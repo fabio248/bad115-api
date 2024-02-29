@@ -1,13 +1,15 @@
 version: '3.3'
 
 services:
-  postgres:
-    image: postgres:13
+  sqldata:
+    container_name: bad-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    command: /bin/bash ./entrypoint.sh
     environment:
-      - POSTGRES_DB=database
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      SA_PASSWORD: Root@123
+      ACCEPT_EULA: "Y"
     ports:
-      - 5432:5432
+      - "1433:1433"
+    platform: linux/amd64
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - ./sqldata:/var/opt/mssql

@@ -35,7 +35,7 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # Docker
-/postgres_data
+/sqldata
 
 # dotenv environment variable files
 .env
