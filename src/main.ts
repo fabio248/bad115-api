@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/exception.filter';
 
 async function bootstrap() {
@@ -24,14 +24,15 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
+    .setTitle('BAD115 API')
     .setDescription('The cats API description')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('v1/docs', app, document);
 
   await app.listen(5002, '0.0.0.0');
+  Logger.log(`Listening on port: ${5002}`, AppModule.name);
 }
 
 bootstrap();

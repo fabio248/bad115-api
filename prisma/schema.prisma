@@ -10,14 +10,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  password      String
-  active        Boolean  @default(true)
-  loginAttemps  Int      @default(0)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String    @id @default(uuid())
+  email        String    @unique @map("correo")
+  password     String    @map("contrasena")
+  isActive     Boolean   @default(true) @map("esta_activo")
+  loginAttemps Int       @default(0) @map("intentos_login")
+  createdAt    DateTime  @default(now()) @map("creado_en")
+  updatedAt    DateTime  @updatedAt @map("modificado_en")
+  deletedAt    DateTime? @map("eliminado_en")
 
+  @@map("usuario")
 }

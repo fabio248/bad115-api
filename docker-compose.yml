@@ -4,7 +4,6 @@ services:
   sqldata:
     container_name: bad-db
     image: mcr.microsoft.com/mssql/server:2022-latest
-    command: /bin/bash ./entrypoint.sh
     environment:
       SA_PASSWORD: Root@123
       ACCEPT_EULA: "Y"
