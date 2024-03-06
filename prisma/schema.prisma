@@ -21,7 +21,7 @@ model User {
   deletedAt    DateTime? @map("eliminado_en")
   rols         UserRol[]
 
-  @@map("usuario")
+  @@map("mnt_usuario")
 }
 
 model UserRol {
@@ -34,7 +34,7 @@ model UserRol {
   deletedAt DateTime? @map("eliminado_en")
 
   @@id([rolId, userId])
-  @@map("usuario_rol")
+  @@map("mnt_usuario_rol")
 }
 
 model Rol {
@@ -46,7 +46,7 @@ model Rol {
   users       UserRol[]
   permissions RolPermission[]
 
-  @@map("rol")
+  @@map("mnt_rol")
 }
 
 model RolPermission {
@@ -59,7 +59,7 @@ model RolPermission {
   deletedAt    DateTime?  @map("eliminado_en")
 
   @@id([rolId, permissionId])
-  @@map("rol_permiso")
+  @@map("mnt_rol_permiso")
 }
 
 model Permission {
@@ -70,5 +70,5 @@ model Permission {
   deletedAt DateTime?       @map("eliminado_en")
   rols      RolPermission[]
 
-  @@map("permiso")
+  @@map("mnt_permiso")
 }
