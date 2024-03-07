@@ -6,10 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import {
-  getI18nContextFromArgumentsHost,
-  I18nValidationException,
-} from 'nestjs-i18n';
+import { I18nContext, I18nValidationException } from 'nestjs-i18n';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -17,7 +14,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const i18n = getI18nContextFromArgumentsHost(host);
+    const i18n = I18nContext.current();
     const statusCode = exception.getStatus();
     const httpResponse = exception.getResponse();
 
@@ -28,6 +25,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     };
 
     let message: string[] | string | undefined;
+
     if (exception instanceof I18nValidationException) {
       message = exception.errors
         .map((e) =>
@@ -38,7 +36,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
                 ? JSON.parse(c.split('|')[1])?.constraints
                 : '';
             return i18n?.t(messageIdentifier, {
-              args: { property: e.property, constraint },
+              args: { property: e.property, constraint, label: i18n.lang },
             });
           }),
         )
@@ -47,11 +45,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     if (exception instanceof HttpException) {
-      return response.status(statusCode).json({
-        ...responseBody,
-        error: httpResponse,
-        message,
-      });
+      if (typeof httpResponse === 'object' && 'message' in httpResponse) {
+        return response.status(statusCode).json({
+          ...responseBody,
+          ...httpResponse,
+        });
+      } else {
+        return response.status(statusCode).json({
+          ...responseBody,
+          message: message || httpResponse,
+        });
+      }
     }
 
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({

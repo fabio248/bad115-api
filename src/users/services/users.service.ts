@@ -1,16 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateUserDto } from '../dtos/request/create-user.dto';
+import { I18nService, I18nContext } from 'nestjs-i18n';
+import { plainToInstance } from 'class-transformer';
+import { UserDto } from '../dtos/response/user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly i18n: I18nService,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
-    console.log(createUserDto);
-    return;
-    return this.prismaService.user.create({
+    const { email } = createUserDto;
+
+    const existingUser = await this.prismaService.user.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (existingUser) {
+      throw new ConflictException(
+        this.i18n.t('exception.CONFLICT.EMAIL_ALREADY_TAKEN', {
+          args: { email },
+          lang: I18nContext.current().lang,
+        }),
+      );
+    }
+
+    const user = this.prismaService.user.create({
       data: createUserDto,
     });
+
+    return plainToInstance(UserDto, user);
   }
 }

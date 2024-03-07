@@ -9,7 +9,12 @@ import { UsersModule } from './users/users.module';
 import { appValidator } from './common/config/app.validator';
 import appConfig from './common/config/app.config';
 import * as path from 'path';
-import { I18nModule } from 'nestjs-i18n';
+import {
+  AcceptLanguageResolver,
+  HeaderResolver,
+  I18nModule,
+  QueryResolver,
+} from 'nestjs-i18n';
 
 @Module({
   imports: [
@@ -25,6 +30,11 @@ import { I18nModule } from 'nestjs-i18n';
         path: path.join(__dirname, 'common/i18n'),
         watch: true,
       },
+      resolvers: [
+        { use: QueryResolver, options: ['lang'] },
+        AcceptLanguageResolver,
+        new HeaderResolver(['x-lang']),
+      ],
       viewEngine: 'pug',
     }),
     PrismaModule.forRootAsync({
