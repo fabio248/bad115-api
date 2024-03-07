@@ -6,11 +6,16 @@ import { PrismaModule } from 'nestjs-prisma';
 import { PrismaConfigService } from './common/services/prisma-config.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { appValidator } from './common/config/app.validator';
+import appConfig from './common/config/app.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      load: [appConfig],
+      expandVariables: true,
       isGlobal: true,
+      validationSchema: appValidator,
     }),
     PrismaModule.forRootAsync({
       isGlobal: true,
