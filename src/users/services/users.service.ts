@@ -30,8 +30,18 @@ export class UsersService {
       );
     }
 
-    const user = this.prismaService.user.create({
+    const user = await this.prismaService.user.create({
       data: createUserDto,
+    });
+
+    return plainToInstance(UserDto, user);
+  }
+
+  async findOne(id: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
     });
 
     return plainToInstance(UserDto, user);

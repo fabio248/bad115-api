@@ -36,7 +36,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
                 ? JSON.parse(c.split('|')[1])?.constraints
                 : '';
             return i18n?.t(messageIdentifier, {
-              args: { property: e.property, constraint, label: i18n.lang },
+              args: { property: e.property, constraint, lang: i18n.lang },
             });
           }),
         )

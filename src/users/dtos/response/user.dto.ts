@@ -1,5 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
+import { ApiHideProperty } from '@nestjs/swagger';
 
+@Exclude()
 export class UserDto {
   @Expose()
   id: string;
@@ -7,6 +9,15 @@ export class UserDto {
   @Expose()
   email: string;
 
-  @Exclude()
+  @ApiHideProperty()
   password: string;
+
+  @ApiHideProperty()
+  createdAt: Date;
+
+  @ApiHideProperty()
+  updatedAt: Date;
+
+  @ApiHideProperty()
+  deletedAt: Date;
 }

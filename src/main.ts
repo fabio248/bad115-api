@@ -11,7 +11,11 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   app.useGlobalPipes(
-    new ValidationPipe({ exceptionFactory: i18nValidationErrorFactory }),
+    new ValidationPipe({
+      exceptionFactory: i18nValidationErrorFactory,
+      whitelist: true,
+      transform: true,
+    }),
   );
 
   app.enableCors();
