@@ -20,6 +20,7 @@
     "DEFAULT": "No tienes acceso para hacer eso."
   },
   "CONFLICT": {
-    "DEFAULT": "No tienes acceso para hacer eso."
+    "DEFAULT": "No tienes acceso para hacer eso.",
+    "EMAIL_ALREADY_TAKEN": "El correo electrónico {email} ya está en uso."
   }
 }

@@ -1,0 +1,15 @@
+{
+  "IS_NOT_EMPTY": "{property} cannot be empty.",
+  "IS_ENUM": "{property} must be an enum.",
+  "IS_STRING": "{property} must be a string.",
+  "IS_EMAIL": "{property} must be a valid email format.",
+  "IS_BOOLEAN": "{property} must be a boolean.",
+  "IS_UUID": "{property} must be a valid uuid.",
+  "IS_INT": "{property} must be an integer number.",
+  "MIN": "{property} must be equal or bigger than {constraint}.",
+  "MAX": "{property} must be equal or lesser than {constraint}.",
+  "IS_DATE": "{property} must be a date in format 'yyyy-mm-dd' and a valid date.",
+  "IS_POSITIVE": "{property} must be a positive number.",
+  "IS_URL": "{property} must be an URL address.",
+  "IS_TIME": "{property} must be a valid time in format 'hh:mm:ss'"
+}

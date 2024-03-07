@@ -1,0 +1,26 @@
+{
+  "NOT_FOUND": {
+    "DEFAULT": "{entity} not found."
+  },
+  "UNAUTHORIZED": {
+    "DEFAULT": "You must be logged in to access here.",
+    "INVALID_TOKEN": "Invalid token",
+    "PERMISSIONS": "The user does not have the required permissions to perform this action, permissions required: {permissions}"
+  },
+  "INTERNAL_SERVER": {
+    "DEFAULT": "Something went wrong."
+  },
+  "BAD_REQUEST": {
+    "DEFAULT": "Something went wrong with the request."
+  },
+  "OK": {
+    "DEFAULT": "Successfully"
+  },
+  "FORBIDDEN": {
+    "DEFAULT": "You don't have access to do that."
+  },
+  "CONFLICT": {
+    "DEFAULT": "You don't have access to do that.",
+    "EMAIL_ALREADY_TAKEN": "The email {email} is already in use."
+  }
+}
