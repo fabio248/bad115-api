@@ -6,6 +6,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import {
+  getI18nContextFromArgumentsHost,
+  I18nValidationException,
+} from 'nestjs-i18n';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -13,6 +17,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
+    const i18n = getI18nContextFromArgumentsHost(host);
     const statusCode = exception.getStatus();
     const httpResponse = exception.getResponse();
 
@@ -22,17 +27,30 @@ export class HttpExceptionFilter implements ExceptionFilter {
       path: request.url,
     };
 
+    let message: string[] | string | undefined;
+    if (exception instanceof I18nValidationException) {
+      message = exception.errors
+        .map((e) =>
+          Object.values(e.constraints).map((c) => {
+            const messageIdentifier = c.split('|')[0];
+            const constraint =
+              c.split('|').length > 1
+                ? JSON.parse(c.split('|')[1])?.constraints
+                : '';
+            return i18n?.t(messageIdentifier, {
+              args: { property: e.property, constraint },
+            });
+          }),
+        )
+        .join(',')
+        .split(',');
+    }
+
     if (exception instanceof HttpException) {
       return response.status(statusCode).json({
         ...responseBody,
-        ...(typeof httpResponse === 'object' && httpResponse),
-      });
-    }
-
-    if (typeof httpResponse === 'string') {
-      return response.status(statusCode).json({
-        ...responseBody,
-        message: httpResponse,
+        error: httpResponse,
+        message,
       });
     }
 
