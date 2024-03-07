@@ -1,0 +1,25 @@
+{
+  "NOT_FOUND": {
+    "DEFAULT": "{entity} no encontrado."
+  },
+  "UNAUTHORIZED": {
+    "DEFAULT": "Debe iniciar sesión para acceder aquí.",
+    "INVALID_TOKEN": "Token inválido",
+    "PERMISSIONS": "El usuario no tiene los permisos necesarios para realizar esta acción, permisos requeridos: {permissions}"
+  },
+  "INTERNAL_SERVER": {
+    "DEFAULT": "Algo salió mal."
+  },
+  "BAD_REQUEST": {
+    "DEFAULT": "Algo salió mal con la solicitud."
+  },
+  "OK": {
+    "DEFAULT": "Exitosamente"
+  },
+  "FORBIDDEN": {
+    "DEFAULT": "No tienes acceso para hacer eso."
+  },
+  "CONFLICT": {
+    "DEFAULT": "No tienes acceso para hacer eso."
+  }
+}

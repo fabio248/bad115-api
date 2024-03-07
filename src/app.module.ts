@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { appValidator } from './common/config/app.validator';
 import appConfig from './common/config/app.config';
+import * as path from 'path';
+import { I18nModule } from 'nestjs-i18n';
 
 @Module({
   imports: [
@@ -16,6 +18,14 @@ import appConfig from './common/config/app.config';
       expandVariables: true,
       isGlobal: true,
       validationSchema: appValidator,
+    }),
+    I18nModule.forRoot({
+      fallbackLanguage: 'es',
+      loaderOptions: {
+        path: path.join(__dirname, 'common/i18n'),
+        watch: true,
+      },
+      viewEngine: 'pug',
     }),
     PrismaModule.forRootAsync({
       isGlobal: true,
