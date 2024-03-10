@@ -5,9 +5,9 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from '../../common/guards/local-auth.guard';
 import { Request as RequestType } from 'express';
 import { User } from '@prisma/client';
-import { LoginDto } from './dtos/response/login.dto';
+import { LoginDto } from '../dtos/response/login.dto';
 import { UserDto } from '../../users/dtos/response/user.dto';
-import { CreateLoginDto } from './dtos/request/create-login.dto';
+import { CreateLoginDto } from '../dtos/request/create-login.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')

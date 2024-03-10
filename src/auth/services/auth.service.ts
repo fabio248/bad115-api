@@ -1,17 +1,19 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../../users/services/users.service';
 import { CreateUserDto } from '../../users/dtos/request/create-user.dto';
-import { CreateLoginDto } from '../controllers/dtos/request/create-login.dto';
+import { CreateLoginDto } from '../dtos/request/create-login.dto';
 import * as bcrypt from 'bcrypt';
-import { I18nService } from 'nestjs-i18n';
+import { I18nService, logger } from 'nestjs-i18n';
 import { JwtService } from '@nestjs/jwt';
 import { IPayload } from '../interfaces';
 import { User } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
-import { LoginDto } from '../controllers/dtos/response/login.dto';
+import { LoginDto } from '../dtos/response/login.dto';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly usersServices: UsersService,
     private readonly i18n: I18nService,
@@ -19,10 +21,12 @@ export class AuthService {
   ) {}
 
   async register(createUserDto: CreateUserDto) {
+    logger.log('register');
     return this.usersServices.create(createUserDto);
   }
 
   async validateUser(createLoginDto: CreateLoginDto): Promise<User> {
+    logger.log('validateUser');
     const { email, password: comingPassword } = createLoginDto;
     const user = await this.usersServices.findOneByEmail(email);
 
@@ -58,7 +62,8 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
+  async login(user: User): Promise<LoginDto> {
+    logger.log('login');
     const payload: IPayload = { email: user.email, sub: user.id };
 
     return plainToInstance(LoginDto, {
