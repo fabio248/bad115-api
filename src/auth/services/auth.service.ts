@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../../users/services/users.service';
 import { CreateUserDto } from '../../users/dtos/request/create-user.dto';
 import { CreateLoginDto } from '../controllers/dtos/request/create-login.dto';
@@ -22,21 +22,18 @@ export class AuthService {
     return this.usersServices.create(createUserDto);
   }
 
-  async validateUser(loginDto: CreateLoginDto): Promise<User> {
-    const { email, password: comingPassword } = loginDto;
+  async validateUser(createLoginDto: CreateLoginDto): Promise<User> {
+    const { email, password: comingPassword } = createLoginDto;
     const user = await this.usersServices.findOneByEmail(email);
 
     if (!user) {
-      await this.usersServices.update(user.id, {
-        loginAttemps: user.loginAttemps + 1,
-      });
-      throw new UnprocessableEntityException(
+      throw new UnauthorizedException(
         this.i18n.t('exception.UNAUTHORIZED.INVALID_CREDENTIALS'),
       );
     }
 
     if (user.loginAttemps >= 3) {
-      throw new UnprocessableEntityException(
+      throw new UnauthorizedException(
         this.i18n.t('exception.UNAUTHORIZED.MAX_LOGIN_ATTEMPTS'),
       );
     }
@@ -46,7 +43,9 @@ export class AuthService {
       await this.usersServices.update(user.id, {
         loginAttemps: user.loginAttemps + 1,
       });
-      return null;
+      throw new UnauthorizedException(
+        this.i18n.t('exception.UNAUTHORIZED.INVALID_CREDENTIALS'),
+      );
     }
 
     if (isValidPassword) {
@@ -63,7 +62,7 @@ export class AuthService {
     const payload: IPayload = { email: user.email, sub: user.id };
 
     return plainToInstance(LoginDto, {
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload),
     });
   }
 }
