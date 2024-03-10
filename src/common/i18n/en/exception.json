@@ -4,8 +4,10 @@
   },
   "UNAUTHORIZED": {
     "DEFAULT": "You must be logged in to access here.",
-    "INVALID_TOKEN": "Invalid token",
-    "PERMISSIONS": "The user does not have the required permissions to perform this action, permissions required: {permissions}"
+    "INVALID_TOKEN": "Invalid token.",
+    "PERMISSIONS": "The user does not have the required permissions to perform this action, permissions required: {permissions}",
+    "INVALID_CREDENTIALS": "Invalid credentials.",
+    "MAX_LOGIN_ATTEMPTS": "You have reached the maximum number of login attempts."
   },
   "INTERNAL_SERVER": {
     "DEFAULT": "Something went wrong."
