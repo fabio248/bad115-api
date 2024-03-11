@@ -19,7 +19,7 @@ model User {
   createdAt    DateTime  @default(now()) @map("creado_en")
   updatedAt    DateTime  @updatedAt @map("modificado_en")
   deletedAt    DateTime? @map("eliminado_en")
-  rols         UserRol[]
+  roles        UserRol[]
 
   @@map("mnt_usuario")
 }
@@ -68,7 +68,7 @@ model Permission {
   createdAt DateTime        @default(now()) @map("creado_en")
   updatedAt DateTime        @updatedAt @map("modificado_en")
   deletedAt DateTime?       @map("eliminado_en")
-  rols      RolPermission[]
+  roles     RolPermission[]
 
   @@map("mnt_permiso")
 }
