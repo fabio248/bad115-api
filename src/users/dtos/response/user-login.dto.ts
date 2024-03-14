@@ -1,9 +1,7 @@
 import { Expose } from 'class-transformer';
+import { UserDto } from './user.dto';
 
-export class LoginDto {
-  @Expose()
-  accessToken: string;
-
+export class UserLoginDto extends UserDto {
   @Expose()
   roles: string[];
 

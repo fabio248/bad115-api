@@ -4,10 +4,10 @@ import { CreateUserDto } from '../../users/dtos/request/create-user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from '../../common/guards/local-auth.guard';
 import { Request as RequestType } from 'express';
-import { User } from '@prisma/client';
 import { LoginDto } from '../dtos/response/login.dto';
 import { UserDto } from '../../users/dtos/response/user.dto';
 import { CreateLoginDto } from '../dtos/request/create-login.dto';
+import { UserLoginDto } from '../../users/dtos/response/user-login.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -27,6 +27,6 @@ export class AuthController {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() createLoginDto: CreateLoginDto,
   ): Promise<LoginDto> {
-    return this.authService.login(req.user as User);
+    return this.authService.login(req.user as UserLoginDto);
   }
 }

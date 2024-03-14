@@ -6,9 +6,9 @@ import * as bcrypt from 'bcrypt';
 import { I18nService, logger } from 'nestjs-i18n';
 import { JwtService } from '@nestjs/jwt';
 import { IPayload } from '../interfaces';
-import { User } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { LoginDto } from '../dtos/response/login.dto';
+import { UserLoginDto } from '../../users/dtos/response/user-login.dto';
 
 @Injectable()
 export class AuthService {
@@ -25,10 +25,18 @@ export class AuthService {
     return this.usersServices.create(createUserDto);
   }
 
-  async validateUser(createLoginDto: CreateLoginDto): Promise<User> {
+  async validateUser(createLoginDto: CreateLoginDto): Promise<UserLoginDto> {
     logger.log('validateUser');
     const { email, password: comingPassword } = createLoginDto;
-    const user = await this.usersServices.findOneByEmail(email);
+    const user = await this.usersServices.findOneByEmail(email, {
+      roles: true,
+    });
+    const [roles, permissions] = await Promise.all([
+      this.usersServices.findRoles(user.id),
+      this.usersServices.findPermissions(
+        user.roles.map((userRole) => userRole.roleId),
+      ),
+    ]);
 
     if (!user) {
       throw new UnauthorizedException(
@@ -56,15 +64,26 @@ export class AuthService {
       await this.usersServices.update(user.id, {
         loginAttemps: 0,
       });
-      return user;
+
+      return plainToInstance(UserLoginDto, {
+        ...user,
+        permissions: permissions.map((per) => per.codename),
+        roles: roles.map((role) => role.name),
+      });
     }
 
     return null;
   }
 
-  async login(user: User): Promise<LoginDto> {
+  async login(user: UserLoginDto): Promise<LoginDto> {
     logger.log('login');
-    const payload: IPayload = { email: user.email, sub: user.id };
+
+    const payload: IPayload = {
+      email: user.email,
+      sub: user.id,
+      permissions: user.permissions,
+      roles: user.roles,
+    };
 
     return plainToInstance(LoginDto, {
       accessToken: this.jwtService.sign(payload),

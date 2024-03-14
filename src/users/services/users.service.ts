@@ -9,8 +9,9 @@ import { CreateUserDto } from '../dtos/request/create-user.dto';
 import { I18nService, I18nContext } from 'nestjs-i18n';
 import { plainToInstance } from 'class-transformer';
 import { UserDto } from '../dtos/response/user.dto';
-import { User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { UpdateUserDto } from '../dtos/request/update-user.dto';
+import { roles } from '../../../prisma/seeds/roles.seed';
 
 @Injectable()
 export class UsersService {
@@ -36,14 +37,57 @@ export class UsersService {
       );
     }
 
-    const user = await this.prismaService.user.create({
-      data: createUserDto,
+    const user = await this.prismaService.$transaction(async (tPrisma) => {
+      const user = await tPrisma.user.create({
+        data: createUserDto,
+      });
+
+      await tPrisma.userRole.create({
+        data: {
+          role: {
+            connect: {
+              name: roles.USER,
+            },
+          },
+          user: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
+      });
+
+      return user;
     });
 
     return plainToInstance(UserDto, user);
   }
 
-  async findOne(id: string) {
+  async findPermissions(userRolesId: string[]) {
+    return this.prismaService.permission.findMany({
+      where: {
+        roles: {
+          some: {
+            roleId: { in: userRolesId },
+          },
+        },
+      },
+    });
+  }
+
+  async findRoles(userId: string) {
+    return this.prismaService.role.findMany({
+      where: {
+        users: {
+          some: {
+            userId,
+          },
+        },
+      },
+    });
+  }
+
+  async findOne(id: string): Promise<UserDto> {
     this.logger.log('findOne');
     const user = await this.prismaService.user.findUnique({
       where: {
@@ -64,12 +108,13 @@ export class UsersService {
     return plainToInstance(UserDto, user);
   }
 
-  async findOneByEmail(email: string): Promise<User> {
+  async findOneByEmail(email: string, include: Prisma.UserInclude = {}) {
     this.logger.log('findOneByEmail');
     return this.prismaService.user.findFirst({
       where: {
         email,
       },
+      include,
     });
   }
 
