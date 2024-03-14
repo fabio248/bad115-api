@@ -27,17 +27,17 @@ model User {
 model UserRol {
   userId    String    @map("usuario_id")
   user      User      @relation(fields: [userId], references: [id])
-  rol       Rol       @relation(fields: [rolId], references: [id])
-  rolId     String    @map("rol_id")
+  role      Role      @relation(fields: [roleId], references: [id])
+  roleId    String    @map("rol_id")
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
 
-  @@id([rolId, userId])
+  @@id([roleId, userId])
   @@map("mnt_usuario_rol")
 }
 
-model Rol {
+model Role {
   id          String          @id @default(uuid())
   name        String          @unique @map("nombre")
   createdAt   DateTime        @default(now()) @map("creado_en")
@@ -50,21 +50,22 @@ model Rol {
 }
 
 model RolPermission {
-  rolId        String     @map("rol_id")
-  rol          Rol        @relation(fields: [rolId], references: [id])
+  roleId       String     @map("rol_id")
+  role         Role       @relation(fields: [roleId], references: [id])
   permission   Permission @relation(fields: [permissionId], references: [id])
   permissionId String     @map("permiso_id")
   createdAt    DateTime   @default(now()) @map("creado_en")
   updatedAt    DateTime   @updatedAt @map("modificado_en")
   deletedAt    DateTime?  @map("eliminado_en")
 
-  @@id([rolId, permissionId])
+  @@id([roleId, permissionId])
   @@map("mnt_rol_permiso")
 }
 
 model Permission {
   id        String          @id @default(uuid())
-  name      String          @unique @map("nombre")
+  name      String          @map("nombre")
+  codename  String          @map("codigo")
   createdAt DateTime        @default(now()) @map("creado_en")
   updatedAt DateTime        @updatedAt @map("modificado_en")
   deletedAt DateTime?       @map("eliminado_en")
