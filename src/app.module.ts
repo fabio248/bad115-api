@@ -22,7 +22,7 @@ import { HeaderResolver, I18nModule } from 'nestjs-i18n';
     I18nModule.forRoot({
       fallbackLanguage: 'es',
       loaderOptions: {
-        path: path.join(__dirname, 'common/i18n'),
+        path: path.join(__dirname, '/i18n/'),
         watch: true,
       },
       resolvers: [new HeaderResolver(['x-lang'])],
