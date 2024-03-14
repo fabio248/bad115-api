@@ -3,7 +3,7 @@ import { UsersService } from '../../users/services/users.service';
 import { CreateUserDto } from '../../users/dtos/request/create-user.dto';
 import { CreateLoginDto } from '../dtos/request/create-login.dto';
 import * as bcrypt from 'bcrypt';
-import { I18nService, logger } from 'nestjs-i18n';
+import { I18nService } from 'nestjs-i18n';
 import { JwtService } from '@nestjs/jwt';
 import { IPayload } from '../interfaces';
 import { plainToInstance } from 'class-transformer';
@@ -21,12 +21,12 @@ export class AuthService {
   ) {}
 
   async register(createUserDto: CreateUserDto) {
-    logger.log('register');
+    this.logger.log('register');
     return this.usersServices.create(createUserDto);
   }
 
   async validateUser(createLoginDto: CreateLoginDto): Promise<UserLoginDto> {
-    logger.log('validateUser');
+    this.logger.log('validateUser');
     const { email, password: comingPassword } = createLoginDto;
     const user = await this.usersServices.findOneByEmail(email, {
       roles: true,
@@ -76,7 +76,7 @@ export class AuthService {
   }
 
   async login(user: UserLoginDto): Promise<LoginDto> {
-    logger.log('login');
+    this.logger.log('login');
 
     const payload: IPayload = {
       email: user.email,
