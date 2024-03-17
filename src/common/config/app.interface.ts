@@ -5,4 +5,11 @@ export interface IAppConfig {
     secret: string;
     expiresIn: string;
   };
+  sendgrid: {
+    apiKey: string;
+    email: string;
+    templates: {
+      welcome: string;
+    };
+  };
 }

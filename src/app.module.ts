@@ -10,6 +10,7 @@ import { appValidator } from './common/config/app.validator';
 import appConfig from './common/config/app.config';
 import * as path from 'path';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -31,6 +32,16 @@ import { HeaderResolver, I18nModule } from 'nestjs-i18n';
     PrismaModule.forRootAsync({
       isGlobal: true,
       useClass: PrismaConfigService,
+    }),
+    EventEmitterModule.forRoot({
+      wildcard: false,
+      delimiter: '.',
+      newListener: false,
+      removeListener: false,
+      maxListeners: 5,
+      verboseMemoryLeak: true,
+      ignoreErrors: false,
+      global: true,
     }),
     CommonModule,
     AuthModule,
