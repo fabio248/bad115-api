@@ -4,6 +4,7 @@ export interface IAppConfig {
   jwt: {
     secret: string;
     expiresIn: string;
+    expiresInRefresh: string;
   };
   sendgrid: {
     apiKey: string;

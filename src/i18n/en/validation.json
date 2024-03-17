@@ -11,5 +11,6 @@
   "IS_DATE": "{property} must be a date in format 'yyyy-mm-dd' and a valid date.",
   "IS_POSITIVE": "{property} must be a positive number.",
   "IS_URL": "{property} must be an URL address.",
-  "IS_TIME": "{property} must be a valid time in format 'hh:mm:ss'"
+  "IS_TIME": "{property} must be a valid time in format 'hh:mm:ss'",
+  "IS_VALID_TOKEN": "{property} must be a valid token type 'refresh Token'"
 }

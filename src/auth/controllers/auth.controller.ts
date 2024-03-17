@@ -8,6 +8,8 @@ import { LoginDto } from '../dtos/response/login.dto';
 import { UserDto } from '../../users/dtos/response/user.dto';
 import { CreateLoginDto } from '../dtos/request/create-login.dto';
 import { UserLoginDto } from '../../users/dtos/response/user-login.dto';
+import { RefreshDto } from '../dtos/response/refresh.dto';
+import { RefreshLoginDto } from '../dtos/request/refresh-token.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -28,5 +30,13 @@ export class AuthController {
     @Body() createLoginDto: CreateLoginDto,
   ): Promise<LoginDto> {
     return this.authService.login(req.user as UserLoginDto);
+  }
+
+  @Post('refresh-token')
+  @ApiOperation({ summary: 'Use this endpoint to refresh token' })
+  async refreshToken(
+    @Body() refreshLoginDto: RefreshLoginDto,
+  ): Promise<RefreshDto> {
+    return this.authService.refreshToken(refreshLoginDto);
   }
 }
