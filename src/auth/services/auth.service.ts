@@ -31,12 +31,6 @@ export class AuthService {
     const user = await this.usersServices.findOneByEmail(email, {
       roles: true,
     });
-    const [roles, permissions] = await Promise.all([
-      this.usersServices.findRoles(user.id),
-      this.usersServices.findPermissions(
-        user.roles.map((userRole) => userRole.roleId),
-      ),
-    ]);
 
     if (!user) {
       throw new UnauthorizedException(
@@ -49,25 +43,35 @@ export class AuthService {
         this.i18n.t('exception.UNAUTHORIZED.MAX_LOGIN_ATTEMPTS'),
       );
     }
+
     const isValidPassword = await bcrypt.compare(comingPassword, user.password);
 
     if (!isValidPassword) {
+      const loginAttemps = user.loginAttemps + 1;
       await this.usersServices.update(user.id, {
-        loginAttemps: user.loginAttemps + 1,
+        loginAttemps,
+        isActive: loginAttemps < 3,
       });
+
       throw new UnauthorizedException(
         this.i18n.t('exception.UNAUTHORIZED.INVALID_CREDENTIALS'),
       );
     }
 
     if (isValidPassword) {
-      await this.usersServices.update(user.id, {
-        loginAttemps: 0,
-      });
+      const [roles, permissions] = await Promise.all([
+        this.usersServices.findRoles(user.id),
+        this.usersServices.findPermissions(
+          user.roles.map((userRole) => userRole.roleId),
+        ),
+        this.usersServices.update(user.id, {
+          loginAttemps: 0,
+        }),
+      ]);
 
       return plainToInstance(UserLoginDto, {
         ...user,
-        permissions: permissions.map((per) => per.codename),
+        permissions: permissions.map((permission) => permission.codename),
         roles: roles.map((role) => role.name),
       });
     }

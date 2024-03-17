@@ -12,6 +12,9 @@ import { UserDto } from '../dtos/response/user.dto';
 import { Prisma } from '@prisma/client';
 import { UpdateUserDto } from '../dtos/request/update-user.dto';
 import { roles } from '../../../prisma/seeds/roles.seed';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { SEND_EMAIL_EVENT } from '../../common/events/mail.event';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +23,8 @@ export class UsersService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
+    private readonly eventEmitter: EventEmitter2,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -58,6 +63,12 @@ export class UsersService {
       });
 
       return user;
+    });
+
+    this.eventEmitter.emit(SEND_EMAIL_EVENT, {
+      to: user.email,
+      from: this.configService.get('app.sendgrid.email'),
+      templateId: this.configService.get('app.sendgrid.templates.welcome'),
     });
 
     return plainToInstance(UserDto, user);
