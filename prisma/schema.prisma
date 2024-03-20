@@ -11,15 +11,17 @@ datasource db {
 }
 
 model User {
-  id           String     @id @default(uuid())
-  email        String     @unique @map("correo")
-  password     String     @map("contrasena")
-  isActive     Boolean    @default(true) @map("esta_activo")
-  loginAttemps Int        @default(0) @map("intentos_login")
-  createdAt    DateTime   @default(now()) @map("creado_en")
-  updatedAt    DateTime   @updatedAt @map("modificado_en")
-  deletedAt    DateTime?  @map("eliminado_en")
-  roles        UserRole[]
+  id           String    @id @default(uuid())
+  email        String    @unique @map("correo")
+  password     String    @map("contrasena")
+  isActive     Boolean   @default(true) @map("esta_activo")
+  loginAttemps Int       @default(0) @map("intentos_login")
+  createdAt    DateTime  @default(now()) @map("creado_en")
+  updatedAt    DateTime  @updatedAt @map("modificado_en")
+  deletedAt    DateTime? @map("eliminado_en")
+
+  roles  UserRole[]
+  person Person?
 
   @@map("mnt_usuario")
 }
@@ -72,4 +74,84 @@ model Permission {
   roles     RolPermission[]
 
   @@map("mnt_permiso")
+}
+
+model Person {
+  id         String    @id @default(uuid())
+  birthday   DateTime  @map("fecha_nacimiento")
+  firstname  String    @map("primer_nombre")
+  middleName String    @map("segundo_nombre")
+  lastName   String    @map("primer_apellido")
+  secondName String    @map("segundo_apellido")
+  gender     String    @map("genero")
+  phone      String    @map("telefono")
+  createdAt  DateTime  @default(now()) @map("creado_en")
+  updatedAt  DateTime  @updatedAt @map("modificado_en")
+  deletedAt  DateTime? @map("eliminado_en")
+
+  userId    String     @unique
+  User      User       @relation(fields: [userId], references: [id])
+  documents Document[]
+  Address   Address[]
+
+  @@map("mnt_persona")
+}
+
+model Document {
+  // type contained four diferents values
+  id        String    @id @default(uuid())
+  personId  String    @map("persona_id")
+  person    Person    @relation(fields: [personId], references: [id])
+  type      String    @map("tipo")
+  number    String    @map("numero")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  @@map("mnt_documento")
+}
+
+model Address {
+  id          String    @id @default(uuid())
+  street      String    @map("calle")
+  numberHouse String    @map("numero_casa")
+  createdAt   DateTime  @default(now()) @map("creado_en")
+  updatedAt   DateTime  @updatedAt @map("modificado_en")
+  deletedAt   DateTime? @map("eliminado_en")
+
+  personId       String?
+  Person         Person?      @relation(fields: [personId], references: [id])
+  departmentId   String
+  department     Department   @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  municipalityId String
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+
+  @@map("mnt_direccion")
+}
+
+model Department {
+  id        String    @id @default(uuid())
+  name      String    @map("nombre")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  municipalities Municipality[]
+  Address        Address[]
+
+  @@map("ctl_departamento")
+}
+
+model Municipality {
+  id        String    @id @default(uuid())
+  name      String    @map("nombre")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  departmentId String
+  Department   Department @relation(fields: [departmentId], references: [id])
+  Address      Address[]
+
+  @@map("ctl_municipio")
 }
