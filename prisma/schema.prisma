@@ -89,21 +89,27 @@ model Person {
   updatedAt  DateTime  @updatedAt @map("modificado_en")
   deletedAt  DateTime? @map("eliminado_en")
 
-  userId    String     @unique
-  User      User       @relation(fields: [userId], references: [id])
-  documents Document[]
-  Address   Address[]
+  userId        String          @unique
+  user          User            @relation(fields: [userId], references: [id])
+  documents     Document[]
+  address       Address[]
+  socialNetwork SocialNetwork[]
+  candidateId   String          @unique()
+  candidate     Candidate       @relation(fields: [candidateId], references: [id])
+  recruiterId   String          @unique
+  recruiter     Recruiter       @relation(fields: [recruiterId], references: [id])
 
   @@map("mnt_persona")
 }
 
 model Document {
   // type contained four diferents values
-  id        String    @id @default(uuid())
+  id     String @id @default(uuid())
+  type   String @map("tipo")
+  number String @map("numero")
+
   personId  String    @map("persona_id")
   person    Person    @relation(fields: [personId], references: [id])
-  type      String    @map("tipo")
-  number    String    @map("numero")
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
@@ -137,7 +143,7 @@ model Department {
   deletedAt DateTime? @map("eliminado_en")
 
   municipalities Municipality[]
-  Address        Address[]
+  address        Address[]
 
   @@map("ctl_departamento")
 }
@@ -150,8 +156,360 @@ model Municipality {
   deletedAt DateTime? @map("eliminado_en")
 
   departmentId String
-  Department   Department @relation(fields: [departmentId], references: [id])
-  Address      Address[]
+  department   Department @relation(fields: [departmentId], references: [id])
+  address      Address[]
 
   @@map("ctl_municipio")
+}
+
+// New entities and catalogs (Revisar)
+model SocialNetwork {
+  id        String    @id @default(uuid())
+  nickname  String    @map("nombre_usuario")
+  url       String    @map("direccion_url")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  personId String
+  person   Person @relation(fields: [personId], references: [id])
+
+  typeSocialNetworkId String
+  typeSocialNetwork   TypeSocialNetwork @relation(fields: [typeSocialNetworkId], references: [id])
+
+  @@map("mnt_persona_red_social")
+}
+
+model TypeSocialNetwork {
+  id        String    @id @default(uuid())
+  name      String    @map("nombre")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  socialNetwork SocialNetwork[]
+
+  @@map("ctl_tipo_red_social")
+}
+
+// Everything entities relacionship on Candidate
+model Candidate {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  persons            Person?
+  laboralExperiences LaboralExperience[]
+  academicKnowledges AcademicKnowledge[]
+  certifications     Certification[]
+  technicalSkills    TechnicalSkillCandidate[]
+  languageSkills     LanguageSkill[]
+  recognitions       Recognition[]
+  publications       Publication[]
+  participations     Participation[]
+  tests              Test[]
+  recomendations     Recomendation[]
+  jobApplications    JobApplication[]
+
+  @@map("mnt_cantidato")
+}
+
+model LaboralExperience {
+  id                      String   @id @default(uuid())
+  positionName            String   @map("nombre_puesto")
+  organizationName        String   @map("nombre_organizacion")
+  initDate                DateTime @map("fecha_de_inicio")
+  finishDate              DateTime @map("fecha_de_finalizacion")
+  // TODO: hacer una nuevas tablas para estos atributos multivalidos
+  dataOrganizationContact String   @map("datos_contacto_organizacion")
+  functionPerformed       String   @map("funciones_desempeñadas")
+
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+
+  @@map("mnt_experiencia_laboral")
+}
+
+model AcademicKnowledge {
+  id            String    @id @default(uuid())
+  name          String    @map("nombre_institucion")
+  initDate      DateTime  @map("fecha_de_inicio")
+  finishDate    DateTime  @map("fecha_de_finalizacion")
+  type          String    @map("tipo_conocimiento_academico") // Enum: titulo, diplomas, cursos
+  knowledgeName String    @map("nombre_conocimiento")
+  createdAt     DateTime  @default(now()) @map("creado_en")
+  updatedAt     DateTime  @updatedAt @map("modificado_en")
+  deletedAt     DateTime? @map("eliminado_en")
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+
+  @@map("mnt_conocimiento_academico")
+}
+
+model Certification {
+  id               String    @id @default(uuid())
+  initDate         DateTime  @map("fecha_de_inicio")
+  finishDate       DateTime  @map("fecha_de_finalizacion")
+  name             String    @map("nombre_certificacion")
+  type             String    @map("tipo_certificacion")
+  code             Int       @map("codigo_certificacion")
+  organizationName String    @map("nombre_organizacion")
+  createdAt        DateTime  @default(now()) @map("creado_en")
+  updatedAt        DateTime  @updatedAt @map("modificado_en")
+  deletedAt        DateTime? @map("eliminado_en")
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+
+  @@map("mnt_certificacion")
+}
+
+model TechnicalSkillCandidate {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  technicalSkillId String         @unique()
+  technicalSkill   TechnicalSkill @relation(fields: [technicalSkillId], references: [id])
+  candidateId      String
+  candidate        Candidate      @relation(fields: [candidateId], references: [id])
+
+  @@map("mnt_habilidad_tecnica_candidato")
+}
+
+model TechnicalSkill {
+  id        String    @id @default(uuid())
+  name      String    @map("nombre_habilidad_tecnica")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  technicalSkillCandidates  TechnicalSkillCandidate[]
+  categoryTechnicalSkillId  String                    @unique()
+  categoryTecnicalHabilitie CategoryTechnicalSkill?   @relation(fields: [categoryTechnicalSkillId], references: [id])
+  jobPosition               JobPosition[]
+
+  @@map("ctl_habilidad_tecnica")
+}
+
+model CategoryTechnicalSkill {
+  id        String    @id @default(uuid())
+  name      String    @map("nombre_categoria_habilidad_tecnica")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  technicalSkill TechnicalSkill[]
+
+  @@map("ctl_categoria")
+}
+
+model LanguageSkill {
+  id        String    @id @default(uuid())
+  skill     String    @map("habilidad_lenguaje") // Enum: Escucha, lectura, escritura y conversacion
+  level     String    @map("nivel_lenguaje") // Enum: A1, A2, B1, B2, C1, C2
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  languageId String   @unique
+  language   Language @relation(fields: [languageId], references: [id])
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+
+  @@map("mnt_habilidad_lenguaje")
+}
+
+model Language {
+  id        String    @id @default(uuid())
+  language  String    @map("idioma")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  languageSkills LanguageSkill[]
+  jobPosition    JobPosition[]
+
+  @@map("ctl_idioma")
+}
+
+model Recognition {
+  id         String    @id @default(uuid())
+  name       String    @map("nombre_reconocimiento")
+  finishDate DateTime  @map("fecha_finalizacion")
+  createdAt  DateTime  @default(now()) @map("creado_en")
+  updatedAt  DateTime  @updatedAt @map("modificado_en")
+  deletedAt  DateTime? @map("eliminado_en")
+
+  recognitionTypeId String          @unique
+  recognitionType   RecognitionType @relation(fields: [recognitionTypeId], references: [id])
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+
+  @@map("mnt_reconocimiento")
+}
+
+model RecognitionType {
+  id        String    @id @default(uuid())
+  name      String    @map("nombre_tipo_reconocimiento")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  recognitions Recognition[]
+
+  @@map("ctl_tipo_reconocimiento")
+}
+
+model Publication {
+  id        String    @id @default(uuid())
+  name      String    @map("nombre_publicacion")
+  place     String    @map("lugar_publicacion")
+  type      String    @map("tipo_publicacion") // Enum: articulo, libro
+  edition   String?   @map("edicion") // edition and isbn will be requires if type = libro
+  isbn      String?   @map("isbn")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+
+  @@map("mnt_publicacion")
+}
+
+model Participation {
+  id        String    @id @default(uuid())
+  date      DateTime  @map("fecha_participacion")
+  place     String    @map("lugar_participacion")
+  country   String    @map("pais_participacion")
+  eventHost String    @map("anfitrion_evento")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  participationTypeId String            @unique
+  participacionType   ParticipacionType @relation(fields: [participationTypeId], references: [id])
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+
+  @@map("mnt_participacion")
+}
+
+model ParticipacionType {
+  id        String    @id @default(uuid())
+  name      String    @map("nombre_tipo_participacion")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  participations Participation[]
+
+  @@map("ctl_tipo_participacion")
+}
+
+model Test {
+  id        String    @id @default(uuid())
+  result    Boolean   @map("resultado")
+  urlDocs   String    @map("url_archivo")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  testTypeId String   @unique
+  test       TestType @relation(fields: [testTypeId], references: [id])
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+
+  @@map("mnt_prueba")
+}
+
+model TestType {
+  id        String    @id @default(uuid())
+  name      String    @map("nombre_tipo_prueba")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  tests Test[]
+
+  @@map("ctl_tipo_prueba")
+}
+
+model Recomendation {
+  id        String    @id @default(uuid())
+  name      String    @map("nombre_del_recomendado")
+  lastName  String    @map("apellido_del_recomendado")
+  email     String    @map("correo_del_recomendado")
+  phone     String    @map("telefono_del_recomendado")
+  type      String    @map("tipo") // this is ENUM and contain two options: Laboral and personal
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+
+  @@map("mtn_recomendacion")
+}
+
+model Recruiter {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  jobPosition JobPosition[]
+
+  persons Person?
+
+  @@map("mnt_reclutador")
+}
+
+model JobPosition {
+  id            String    @id @default(uuid())
+  salarialRange String    @map("rango_salarial")
+  modality      String    @map("modalidad") // Enum: presencial, semipresencial, remoto
+  location      String    @map("ubicacion")
+  description   String    @map("descripcion")
+  // TODO: move requirement to a separate table because is a multivalual attribute
+  require       String    @map("requisito")
+  createdAt     DateTime  @default(now()) @map("creado_en")
+  updatedAt     DateTime  @updatedAt @map("modificado_en")
+  deletedAt     DateTime? @map("eliminado_en")
+
+  recruiterId String
+  recruiter   Recruiter @relation(fields: [recruiterId], references: [id])
+
+  jobApplications JobApplication[]
+  language        Language[]
+  technicalSkill  TechnicalSkill[]
+
+  @@map("mnt_puesto_de_trabajo")
+}
+
+model JobApplication {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  jobPositionId String      @unique
+  jobPosition   JobPosition @relation(fields: [jobPositionId], references: [id])
+
+  candidateId String     @unique
+  candidate   Candidate? @relation(fields: [candidateId], references: [id])
+
+  @@map("mnt_aplicacion_puesto_trabajo")
 }
