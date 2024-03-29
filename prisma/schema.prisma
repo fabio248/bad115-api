@@ -77,35 +77,35 @@ model Permission {
 }
 
 model Person {
-  id         String    @id @default(uuid())
-  birthday   DateTime  @map("fecha_nacimiento")
-  firstname  String    @map("primer_nombre")
-  middleName String    @map("segundo_nombre")
-  lastName   String    @map("primer_apellido")
-  secondName String    @map("segundo_apellido")
-  gender     String    @map("genero")
-  phone      String    @map("telefono")
-  createdAt  DateTime  @default(now()) @map("creado_en")
-  updatedAt  DateTime  @updatedAt @map("modificado_en")
-  deletedAt  DateTime? @map("eliminado_en")
+  id             String    @id @default(uuid())
+  birthday       DateTime  @map("fecha_nacimiento")
+  firstName      String    @map("primer_nombre")
+  middleName     String?   @map("segundo_nombre")
+  lastName       String    @map("primer_apellido")
+  secondLastName String?   @map("segundo_apellido")
+  gender         String    @map("genero")
+  phone          String?   @map("telefono")
+  createdAt      DateTime  @default(now()) @map("creado_en")
+  updatedAt      DateTime  @updatedAt @map("modificado_en")
+  deletedAt      DateTime? @map("eliminado_en")
 
   userId        String          @unique
   user          User            @relation(fields: [userId], references: [id])
   documents     Document[]
-  address       Address[]
   socialNetwork SocialNetwork[]
-  candidateId   String          @unique()
-  candidate     Candidate       @relation(fields: [candidateId], references: [id])
-  recruiterId   String          @unique
-  recruiter     Recruiter       @relation(fields: [recruiterId], references: [id])
+  candidateId   String?         @unique()
+  candidate     Candidate?      @relation(fields: [candidateId], references: [id])
+  recruiterId   String?         @unique
+  recruiter     Recruiter?      @relation(fields: [recruiterId], references: [id])
+  adressId      String?         @unique
+  address       Address?        @relation(fields: [adressId], references: [id])
 
   @@map("mnt_persona")
 }
 
 model Document {
-  // type contained four diferents values
   id     String @id @default(uuid())
-  type   String @map("tipo")
+  type   String @map("tipo") // Enum: pasaporte, dui, nup, nit
   number String @map("numero")
 
   personId  String    @map("persona_id")
@@ -125,8 +125,7 @@ model Address {
   updatedAt   DateTime  @updatedAt @map("modificado_en")
   deletedAt   DateTime? @map("eliminado_en")
 
-  personId       String?
-  Person         Person?      @relation(fields: [personId], references: [id])
+  person         Person?
   departmentId   String
   department     Department   @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   municipalityId String
@@ -199,7 +198,7 @@ model Candidate {
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
 
-  persons            Person?
+  person             Person?
   laboralExperiences LaboralExperience[]
   academicKnowledges AcademicKnowledge[]
   certifications     Certification[]
@@ -216,35 +215,49 @@ model Candidate {
 }
 
 model LaboralExperience {
-  id                      String   @id @default(uuid())
-  positionName            String   @map("nombre_puesto")
-  organizationName        String   @map("nombre_organizacion")
-  initDate                DateTime @map("fecha_de_inicio")
-  finishDate              DateTime @map("fecha_de_finalizacion")
-  // TODO: hacer una nuevas tablas para estos atributos multivalidos
-  dataOrganizationContact String   @map("datos_contacto_organizacion")
-  functionPerformed       String   @map("funciones_desempeñadas")
+  id                String    @id @default(uuid())
+  name              String    @map("nombre_puesto")
+  organizationName  String    @map("nombre_organizacion")
+  initDate          DateTime  @map("fecha_de_inicio")
+  finishDate        DateTime? @map("fecha_de_finalizacion")
+  currentJob        Boolean   @map("trabajo_actual")
+  functionPerformed String    @map("funciones_desempeñadas")
 
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
 
-  candidateId String
-  candidate   Candidate @relation(fields: [candidateId], references: [id])
+  candidateId           String
+  candidate             Candidate            @relation(fields: [candidateId], references: [id])
+  organizationContactId String?              @unique
+  organizationContact   OrganizationContact? @relation(fields: [organizationContactId], references: [id])
 
   @@map("mnt_experiencia_laboral")
 }
 
+model OrganizationContact {
+  id        String    @id @default(uuid())
+  phone     String?   @map("telefono_organizacion")
+  email     String?   @map("correo_organizacion")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  laboralExperience LaboralExperience?
+
+  @@map("mnt_contacto_organizacion")
+}
+
 model AcademicKnowledge {
-  id            String    @id @default(uuid())
-  name          String    @map("nombre_institucion")
-  initDate      DateTime  @map("fecha_de_inicio")
-  finishDate    DateTime  @map("fecha_de_finalizacion")
-  type          String    @map("tipo_conocimiento_academico") // Enum: titulo, diplomas, cursos
-  knowledgeName String    @map("nombre_conocimiento")
-  createdAt     DateTime  @default(now()) @map("creado_en")
-  updatedAt     DateTime  @updatedAt @map("modificado_en")
-  deletedAt     DateTime? @map("eliminado_en")
+  id               String    @id @default(uuid())
+  name             String    @map("nombre_conocimiento")
+  type             String    @map("tipo_conocimiento_academico") // Enum: titulo, diplomas, cursos
+  initDate         DateTime  @map("fecha_de_inicio")
+  finishDate       DateTime? @map("fecha_de_finalizacion")
+  organizationName String    @map("nombre_institucion")
+  createdAt        DateTime  @default(now()) @map("creado_en")
+  updatedAt        DateTime  @updatedAt @map("modificado_en")
+  deletedAt        DateTime? @map("eliminado_en")
 
   candidateId String
   candidate   Candidate @relation(fields: [candidateId], references: [id])
@@ -258,7 +271,7 @@ model Certification {
   finishDate       DateTime  @map("fecha_de_finalizacion")
   name             String    @map("nombre_certificacion")
   type             String    @map("tipo_certificacion")
-  code             Int       @map("codigo_certificacion")
+  code             Int?      @map("codigo_certificacion")
   organizationName String    @map("nombre_organizacion")
   createdAt        DateTime  @default(now()) @map("creado_en")
   updatedAt        DateTime  @updatedAt @map("modificado_en")
@@ -452,7 +465,7 @@ model Recomendation {
   name      String    @map("nombre_del_recomendado")
   lastName  String    @map("apellido_del_recomendado")
   email     String    @map("correo_del_recomendado")
-  phone     String    @map("telefono_del_recomendado")
+  phone     String?   @map("telefono_del_recomendado")
   type      String    @map("tipo") // this is ENUM and contain two options: Laboral and personal
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
@@ -483,8 +496,6 @@ model JobPosition {
   modality      String    @map("modalidad") // Enum: presencial, semipresencial, remoto
   location      String    @map("ubicacion")
   description   String    @map("descripcion")
-  // TODO: move requirement to a separate table because is a multivalual attribute
-  require       String    @map("requisito")
   createdAt     DateTime  @default(now()) @map("creado_en")
   updatedAt     DateTime  @updatedAt @map("modificado_en")
   deletedAt     DateTime? @map("eliminado_en")
@@ -492,11 +503,25 @@ model JobPosition {
   recruiterId String
   recruiter   Recruiter @relation(fields: [recruiterId], references: [id])
 
+  requirement     Requirement[]
   jobApplications JobApplication[]
   language        Language[]
   technicalSkill  TechnicalSkill[]
 
   @@map("mnt_puesto_de_trabajo")
+}
+
+model Requirement {
+  id          String    @id @default(uuid())
+  description String    @map("descripcion_requisito")
+  createdAt   DateTime  @default(now()) @map("creado_en")
+  updatedAt   DateTime  @updatedAt @map("modificado_en")
+  deletedAt   DateTime? @map("eliminado_en")
+
+  jobPositionId String
+  jobPosition   JobPosition @relation(fields: [jobPositionId], references: [id])
+
+  @@map("mnt_requisito")
 }
 
 model JobApplication {
