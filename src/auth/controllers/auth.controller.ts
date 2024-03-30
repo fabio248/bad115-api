@@ -1,15 +1,15 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
-import { CreateUserDto } from '../../users/dtos/request/create-user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from '../../common/guards/local-auth.guard';
 import { Request as RequestType } from 'express';
 import { LoginDto } from '../dtos/response/login.dto';
-import { UserDto } from '../../users/dtos/response/user.dto';
 import { CreateLoginDto } from '../dtos/request/create-login.dto';
 import { UserLoginDto } from '../../users/dtos/response/user-login.dto';
 import { RefreshDto } from '../dtos/response/refresh.dto';
 import { RefreshLoginDto } from '../dtos/request/refresh-token.dto';
+import { CreateRegisterDto } from '../dtos/request/create-register.dto';
+import { RegisterDto } from '../dtos/response/register.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -17,8 +17,10 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
-    return this.authService.register(createUserDto);
+  async register(
+    @Body() createRegisterDto: CreateRegisterDto,
+  ): Promise<RegisterDto> {
+    return this.authService.register(createRegisterDto);
   }
 
   @UseGuards(LocalAuthGuard)

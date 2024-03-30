@@ -5,9 +5,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { CreateUserDto } from '../dtos/request/create-user.dto';
 import { I18nService, I18nContext } from 'nestjs-i18n';
-import { plainToInstance } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { UserDto } from '../dtos/response/user.dto';
 import { Prisma } from '@prisma/client';
 import { UpdateUserDto } from '../dtos/request/update-user.dto';
@@ -15,6 +14,9 @@ import { roles } from '../../../prisma/seeds/roles.seed';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SEND_EMAIL_EVENT } from '../../common/events/mail.event';
 import { ConfigService } from '@nestjs/config';
+import { CreateRegisterDto } from '../../auth/dtos/request/create-register.dto';
+import { CreatePersonDto } from '../../persons/dtos/request/create-person.dto';
+import { RegisterDto } from '../../auth/dtos/response/register.dto';
 
 @Injectable()
 export class UsersService {
@@ -27,9 +29,9 @@ export class UsersService {
     private readonly configService: ConfigService,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(registerDto: CreateRegisterDto) {
     this.logger.log('create');
-    const { email } = createUserDto;
+    const { email } = registerDto;
 
     const existingUser = await this.findOneByEmail(email);
 
@@ -42,28 +44,49 @@ export class UsersService {
       );
     }
 
-    const user = await this.prismaService.$transaction(async (tPrisma) => {
-      const user = await tPrisma.user.create({
-        data: createUserDto,
-      });
-
-      await tPrisma.userRole.create({
-        data: {
-          role: {
-            connect: {
-              name: roles.USER,
-            },
+    const [user, person] = await this.prismaService.$transaction(
+      async (tPrisma) => {
+        const user = await tPrisma.user.create({
+          data: {
+            email: registerDto.email,
+            password: registerDto.password,
           },
-          user: {
-            connect: {
-              id: user.id,
-            },
-          },
-        },
-      });
+        });
 
-      return user;
-    });
+        const createPersonDto = instanceToPlain(registerDto);
+        delete createPersonDto.email;
+        delete createPersonDto.password;
+
+        const [person] = await Promise.all([
+          tPrisma.person.create({
+            data: {
+              ...(createPersonDto as CreatePersonDto),
+              user: {
+                connect: {
+                  id: user.id,
+                },
+              },
+            },
+          }),
+          tPrisma.userRole.create({
+            data: {
+              role: {
+                connect: {
+                  name: roles.USER,
+                },
+              },
+              user: {
+                connect: {
+                  id: user.id,
+                },
+              },
+            },
+          }),
+        ]);
+
+        return [user, person];
+      },
+    );
 
     this.eventEmitter.emit(SEND_EMAIL_EVENT, {
       to: user.email,
@@ -71,7 +94,7 @@ export class UsersService {
       templateId: this.configService.get('app.sendgrid.templates.welcome'),
     });
 
-    return plainToInstance(UserDto, user);
+    return plainToInstance(RegisterDto, { ...user, id: person.id, ...person });
   }
 
   async findPermissions(userRolesId: string[]) {

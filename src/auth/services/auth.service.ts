@@ -1,6 +1,5 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../../users/services/users.service';
-import { CreateUserDto } from '../../users/dtos/request/create-user.dto';
 import { CreateLoginDto } from '../dtos/request/create-login.dto';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
@@ -12,6 +11,8 @@ import { LoginDto } from '../dtos/response/login.dto';
 import { UserLoginDto } from '../../users/dtos/response/user-login.dto';
 import { RefreshDto } from '../dtos/response/refresh.dto';
 import { RefreshLoginDto } from '../dtos/request/refresh-token.dto';
+import { CreateRegisterDto } from '../dtos/request/create-register.dto';
+
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
@@ -23,7 +24,7 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async register(createUserDto: CreateUserDto) {
+  async register(createUserDto: CreateRegisterDto) {
     this.logger.log('register');
     return this.usersServices.create(createUserDto);
   }

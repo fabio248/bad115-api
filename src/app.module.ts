@@ -11,6 +11,7 @@ import appConfig from './common/config/app.config';
 import * as path from 'path';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { PersonsModule } from './persons/persons.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     CommonModule,
     AuthModule,
     UsersModule,
+    PersonsModule,
   ],
   controllers: [AppController],
   providers: [AuthModule, UsersModule],
