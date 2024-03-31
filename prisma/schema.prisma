@@ -140,7 +140,7 @@ model Address {
 model Country {
   id        String    @id @default(uuid())
   name      String    @unique @map("nombre")
-  codename  String    @map("codigo")
+  areaCode  String    @map("codigo")
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
@@ -491,7 +491,7 @@ model Recomendation {
   candidateId String
   candidate   Candidate @relation(fields: [candidateId], references: [id])
 
-  @@map("mtn_recomendacion")
+  @@map("mnt_recomendacion")
 }
 
 model Recruiter {
