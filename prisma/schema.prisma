@@ -131,13 +131,28 @@ model Address {
   department     Department   @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   municipalityId String
   municipality   Municipality @relation(fields: [municipalityId], references: [id])
+  countryId      String
+  country        Country      @relation(fields: [countryId], references: [id])
 
   @@map("mnt_direccion")
 }
 
+model Country {
+  id        String    @id @default(uuid())
+  name      String    @unique @map("nombre")
+  codename  String    @map("codigo")
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+  Address   Address[]
+
+  @@map("ctl_pais")
+}
+
 model Department {
   id        String    @id @default(uuid())
-  name      String    @map("nombre")
+  name      String    @unique @map("nombre")
+  codename  String    @map("codigo")
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
@@ -150,7 +165,8 @@ model Department {
 
 model Municipality {
   id        String    @id @default(uuid())
-  name      String    @map("nombre")
+  name      String    @unique @map("nombre")
+  codename  String    @map("codigo")
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
