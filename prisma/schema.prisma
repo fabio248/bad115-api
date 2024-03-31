@@ -92,14 +92,13 @@ model Person {
 
   userId        String          @unique
   user          User            @relation(fields: [userId], references: [id])
-  documents     Document[]
-  socialNetwork SocialNetwork[]
   candidateId   String?         @unique()
   candidate     Candidate?      @relation(fields: [candidateId], references: [id])
   recruiterId   String?         @unique
   recruiter     Recruiter?      @relation(fields: [recruiterId], references: [id])
-  adressId      String?         @unique
-  address       Address?        @relation(fields: [adressId], references: [id])
+  documents     Document[]
+  socialNetwork SocialNetwork[]
+  Address       Address?
 
   @@map("mnt_persona")
 }
@@ -126,7 +125,8 @@ model Address {
   updatedAt   DateTime  @updatedAt @map("modificado_en")
   deletedAt   DateTime? @map("eliminado_en")
 
-  person         Person?
+  personId       String?      @unique
+  person         Person?      @relation(fields: [personId], references: [id])
   departmentId   String
   department     Department   @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   municipalityId String
