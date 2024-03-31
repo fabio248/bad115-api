@@ -18,26 +18,28 @@ import { PersonDto } from './dtos/response/person.dto';
 import { ApiErrorResponse } from '../common/decorators/api-error-response.decorator';
 import { PersonIdDto } from './dtos/request/person-id.dto';
 import { PaginatedDto } from '../common/dtos/response/paginated.dto';
+import { permissions } from '../../prisma/seeds/permissions.seed';
 
 @Controller('persons')
 @ApiTags('Persons Endpoints')
 export class PersonsController {
   constructor(private readonly personsService: PersonsService) {}
 
-  @Auth()
+  @Auth({ permissions: [permissions.MANAGE_PERSON.codename] })
   @ApiPaginatedResponse(PersonDto)
   @Get()
   findAll(@Query() pageDto: PageDto): Promise<PaginatedDto<PersonDto>> {
     return this.personsService.findAll(pageDto);
   }
 
-  @Auth()
+  @Auth({ permissions: [permissions.READ_PERSON.codename] })
   @ApiErrorResponse([
     {
       status: HttpStatus.NOT_FOUND,
       message: 'Persona no encontrada.',
       errorType: 'Not Found',
       path: 'persons',
+      description: 'El id de la persona no existe en la base de datos.',
     },
   ])
   @Get(':personId')
@@ -45,6 +47,7 @@ export class PersonsController {
     return this.personsService.findOne(personId);
   }
 
+  @Auth({ permissions: [permissions.UPDATE_PERSON.codename] })
   @ApiErrorResponse([
     {
       status: HttpStatus.NOT_FOUND,
@@ -53,7 +56,6 @@ export class PersonsController {
       path: 'persons',
     },
   ])
-  @Auth()
   @Put(':personId')
   update(
     @Param() { personId }: PersonIdDto,
@@ -62,7 +64,7 @@ export class PersonsController {
     return this.personsService.update(personId, updatePersonDto);
   }
 
-  @Auth()
+  @Auth({ permissions: [permissions.DELETE_PERSON.codename] })
   @ApiErrorResponse([
     {
       status: HttpStatus.NOT_FOUND,

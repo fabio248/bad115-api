@@ -6,13 +6,15 @@ interface IApiErrorResponse {
   message: string;
   errorType: string;
   path: string;
+  description?: string;
 }
 
 export const ApiErrorResponse = (errors: IApiErrorResponse[]) => {
   return applyDecorators(
-    ...errors.map(({ status, message, errorType, path }) =>
+    ...errors.map(({ status, message, errorType, path, description }) =>
       ApiResponse({
         status: status,
+        description,
         schema: {
           type: 'object',
           properties: {

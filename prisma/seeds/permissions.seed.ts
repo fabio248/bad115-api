@@ -76,4 +76,29 @@ export const permissions = {
     codename: 'manage:permission',
     roles: [roles.ADMIN],
   },
+  CREATE_PERSON: {
+    name: 'Create person',
+    codename: 'create:person',
+    roles: [roles.ADMIN, roles.USER],
+  },
+  UPDATE_PERSON: {
+    name: 'Update person',
+    codename: 'update:person',
+    roles: [roles.ADMIN, roles.USER],
+  },
+  DELETE_PERSON: {
+    name: 'Delete person',
+    codename: 'delete:person',
+    roles: [roles.ADMIN, roles.USER],
+  },
+  READ_PERSON: {
+    name: 'Read person',
+    codename: 'read:person',
+    roles: [roles.ADMIN, roles.USER],
+  },
+  MANAGE_PERSON: {
+    name: 'Manage person',
+    codename: 'manage:person',
+    roles: [roles.ADMIN],
+  },
 };
