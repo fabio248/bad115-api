@@ -23,6 +23,7 @@
   },
   "CONFLICT": {
     "DEFAULT": "You don't have access to do that.",
-    "EMAIL_ALREADY_TAKEN": "The email {email} is already in use."
+    "EMAIL_ALREADY_TAKEN": "The email {email} is already in use.",
+    "ROLE_NAME_ALREADY_TAKEN": "The role name is already in use."
   }
 }

@@ -19,9 +19,9 @@ export const ApiErrorResponse = ({ errors }: IApiErrorResponse) => {
           type: 'object',
           properties: {
             statusCode: { type: 'number', example: status },
-            message: { type: 'string', example: message },
-            path: { type: 'string', example: `/v1/${path}` },
             timestamp: { type: 'string', format: 'date-time' },
+            path: { type: 'string', example: `/v1/${path}` },
+            message: { type: 'string', example: message },
             error: { type: 'string', example: errorType },
           },
         },

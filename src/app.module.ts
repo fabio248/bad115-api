@@ -12,6 +12,8 @@ import * as path from 'path';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PersonsModule } from './persons/persons.module';
+import { AdminsModule } from './admins/admins.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -48,6 +50,8 @@ import { PersonsModule } from './persons/persons.module';
     AuthModule,
     UsersModule,
     PersonsModule,
+    AdminsModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AuthModule, UsersModule],
