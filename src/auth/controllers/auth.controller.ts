@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from '../../common/guards/local-auth.guard';
@@ -10,6 +17,7 @@ import { RefreshDto } from '../dtos/response/refresh.dto';
 import { RefreshLoginDto } from '../dtos/request/refresh-token.dto';
 import { CreateRegisterDto } from '../dtos/request/create-register.dto';
 import { RegisterDto } from '../dtos/response/register.dto';
+import { ApiErrorResponse } from '../../common/decorators/api-error-response.decorator';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -26,6 +34,23 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiOperation({ summary: 'Use this endpoint to authenticate user' })
+  @ApiErrorResponse({
+    errors: [
+      {
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        message:
+          'Has excedido el número máximo de intentos de inicio de sesión.',
+        errorType: 'Unprocessable Entity',
+        path: 'auth/login',
+      },
+      {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Credenciales invalidas',
+        errorType: 'Unauthorized',
+        path: 'auth/login',
+      },
+    ],
+  })
   async login(
     @Request() req: RequestType,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

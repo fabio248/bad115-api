@@ -1,4 +1,9 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { UsersService } from '../../users/services/users.service';
 import { CreateLoginDto } from '../dtos/request/create-login.dto';
 import { ConfigService } from '@nestjs/config';
@@ -45,7 +50,7 @@ export class AuthService {
     }
 
     if (user.loginAttemps >= 3) {
-      throw new UnauthorizedException(
+      throw new UnprocessableEntityException(
         this.i18n.t('exception.UNAUTHORIZED.MAX_LOGIN_ATTEMPTS'),
       );
     }

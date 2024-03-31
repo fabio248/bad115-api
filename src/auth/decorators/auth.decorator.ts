@@ -8,10 +8,13 @@ interface IAuth {
   additionalGuards?: any[];
 }
 
-export function Auth({ permissions = [], additionalGuards = [] }: IAuth = {}) {
+export const Auth = ({
+  permissions = [],
+  additionalGuards = [],
+}: IAuth = {}) => {
   return applyDecorators(
     SetMetadata('permissions', permissions),
     UseGuards(JwtAuthGuard, PermissionGuard, ...additionalGuards),
     ApiBearerAuth(),
   );
-}
+};
