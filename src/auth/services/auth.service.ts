@@ -31,6 +31,7 @@ export class AuthService {
 
   async validateUser(createLoginDto: CreateLoginDto): Promise<UserLoginDto> {
     this.logger.log('validateUser');
+
     const { email, password: comingPassword } = createLoginDto;
     const user = await this.usersServices.findOneByEmail(email, {
       roles: true,
@@ -102,16 +103,22 @@ export class AuthService {
   }
 
   async refreshToken(refreshLoginDto: RefreshLoginDto): Promise<RefreshDto> {
-    const user = this.jwtService.verify(refreshLoginDto.refreshToken);
+    this.logger.log('refreshToken');
+
+    const currentPayload = this.jwtService.verify<IPayload>(
+      refreshLoginDto.refreshToken,
+    );
+
     const payload: IPayload = {
-      email: user.email,
-      userId: user.id,
-      candidateId: user.person.candidateId,
-      recruiterId: user.person.recruiterId,
-      personId: user.person.id,
-      permissions: user.permissions,
-      roles: user.roles,
+      email: currentPayload.email,
+      userId: currentPayload.userId,
+      candidateId: currentPayload.candidateId,
+      recruiterId: currentPayload.recruiterId,
+      personId: currentPayload.personId,
+      permissions: currentPayload.permissions,
+      roles: currentPayload.roles,
     };
+
     return plainToInstance(RefreshDto, {
       accessToken: this.jwtService.sign(payload),
     });
