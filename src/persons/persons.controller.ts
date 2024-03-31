@@ -17,6 +17,7 @@ import { ApiPaginatedResponse } from '../common/decorators/api-paginated-respons
 import { PersonDto } from './dtos/response/person.dto';
 import { ApiErrorResponse } from '../common/decorators/api-error-response.decorator';
 import { PersonIdDto } from './dtos/request/person-id.dto';
+import { PaginatedDto } from '../common/dtos/response/paginated.dto';
 
 @Controller('persons')
 @ApiTags('Persons Endpoints')
@@ -26,7 +27,7 @@ export class PersonsController {
   @Auth()
   @ApiPaginatedResponse(PersonDto)
   @Get()
-  findAll(@Query() pageDto: PageDto) {
+  findAll(@Query() pageDto: PageDto): Promise<PaginatedDto<PersonDto>> {
     return this.personsService.findAll(pageDto);
   }
 
@@ -40,7 +41,7 @@ export class PersonsController {
     },
   ])
   @Get(':personId')
-  findOne(@Param() { personId }: PersonIdDto) {
+  findOne(@Param() { personId }: PersonIdDto): Promise<PersonDto> {
     return this.personsService.findOne(personId);
   }
 
@@ -71,7 +72,7 @@ export class PersonsController {
     },
   ])
   @Delete(':personId')
-  remove(@Param() { personId }: PersonIdDto) {
+  remove(@Param() { personId }: PersonIdDto): Promise<void> {
     return this.personsService.remove(personId);
   }
 }

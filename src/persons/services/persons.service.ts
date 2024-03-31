@@ -49,8 +49,6 @@ export class PersonsService {
       }),
     ]);
 
-    console.log('persons', persons);
-
     const pagination = getPaginationInfo(pageDto, totalItems);
 
     return { data: plainToInstance(PersonDto, persons), pagination };
