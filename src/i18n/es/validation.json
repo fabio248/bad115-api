@@ -8,9 +8,9 @@
   "IS_INT": "{property} debe ser un número entero.",
   "MIN": "{property} debe ser igual o mayor que {constraint}.",
   "MAX": "{property} debe ser igual o menor que {constraint}.",
-  "IS_DATE": "{property} debe ser una fecha en formato 'yyyy-mm-dd' y una fecha válida.",
+  "IS_DATE": "{property} debe ser una fecha en formato 'yyyy-mm-ddThh:mm:ss.mmmZ' y una fecha válida.",
   "IS_POSITIVE": "{property} debe ser un número positivo.",
   "IS_URL": "{property} debe ser una dirección URL.",
   "IS_TIME": "{property} debe ser una hora válida en formato 'hh:mm:ss'",
-  "IS_VALID_TOKEN":"{property} debe ser un tipo de token valido 'refresh token'"
+  "IS_VALID_TOKEN": "{property} debe ser un tipo de token valido 'refresh token'"
 }
