@@ -19,7 +19,7 @@ import { CreateRegisterDto } from '../dtos/request/create-register.dto';
 import { RegisterDto } from '../dtos/response/register.dto';
 import { ApiErrorResponse } from '../../common/decorators/api-error-response.decorator';
 
-@ApiTags('Authentication')
+@ApiTags('Authentication Endpoints')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

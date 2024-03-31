@@ -5,7 +5,7 @@ import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from '../../../prisma/seeds/permissions.seed';
 import { UserIdDto } from '../dtos/request/user-id.dto';
 
-@ApiTags('Users')
+@ApiTags('Users Endpoints')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
