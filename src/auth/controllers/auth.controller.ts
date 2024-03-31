@@ -61,6 +61,16 @@ export class AuthController {
 
   @Post('refresh-token')
   @ApiOperation({ summary: 'Use this endpoint to refresh token' })
+  @ApiErrorResponse({
+    errors: [
+      {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Token inválid o expirado.',
+        errorType: 'Unauthorized',
+        path: 'auth/refresh-token',
+      },
+    ],
+  })
   async refreshToken(
     @Body() refreshLoginDto: RefreshLoginDto,
   ): Promise<RefreshDto> {

@@ -108,24 +108,31 @@ export class AuthService {
   }
 
   async refreshToken(refreshLoginDto: RefreshLoginDto): Promise<RefreshDto> {
-    this.logger.log('refreshToken');
+    try {
+      this.logger.log('refreshToken');
 
-    const currentPayload = this.jwtService.verify<IPayload>(
-      refreshLoginDto.refreshToken,
-    );
+      const currentPayload = this.jwtService.verify<IPayload>(
+        refreshLoginDto.refreshToken,
+      );
 
-    const payload: IPayload = {
-      email: currentPayload.email,
-      userId: currentPayload.userId,
-      candidateId: currentPayload.candidateId,
-      recruiterId: currentPayload.recruiterId,
-      personId: currentPayload.personId,
-      permissions: currentPayload.permissions,
-      roles: currentPayload.roles,
-    };
+      const payload: IPayload = {
+        email: currentPayload.email,
+        userId: currentPayload.userId,
+        candidateId: currentPayload.candidateId,
+        recruiterId: currentPayload.recruiterId,
+        personId: currentPayload.personId,
+        permissions: currentPayload.permissions,
+        roles: currentPayload.roles,
+      };
 
-    return plainToInstance(RefreshDto, {
-      accessToken: this.jwtService.sign(payload),
-    });
+      return plainToInstance(RefreshDto, {
+        accessToken: this.jwtService.sign(payload),
+      });
+    } catch (err) {
+      this.logger.error(err);
+      throw new UnauthorizedException(
+        this.i18n.t('exception.UNAUTHORIZED.INVALID_TOKEN'),
+      );
+    }
   }
 }
