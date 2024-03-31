@@ -25,6 +25,9 @@ export class CreatePersonDto {
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
   readonly secondLastName?: string;
 
+  /**
+   * M = Masculino, F = Femenino
+   * */
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
   @IsEnum(['M', 'F'], { message: i18nValidationMessage('validation.IS_ENUM') })
   readonly gender: GenderEnum;

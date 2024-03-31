@@ -3,7 +3,7 @@ import { Exclude, Expose } from 'class-transformer';
 @Exclude()
 export class PersonDto {
   @Expose()
-  readonly id: number;
+  readonly id: string;
 
   @Expose()
   readonly firstName: string;
@@ -19,4 +19,10 @@ export class PersonDto {
 
   @Expose()
   readonly birthday: Date;
+
+  @Expose()
+  readonly candidateId: string;
+
+  @Expose()
+  readonly recruiterId: string;
 }

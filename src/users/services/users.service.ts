@@ -46,12 +46,16 @@ export class UsersService {
 
     const [user, person] = await this.prismaService.$transaction(
       async (tPrisma) => {
-        const user = await tPrisma.user.create({
-          data: {
-            email: registerDto.email,
-            password: registerDto.password,
-          },
-        });
+        const [user, candidate, recruiter] = await Promise.all([
+          tPrisma.user.create({
+            data: {
+              email: registerDto.email,
+              password: registerDto.password,
+            },
+          }),
+          tPrisma.candidate.create({ data: {} }),
+          tPrisma.recruiter.create({ data: {} }),
+        ]);
 
         const createPersonDto = instanceToPlain(registerDto);
         delete createPersonDto.email;
@@ -64,6 +68,16 @@ export class UsersService {
               user: {
                 connect: {
                   id: user.id,
+                },
+              },
+              candidate: {
+                connect: {
+                  id: candidate.id,
+                },
+              },
+              recruiter: {
+                connect: {
+                  id: recruiter.id,
                 },
               },
             },

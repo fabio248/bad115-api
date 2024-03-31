@@ -2,11 +2,8 @@ import { Expose } from 'class-transformer';
 
 export class LoginDto {
   @Expose()
-  accessToken: string;
+  readonly accessToken: string;
 
   @Expose()
-  roles: string[];
-
-  @Expose()
-  permissions: string[];
+  readonly refreshToken: string;
 }

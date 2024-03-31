@@ -1,5 +1,8 @@
 export interface IPayload {
-  sub: string;
+  userId: string;
+  candidateId: string;
+  recruiterId: string;
+  personId: string;
   email: string;
   roles: string[];
   permissions: string[];

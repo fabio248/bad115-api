@@ -34,6 +34,7 @@ export class AuthService {
     const { email, password: comingPassword } = createLoginDto;
     const user = await this.usersServices.findOneByEmail(email, {
       roles: true,
+      person: true,
     });
 
     if (!user) {
@@ -62,25 +63,21 @@ export class AuthService {
       );
     }
 
-    if (isValidPassword) {
-      const [roles, permissions] = await Promise.all([
-        this.usersServices.findRoles(user.id),
-        this.usersServices.findPermissions(
-          user.roles.map((userRole) => userRole.roleId),
-        ),
-        this.usersServices.update(user.id, {
-          loginAttemps: 0,
-        }),
-      ]);
+    const [roles, permissions] = await Promise.all([
+      this.usersServices.findRoles(user.id),
+      this.usersServices.findPermissions(
+        user.roles.map((userRole) => userRole.roleId),
+      ),
+      this.usersServices.update(user.id, {
+        loginAttemps: 0,
+      }),
+    ]);
 
-      return plainToInstance(UserLoginDto, {
-        ...user,
-        permissions: permissions.map((permission) => permission.codename),
-        roles: roles.map((role) => role.name),
-      });
-    }
-
-    return null;
+    return plainToInstance(UserLoginDto, {
+      ...user,
+      permissions: permissions.map((permission) => permission.codename),
+      roles: roles.map((role) => role.name),
+    });
   }
 
   async login(user: UserLoginDto): Promise<LoginDto> {
@@ -88,7 +85,10 @@ export class AuthService {
 
     const payload: IPayload = {
       email: user.email,
-      sub: user.id,
+      userId: user.id,
+      candidateId: user.person?.candidateId,
+      recruiterId: user.person?.recruiterId,
+      personId: user.person.id,
       permissions: user.permissions,
       roles: user.roles,
     };
@@ -102,10 +102,13 @@ export class AuthService {
   }
 
   async refreshToken(refreshLoginDto: RefreshLoginDto): Promise<RefreshDto> {
-    const user = await this.jwtService.verify(refreshLoginDto.refreshToken);
+    const user = this.jwtService.verify(refreshLoginDto.refreshToken);
     const payload: IPayload = {
       email: user.email,
-      sub: user.id,
+      userId: user.id,
+      candidateId: user.person.candidateId,
+      recruiterId: user.person.recruiterId,
+      personId: user.person.id,
       permissions: user.permissions,
       roles: user.roles,
     };
