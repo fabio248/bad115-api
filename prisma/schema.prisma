@@ -152,7 +152,7 @@ model Country {
 model Department {
   id        String    @id @default(uuid())
   name      String    @unique @map("nombre")
-  codename  String    @map("codigo")
+  codename  String    @unique @map("codigo")
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
@@ -166,7 +166,7 @@ model Department {
 model Municipality {
   id        String    @id @default(uuid())
   name      String    @unique @map("nombre")
-  codename  String    @map("codigo")
+  codename  String    @unique @map("codigo")
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")

@@ -2,15 +2,27 @@ import { PrismaClient } from '@prisma/client';
 import { Logger } from '@nestjs/common';
 import { roles } from './roles.seed';
 import { permissions } from './permissions.seed';
+import { countriesSeed } from './country.seed';
+import { departmentSeed } from './deparment.seed';
+import { municipalitySeed } from './municipality.seed';
 
 const prisma = new PrismaClient();
 
 async function main() {
   Logger.log('Seeding started', 'Seeder');
 
-  const [storedRoles, storedPermission] = await Promise.all([
+  const [
+    storedRoles,
+    storedPermission,
+    storedCountries,
+    storedDeparments,
+    storedMunicipality,
+  ] = await Promise.all([
     prisma.role.findMany(),
     prisma.permission.findMany(),
+    prisma.country.findMany(),
+    prisma.department.findMany(),
+    prisma.municipality.findMany(),
   ]);
 
   //Check if roles already exist, if not create them
@@ -48,6 +60,68 @@ async function main() {
         })),
       });
       Logger.log(`Permission ${newPermission.name} created`, 'Seeder');
+    }
+  }
+
+  for await (const country of countriesSeed) {
+    const existingCountry = storedCountries.find(
+      (c) => c.name === country.nombre,
+    );
+
+    if (!existingCountry) {
+      const newCountry = await prisma.country.create({
+        data: {
+          name: country.nombre,
+          areaCode: country.codigo_area,
+        },
+      });
+
+      storedCountries.push(newCountry);
+      Logger.log(`Country ${newCountry.name} created`, 'Seeder');
+    }
+  }
+
+  for await (const deparment of departmentSeed) {
+    const existingDepartment = storedDeparments.find(
+      (d) => d.name === deparment.nam,
+    );
+
+    if (!existingDepartment) {
+      const newDepartment = await prisma.department.create({
+        data: {
+          name: deparment.nam,
+          codename: deparment.codigo.toString(),
+        },
+      });
+
+      storedDeparments.push(newDepartment);
+      Logger.log(`Department ${newDepartment.name} created`, 'Seeder');
+    }
+  }
+
+  for await (const municipality of municipalitySeed) {
+    const existingMunicipality = storedMunicipality.find(
+      (m) => m.name === municipality.nam,
+    );
+
+    if (!existingMunicipality) {
+      const newMunicipality = await prisma.municipality.create({
+        data: {
+          name: municipality.nam,
+          codename: municipality.codigo.toString(),
+          department: {
+            connect: {
+              name: departmentSeed.find(
+                (d) =>
+                  d.codigo === municipality.codigo.toString().substring(0, 2),
+              ).nam,
+            },
+          },
+        },
+      });
+
+      storedMunicipality.push(newMunicipality);
+      Logger.log(`Municipality ${newMunicipality.name} created`, 'Seeder');
     }
   }
 
