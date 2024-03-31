@@ -1,4 +1,5 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
+import { UserDto } from '../../../users/dtos/response/user.dto';
 
 @Exclude()
 export class PersonDto {
@@ -25,4 +26,11 @@ export class PersonDto {
 
   @Expose()
   readonly recruiterId: string;
+
+  @Expose()
+  readonly userId: string;
+
+  @Expose()
+  @Type(() => UserDto)
+  readonly user?: UserDto;
 }

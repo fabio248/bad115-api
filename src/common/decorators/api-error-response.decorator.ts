@@ -2,15 +2,13 @@ import { applyDecorators } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 
 interface IApiErrorResponse {
-  errors: {
-    status: number;
-    message: string;
-    errorType: string;
-    path: string;
-  }[];
+  status: number;
+  message: string;
+  errorType: string;
+  path: string;
 }
 
-export const ApiErrorResponse = ({ errors }: IApiErrorResponse) => {
+export const ApiErrorResponse = (errors: IApiErrorResponse[]) => {
   return applyDecorators(
     ...errors.map(({ status, message, errorType, path }) =>
       ApiResponse({

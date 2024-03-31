@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Param, HttpStatus } from '@nestjs/common';
 import { RolesService } from '../services/roles.service';
 import { CreateRoleDto } from '../dto/request/create-role.dto';
 
-import { IdDto } from '../../common/dtos/id.dto';
+import { IdDto } from '../../common/dtos/request/id.dto';
 import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from '../../../prisma/seeds/permissions.seed';
 import { ApiErrorResponse } from '../../common/decorators/api-error-response.decorator';
@@ -17,16 +17,14 @@ export class RolesController {
   @Auth({
     permissions: [permissions.CREATE_ROLE.codename],
   })
-  @ApiErrorResponse({
-    errors: [
-      {
-        status: HttpStatus.CONFLICT,
-        message: 'El nombre del rol ya está en uso.',
-        errorType: 'Conflict',
-        path: 'roles',
-      },
-    ],
-  })
+  @ApiErrorResponse([
+    {
+      status: HttpStatus.CONFLICT,
+      message: 'El nombre del rol ya está en uso.',
+      errorType: 'Conflict',
+      path: 'roles',
+    },
+  ])
   @Post()
   create(@Body() createRoleDto: CreateRoleDto): Promise<RoleDto> {
     return this.rolesService.create(createRoleDto);
@@ -43,16 +41,14 @@ export class RolesController {
   @Auth({
     permissions: [permissions.READ_ROLE.codename],
   })
-  @ApiErrorResponse({
-    errors: [
-      {
-        status: HttpStatus.NOT_FOUND,
-        message: 'Rol no encontrado.',
-        errorType: 'Not Found',
-        path: 'roles',
-      },
-    ],
-  })
+  @ApiErrorResponse([
+    {
+      status: HttpStatus.NOT_FOUND,
+      message: 'Rol no encontrado.',
+      errorType: 'Not Found',
+      path: 'roles',
+    },
+  ])
   @Get(':id')
   findOne(@Param() { id }: IdDto): Promise<RoleDto> {
     return this.rolesService.findOne(id);

@@ -6,8 +6,8 @@ export function getPaginationInfo(
   totalItems: number,
 ): PaginationDto {
   const totalPages = Math.ceil(totalItems / perPage);
-  const nextPage = page < totalPages ? page + 1 : undefined;
-  const previousPage = page > 1 && !(page > totalPages) ? page - 1 : undefined;
+  const nextPage = page < totalPages ? page + 1 : null;
+  const previousPage = page > 1 && !(page > totalPages) ? page - 1 : null;
   return {
     totalPages,
     perPage,

@@ -36,7 +36,11 @@ export class RolesService {
   }
 
   async findAll(): Promise<RoleDto[]> {
-    const roles = await this.prismaService.role.findMany();
+    const roles = await this.prismaService.role.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
 
     return plainToInstance(RoleDto, roles);
   }

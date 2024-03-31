@@ -34,23 +34,20 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiOperation({ summary: 'Use this endpoint to authenticate user' })
-  @ApiErrorResponse({
-    errors: [
-      {
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        message:
-          'Has excedido el número máximo de intentos de inicio de sesión.',
-        errorType: 'Unprocessable Entity',
-        path: 'auth/login',
-      },
-      {
-        status: HttpStatus.UNAUTHORIZED,
-        message: 'Credenciales invalidas',
-        errorType: 'Unauthorized',
-        path: 'auth/login',
-      },
-    ],
-  })
+  @ApiErrorResponse([
+    {
+      status: HttpStatus.UNPROCESSABLE_ENTITY,
+      message: 'Has excedido el número máximo de intentos de inicio de sesión.',
+      errorType: 'Unprocessable Entity',
+      path: 'auth/login',
+    },
+    {
+      status: HttpStatus.UNAUTHORIZED,
+      message: 'Credenciales invalidas',
+      errorType: 'Unauthorized',
+      path: 'auth/login',
+    },
+  ])
   async login(
     @Request() req: RequestType,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -61,16 +58,14 @@ export class AuthController {
 
   @Post('refresh-token')
   @ApiOperation({ summary: 'Use this endpoint to refresh token' })
-  @ApiErrorResponse({
-    errors: [
-      {
-        status: HttpStatus.UNAUTHORIZED,
-        message: 'Token inválid o expirado.',
-        errorType: 'Unauthorized',
-        path: 'auth/refresh-token',
-      },
-    ],
-  })
+  @ApiErrorResponse([
+    {
+      status: HttpStatus.UNAUTHORIZED,
+      message: 'Token inválid o expirado.',
+      errorType: 'Unauthorized',
+      path: 'auth/refresh-token',
+    },
+  ])
   async refreshToken(
     @Body() refreshLoginDto: RefreshLoginDto,
   ): Promise<RefreshDto> {

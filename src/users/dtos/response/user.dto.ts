@@ -5,24 +5,27 @@ import { PersonDto } from '../../../persons/dtos/response/person.dto';
 @Exclude()
 export class UserDto {
   @Expose()
-  id: string;
+  readonly id: string;
 
   @Expose()
-  email: string;
+  readonly email: string;
+
+  @Expose()
+  readonly avatar?: string;
 
   @Expose()
   @Type(() => PersonDto)
-  person?: PersonDto;
+  readonly person?: PersonDto;
 
   @ApiHideProperty()
-  password: string;
+  readonly password: string;
 
   @ApiHideProperty()
-  createdAt: Date;
+  readonly createdAt: Date;
 
   @ApiHideProperty()
-  updatedAt: Date;
+  readonly updatedAt: Date;
 
   @ApiHideProperty()
-  deletedAt: Date;
+  readonly deletedAt: Date;
 }
