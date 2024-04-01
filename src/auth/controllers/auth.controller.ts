@@ -18,6 +18,7 @@ import { RefreshLoginDto } from '../dtos/request/refresh-token.dto';
 import { CreateRegisterDto } from '../dtos/request/create-register.dto';
 import { RegisterDto } from '../dtos/response/register.dto';
 import { ApiErrorResponse } from '../../common/decorators/api-error-response.decorator';
+import { UnlockAccountDto } from '../dtos/request/unlock-account.dto';
 
 @ApiTags('Authentication Endpoints')
 @Controller('auth')
@@ -70,5 +71,31 @@ export class AuthController {
     @Body() refreshLoginDto: RefreshLoginDto,
   ): Promise<RefreshDto> {
     return this.authService.refreshToken(refreshLoginDto);
+  }
+
+  @Post('unlock-accounts')
+  @ApiOperation({ summary: 'Use this endpoint to unblock user' })
+  @ApiErrorResponse([
+    {
+      status: HttpStatus.NOT_FOUND,
+      message: 'Usuario no encontrado',
+      errorType: 'Not Found',
+      path: 'auth/unblock',
+    },
+    {
+      status: HttpStatus.UNPROCESSABLE_ENTITY,
+      message: 'La cuenta ya está activa.',
+      errorType: 'Unprocessable Entity',
+      path: 'auth/unblock',
+    },
+    {
+      status: HttpStatus.CONFLICT,
+      message: 'Debe haber al menos un administrador en el sistema.',
+      errorType: 'Conflict',
+      path: 'auth/unblock',
+    },
+  ])
+  async unlockUser(@Body() { email }: UnlockAccountDto): Promise<void> {
+    return this.authService.requestUnlockAccount(email);
   }
 }

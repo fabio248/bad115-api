@@ -16,6 +16,7 @@ export default registerAs(
       email: process.env.SENDGRID_FROM_EMAIL,
       templates: {
         welcome: process.env.SENDGRID_WELCOME_MAIL_TEMPLATE_ID,
+        unblock: process.env.SENDGRID_UNBLOCK_USER_MAIL_TEMPLATE_ID,
       },
     },
   }),

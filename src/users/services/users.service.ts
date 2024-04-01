@@ -175,4 +175,29 @@ export class UsersService {
       data: updateUserDto,
     });
   }
+
+  async findByRole(roles: string[]) {
+    const roleIds = await this.prismaService.role.findMany({
+      where: {
+        name: {
+          in: roles,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return this.prismaService.user.findMany({
+      where: {
+        roles: {
+          some: {
+            roleId: {
+              in: roleIds.map((role) => role.id),
+            },
+          },
+        },
+      },
+    });
+  }
 }

@@ -11,6 +11,7 @@ export interface IAppConfig {
     email: string;
     templates: {
       welcome: string;
+      unblock: string;
     };
   };
 }

@@ -12,4 +12,5 @@ export const appValidator = Joi.object({
   SENDGRID_API_KEY: Joi.string().required(),
   SENDGRID_FROM_EMAIL: Joi.string().email().required(),
   SENDGRID_WELCOME_MAIL_TEMPLATE_ID: Joi.string().required(),
+  SENDGRID_UNBLOCK_USER_MAIL_TEMPLATE_ID: Joi.string().required(),
 });
