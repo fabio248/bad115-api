@@ -1,5 +1,6 @@
 {
   "USER": "Usuario",
   "ROLE": "Rol",
-  "PERSON": "Persona"
+  "PERSON": "Persona",
+  "COUNTRY": "País"
 }
