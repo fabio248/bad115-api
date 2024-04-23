@@ -98,7 +98,7 @@ model Person {
   recruiter     Recruiter?      @relation(fields: [recruiterId], references: [id])
   documents     Document[]
   socialNetwork SocialNetwork[]
-  Address       Address?
+  address       Address?
 
   @@map("mnt_persona")
 }
@@ -125,14 +125,14 @@ model Address {
   updatedAt   DateTime  @updatedAt @map("modificado_en")
   deletedAt   DateTime? @map("eliminado_en")
 
-  personId       String?      @unique
-  person         Person?      @relation(fields: [personId], references: [id])
-  departmentId   String
-  department     Department   @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  municipalityId String
-  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+  personId       String?       @unique
+  person         Person?       @relation(fields: [personId], references: [id])
+  departmentId   String?
+  department     Department?   @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  municipalityId String?
+  municipality   Municipality? @relation(fields: [municipalityId], references: [id])
   countryId      String
-  country        Country      @relation(fields: [countryId], references: [id])
+  country        Country       @relation(fields: [countryId], references: [id])
 
   @@map("mnt_direccion")
 }
@@ -509,6 +509,7 @@ model Recruiter {
 
 model JobPosition {
   id            String    @id @default(uuid())
+  company       String    @map("empresa")
   salarialRange String    @map("rango_salarial")
   modality      String    @map("modalidad") // Enum: presencial, semipresencial, remoto
   location      String    @map("ubicacion")

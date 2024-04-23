@@ -2,5 +2,7 @@
   "USER": "Usuario",
   "ROLE": "Rol",
   "PERSON": "Persona",
-  "COUNTRY": "País"
+  "COUNTRY": "País",
+  "DEPARTMENT": "Departamento",
+  "MUNICIPALITY": "Municipio"
 }

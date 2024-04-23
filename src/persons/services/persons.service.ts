@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CreatePersonDto } from '../dtos/request/create-person.dto';
 import { UpdatePersonDto } from '../dtos/request/update-person.dto';
 import { PrismaService } from 'nestjs-prisma';
@@ -11,6 +15,10 @@ import {
 } from '../../common/utils/pagination.utils';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { I18nService } from 'nestjs-i18n';
+import { CreateAddressDto } from '../dtos/request/create-address.dto';
+import { AddressDto } from '../dtos/response/address.dto';
+import { EL_SALVADOR } from '../../common/utils/constants';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PersonsService {
@@ -54,11 +62,15 @@ export class PersonsService {
     return { data: plainToInstance(PersonDto, persons), pagination };
   }
 
-  async findOne(id: string): Promise<PersonDto> {
+  async findOne(
+    id: string,
+    include?: Prisma.PersonInclude,
+  ): Promise<PersonDto> {
     const person = await this.prismaService.person.findUnique({
       where: {
         id,
       },
+      include,
     });
 
     if (!person) {
@@ -101,5 +113,81 @@ export class PersonsService {
         deletedAt: new Date(),
       },
     });
+  }
+
+  async addAddress(
+    personId: string,
+    createAddressDto: CreateAddressDto,
+  ): Promise<AddressDto> {
+    let address;
+
+    const { countryId, municipalityId, departmentId } = createAddressDto;
+
+    const [country, person, department, municipality] = await Promise.all([
+      this.prismaService.country.findUnique({ where: { id: countryId } }),
+      await this.findOne(personId, { address: { include: { country: true } } }),
+      this.prismaService.department.findUnique({ where: { id: departmentId } }),
+      this.prismaService.municipality.findFirst({
+        where: { id: municipalityId, departmentId },
+      }),
+    ]);
+
+    if (!country) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.COUNTRY'),
+          },
+        }),
+      );
+    }
+
+    if (departmentId && !department) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.DEPARTMENT'),
+          },
+        }),
+      );
+    }
+
+    if (municipalityId && !municipality) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.MUNICIPALITY'),
+          },
+        }),
+      );
+    }
+
+    if (person.address) {
+      throw new UnprocessableEntityException('Person already has an address');
+    }
+
+    if (country.name === EL_SALVADOR) {
+      address = this.prismaService.address.create({
+        data: {
+          street: createAddressDto.street,
+          numberHouse: createAddressDto.numberHouse,
+          country: { connect: { id: countryId } },
+          department: { connect: { id: departmentId } },
+          municipality: { connect: { id: municipalityId } },
+          person: { connect: { id: personId } },
+        },
+      });
+    } else {
+      address = this.prismaService.address.create({
+        data: {
+          street: createAddressDto.street,
+          numberHouse: createAddressDto.numberHouse,
+          country: { connect: { id: countryId } },
+          person: { connect: { id: personId } },
+        },
+      });
+    }
+
+    return plainToInstance(AddressDto, address);
   }
 }
