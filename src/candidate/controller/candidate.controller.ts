@@ -9,30 +9,35 @@ import {
   Delete,
 } from '@nestjs/common';
 import { LaboralExperienceService } from '../services/laboral-experience.service';
+import { AcademicKnowledgeService } from '../services/academic-knowledge.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ApiErrorResponse } from 'src/common/decorators/api-error-response.decorator';
 
 //dto's
+// Laboral Experience
 import { CreateLaboralExperienceDto } from '../dto/request/create-laboral-experience.dto';
 import { CandidateIdDto } from '../dto/request/candidate-id.dto';
 import { LaboralExperienceDto } from '../dto/response/laboral-experience.dto';
 import { LaboralExperienceIdDto } from '../dto/request/laboral-experience-id.dto';
 import { UpdateLaboralExperienceDto } from '../dto/request/update-laboral-expirence.dto';
+// Academic knowledge
+import { CreateAcademicKnowledgeDto } from '../dto/request/create-academic-knowledge.dto';
+import { AcademicKnowledgeDto } from '../dto/response/academic-knowledge.dto';
 
 //pagination
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
-import { permissions } from 'prisma/seeds/permissions.seed';
 
 @Controller('candidates')
-@Auth({ permissions: [permissions.MANAGE_USER.codename] })
+// @Auth({ permissions: [permissions.MANAGE_USER.codename] })
 @ApiTags('Candidates')
 export class LaboralExperienceController {
   constructor(
     private readonly laboralExperienceService: LaboralExperienceService,
+    private readonly academicKnowledgeService: AcademicKnowledgeService,
   ) {}
 
+  //LABORAL EXPERIENCE CRUD
   @Post(':candidateId/laboral-experiences')
   @ApiErrorResponse([
     {
@@ -106,5 +111,39 @@ export class LaboralExperienceController {
   @Delete('/candidateId/laboral-experiences/:laboralExpirenceId')
   remove(@Param() { laboralExpirenceId }: LaboralExperienceIdDto) {
     return this.laboralExperienceService.remove(laboralExpirenceId);
+  }
+
+  //ACADEMIC KNOWLEDGE CRUD
+  @Post(':candidateId/academic-knowledge')
+  // @ApiErrorResponse([])
+  createAcademicKnowledge(
+    @Body() createAcademicKnowledge: CreateAcademicKnowledgeDto,
+    @Param() { candidateId }: CandidateIdDto,
+  ): Promise<AcademicKnowledgeDto> {
+    return this.academicKnowledgeService.create(
+      createAcademicKnowledge,
+      candidateId,
+    );
+  }
+
+  //pendiente
+  @Get('/candidateId/academic-knowledge/:academicKnowledgeId')
+  @ApiOperation({
+    summary: 'Use this endpoint to search a LaboralExperience',
+  })
+  findOneAcademicKnowledge(
+    @Param() { laboralExpirenceId }: LaboralExperienceIdDto,
+  ): Promise<LaboralExperienceDto> {
+    return this.laboralExperienceService.findOne(laboralExpirenceId);
+  }
+
+  @Get('/candidateId/academic-knowledge/:academicKnowledgeId')
+  @ApiOperation({
+    summary: 'Use this endpoint to search a LaboralExperience',
+  })
+  findAllAcademicKnowledge(
+    @Param() { laboralExpirenceId }: LaboralExperienceIdDto,
+  ): Promise<LaboralExperienceDto> {
+    return this.laboralExperienceService.findOne(laboralExpirenceId);
   }
 }
