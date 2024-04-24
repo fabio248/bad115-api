@@ -8,7 +8,7 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
-import { LaboralExperienceService } from '../services/laboral-experience.service';
+import { LaboralExperiencesService } from '../services/laboral-experiences.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ApiErrorResponse } from 'src/common/decorators/api-error-response.decorator';
 
@@ -25,9 +25,9 @@ import { PageDto } from '../../common/dtos/request/page.dto';
 
 @Controller('candidates')
 @ApiTags('Candidates Endpoints')
-export class LaboralExperienceController {
+export class LaboralExperiencesController {
   constructor(
-    private readonly laboralExperienceService: LaboralExperienceService,
+    private readonly laboralExperiencesService: LaboralExperiencesService,
   ) {}
 
   //LABORAL EXPERIENCE CRUD
@@ -44,7 +44,7 @@ export class LaboralExperienceController {
     @Body() createLaboralExperienceDto: CreateLaboralExperienceDto,
     @Param() { candidateId }: CandidateIdDto,
   ): Promise<LaboralExperienceDto> {
-    return this.laboralExperienceService.create(
+    return this.laboralExperiencesService.create(
       createLaboralExperienceDto,
       candidateId,
     );
@@ -65,7 +65,7 @@ export class LaboralExperienceController {
   findOne(
     @Param() { laboralExpirenceId }: LaboralExperienceIdDto,
   ): Promise<LaboralExperienceDto> {
-    return this.laboralExperienceService.findOne(laboralExpirenceId);
+    return this.laboralExperiencesService.findOne(laboralExpirenceId);
   }
 
   @Get(':candidateId/laboral-experiences/laboralExpirenceId')
@@ -85,7 +85,7 @@ export class LaboralExperienceController {
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
   ): Promise<PaginatedDto<LaboralExperienceDto>> {
-    return this.laboralExperienceService.findAll(candidateId, pageDto);
+    return this.laboralExperiencesService.findAll(candidateId, pageDto);
   }
 
   @Put(':candidateId/laboral-experiences/:laboralExpirenceId')
@@ -94,7 +94,7 @@ export class LaboralExperienceController {
     @Param() { laboralExpirenceId }: LaboralExperienceIdDto,
     @Param() { candidateId }: CandidateIdDto,
   ): Promise<LaboralExperienceDto> {
-    return this.laboralExperienceService.update(
+    return this.laboralExperiencesService.update(
       updateLaboralExperienceDto,
       laboralExpirenceId,
       candidateId,
@@ -103,7 +103,7 @@ export class LaboralExperienceController {
 
   @Delete('/candidateId/laboral-experiences/:laboralExpirenceId')
   remove(@Param() { laboralExpirenceId }: LaboralExperienceIdDto) {
-    return this.laboralExperienceService.remove(laboralExpirenceId);
+    return this.laboralExperiencesService.remove(laboralExpirenceId);
   }
 
   //ACADEMIC KNOWLEDGE CRU
@@ -115,7 +115,7 @@ export class LaboralExperienceController {
   findOneAcademicKnowledge(
     @Param() { laboralExpirenceId }: LaboralExperienceIdDto,
   ): Promise<LaboralExperienceDto> {
-    return this.laboralExperienceService.findOne(laboralExpirenceId);
+    return this.laboralExperiencesService.findOne(laboralExpirenceId);
   }
 
   @Get('/candidateId/academic-knowledge/:academicKnowledgeId')
@@ -125,6 +125,6 @@ export class LaboralExperienceController {
   findAllAcademicKnowledge(
     @Param() { laboralExpirenceId }: LaboralExperienceIdDto,
   ): Promise<LaboralExperienceDto> {
-    return this.laboralExperienceService.findOne(laboralExpirenceId);
+    return this.laboralExperiencesService.findOne(laboralExpirenceId);
   }
 }

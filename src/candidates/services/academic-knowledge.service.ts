@@ -11,10 +11,12 @@ import { AcademicKnowledgeDto } from '../dto/response/academic-knowledge.dto';
 @Injectable()
 export class AcademicKnowledgeService {
   private readonly logger = new Logger(AcademicKnowledgeService.name);
+
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
   ) {}
+
   async create(
     createAcademicKnowledge: CreateAcademicKnowledgeDto,
     id: string,

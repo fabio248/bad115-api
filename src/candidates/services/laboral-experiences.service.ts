@@ -16,7 +16,7 @@ import {
 } from '../../common/utils/pagination.utils';
 
 @Injectable()
-export class LaboralExperienceService {
+export class LaboralExperiencesService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,

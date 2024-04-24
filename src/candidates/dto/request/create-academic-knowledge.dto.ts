@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsEnum,
 } from 'class-validator';
-import { TypeAcademicKnowledge } from '../../enums/typeAcademicKnowledge.enum';
+import { AcademicKnowledgeEnum } from '../../enums/academic-knowledge.enum';
 
 export class CreateAcademicKnowledgeDto {
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
@@ -20,7 +20,7 @@ export class CreateAcademicKnowledgeDto {
   @IsEnum(['Titulo', 'Diploma', 'Cursos'], {
     message: i18nValidationMessage('validation.IS_ENUM'),
   })
-  readonly type: TypeAcademicKnowledge;
+  readonly type: AcademicKnowledgeEnum;
 
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
   @IsDateString(

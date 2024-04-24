@@ -14,7 +14,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PersonsModule } from './persons/persons.module';
 import { AdminsModule } from './admins/admins.module';
 import { RolesModule } from './roles/roles.module';
-import { CandidateModule } from './candidate/candidate.module';
+import { CandidateModule } from './candidates/candidate.module';
 
 @Module({
   imports: [

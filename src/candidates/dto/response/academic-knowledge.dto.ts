@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
-import { TypeAcademicKnowledge } from '../../enums/typeAcademicKnowledge.enum';
+import { AcademicKnowledgeEnum } from '../../enums/academic-knowledge.enum';
 
 @Exclude()
 export class AcademicKnowledgeDto {
@@ -11,7 +11,7 @@ export class AcademicKnowledgeDto {
   readonly name: string;
 
   @Expose()
-  readonly type: TypeAcademicKnowledge;
+  readonly type: AcademicKnowledgeEnum;
 
   @Expose()
   readonly organizationName: string;
