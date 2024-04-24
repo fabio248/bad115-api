@@ -37,8 +37,12 @@ export class PersonsService {
     return plainToInstance(PersonDto, person);
   }
 
-  async findAll(pageDto: PageDto): Promise<PaginatedDto<PersonDto>> {
+  async findAll(
+    pageDto: PageDto,
+    include?: Prisma.PersonInclude,
+  ): Promise<PaginatedDto<PersonDto>> {
     const { skip, take } = getPaginationParams(pageDto);
+    const { address } = include || {};
 
     const [persons, totalItems] = await Promise.all([
       this.prismaService.person.findMany({
@@ -48,7 +52,18 @@ export class PersonsService {
           deletedAt: null,
         },
         include: {
-          user: true,
+          ...include,
+          ...(address
+            ? {
+                address: {
+                  include: {
+                    country: true,
+                    department: true,
+                    municipality: true,
+                  },
+                },
+              }
+            : { address: false }),
         },
       }),
       this.prismaService.person.count({
@@ -66,11 +81,26 @@ export class PersonsService {
     id: string,
     include?: Prisma.PersonInclude,
   ): Promise<PersonDto> {
+    const { address } = include || {};
+
     const person = await this.prismaService.person.findUnique({
       where: {
         id,
       },
-      include,
+      include: {
+        ...include,
+        ...(address
+          ? {
+              address: {
+                include: {
+                  country: true,
+                  department: true,
+                  municipality: true,
+                },
+              },
+            }
+          : { address: false }),
+      },
     });
 
     if (!person) {

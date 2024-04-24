@@ -21,6 +21,7 @@ import { PersonIdDto } from '../dtos/request/person-id.dto';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { permissions } from '../../../prisma/seeds/permissions.seed';
 import { CreateAddressDto } from '../dtos/request/create-address.dto';
+import { PersonIncludeDto } from '../dtos/request/person-include.dto';
 
 @Controller('persons')
 @ApiTags('Persons Endpoints')
@@ -30,8 +31,11 @@ export class PersonsController {
   @Auth({ permissions: [permissions.MANAGE_PERSON.codename] })
   @ApiPaginatedResponse(PersonDto)
   @Get()
-  findAll(@Query() pageDto: PageDto): Promise<PaginatedDto<PersonDto>> {
-    return this.personsService.findAll(pageDto);
+  findAll(
+    @Query() pageDto: PageDto,
+    @Query() personIncludeDto: PersonIncludeDto,
+  ): Promise<PaginatedDto<PersonDto>> {
+    return this.personsService.findAll(pageDto, personIncludeDto);
   }
 
   @Auth({ permissions: [permissions.READ_PERSON.codename] })
@@ -45,8 +49,11 @@ export class PersonsController {
     },
   ])
   @Get(':personId')
-  findOne(@Param() { personId }: PersonIdDto): Promise<PersonDto> {
-    return this.personsService.findOne(personId);
+  findOne(
+    @Param() { personId }: PersonIdDto,
+    @Query() personIncludeDto: PersonIncludeDto,
+  ): Promise<PersonDto> {
+    return this.personsService.findOne(personId, personIncludeDto);
   }
 
   @Auth({ permissions: [permissions.UPDATE_PERSON.codename] })
