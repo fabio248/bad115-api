@@ -9,7 +9,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { LaboralExperienceService } from '../services/laboral-experience.service';
-import { AcademicKnowledgeService } from '../services/academic-knowledge.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ApiErrorResponse } from 'src/common/decorators/api-error-response.decorator';
 
@@ -20,21 +19,15 @@ import { CandidateIdDto } from '../dto/request/candidate-id.dto';
 import { LaboralExperienceDto } from '../dto/response/laboral-experience.dto';
 import { LaboralExperienceIdDto } from '../dto/request/laboral-experience-id.dto';
 import { UpdateLaboralExperienceDto } from '../dto/request/update-laboral-expirence.dto';
-// Academic knowledge
-import { CreateAcademicKnowledgeDto } from '../dto/request/create-academic-knowledge.dto';
-import { AcademicKnowledgeDto } from '../dto/response/academic-knowledge.dto';
-
 //pagination
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
 
 @Controller('candidates')
-// @Auth({ permissions: [permissions.MANAGE_USER.codename] })
-@ApiTags('Candidates')
+@ApiTags('Candidates Endpoints')
 export class LaboralExperienceController {
   constructor(
     private readonly laboralExperienceService: LaboralExperienceService,
-    private readonly academicKnowledgeService: AcademicKnowledgeService,
   ) {}
 
   //LABORAL EXPERIENCE CRUD
@@ -113,19 +106,7 @@ export class LaboralExperienceController {
     return this.laboralExperienceService.remove(laboralExpirenceId);
   }
 
-  //ACADEMIC KNOWLEDGE CRUD
-  @Post(':candidateId/academic-knowledge')
-  // @ApiErrorResponse([])
-  createAcademicKnowledge(
-    @Body() createAcademicKnowledge: CreateAcademicKnowledgeDto,
-    @Param() { candidateId }: CandidateIdDto,
-  ): Promise<AcademicKnowledgeDto> {
-    return this.academicKnowledgeService.create(
-      createAcademicKnowledge,
-      candidateId,
-    );
-  }
-
+  //ACADEMIC KNOWLEDGE CRU
   //pendiente
   @Get('/candidateId/academic-knowledge/:academicKnowledgeId')
   @ApiOperation({
