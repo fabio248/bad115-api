@@ -6,5 +6,6 @@
   "PERSON": "Person",
   "COUNTRY": "Country",
   "DEPARTMENT": "Department",
-  "MUNICIPALITY": "Municipality"
+  "MUNICIPALITY": "Municipality",
+  "CERTIFICATION": "Certification"
 }

@@ -288,7 +288,7 @@ model Certification {
   finishDate       DateTime  @map("fecha_de_finalizacion")
   name             String    @map("nombre_certificacion")
   type             String    @map("tipo_certificacion")
-  code             Int?      @map("codigo_certificacion")
+  code             String?   @map("codigo_certificacion")
   organizationName String    @map("nombre_organizacion")
   createdAt        DateTime  @default(now()) @map("creado_en")
   updatedAt        DateTime  @updatedAt @map("modificado_en")
