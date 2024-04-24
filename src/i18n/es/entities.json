@@ -2,5 +2,8 @@
   "USER": "Usuario",
   "ROLE": "Rol",
   "PERSON": "Persona",
-  "CANDIDATE": "Candidato"
+  "CANDIDATE": "Candidato",
+  "COUNTRY": "País",
+  "DEPARTMENT": "Departamento",
+  "MUNICIPALITY": "Municipio"
 }

@@ -2,5 +2,9 @@
   "USER": "User",
   "ROLE": "Role",
   "PERSON": "Person",
-  "CANDIDATE": "CANDIDATE"
+  "CANDIDATE": "CANDIDATE",
+  "PERSON": "Person",
+  "COUNTRY": "Country",
+  "DEPARTMENT": "Department",
+  "MUNICIPALITY": "Municipality"
 }
