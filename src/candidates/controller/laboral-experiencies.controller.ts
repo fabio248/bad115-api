@@ -105,26 +105,4 @@ export class LaboralExperiencesController {
   remove(@Param() { laboralExpirenceId }: LaboralExperienceIdDto) {
     return this.laboralExperiencesService.remove(laboralExpirenceId);
   }
-
-  //ACADEMIC KNOWLEDGE CRU
-  //pendiente
-  @Get('/candidateId/academic-knowledge/:academicKnowledgeId')
-  @ApiOperation({
-    summary: 'Use this endpoint to search a LaboralExperience',
-  })
-  findOneAcademicKnowledge(
-    @Param() { laboralExpirenceId }: LaboralExperienceIdDto,
-  ): Promise<LaboralExperienceDto> {
-    return this.laboralExperiencesService.findOne(laboralExpirenceId);
-  }
-
-  @Get('/candidateId/academic-knowledge/:academicKnowledgeId')
-  @ApiOperation({
-    summary: 'Use this endpoint to search a LaboralExperience',
-  })
-  findAllAcademicKnowledge(
-    @Param() { laboralExpirenceId }: LaboralExperienceIdDto,
-  ): Promise<LaboralExperienceDto> {
-    return this.laboralExperiencesService.findOne(laboralExpirenceId);
-  }
 }
