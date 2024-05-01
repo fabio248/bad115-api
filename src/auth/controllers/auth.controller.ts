@@ -25,7 +25,7 @@ import { UnlockAccountDto } from '../dtos/request/unlock-account.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
+  @Post('signup')
   async register(
     @Body() createRegisterDto: CreateRegisterDto,
   ): Promise<RegisterDto> {
@@ -73,7 +73,7 @@ export class AuthController {
     return this.authService.refreshToken(refreshLoginDto);
   }
 
-  @Post('unlock-accounts')
+  @Post('unlock-users')
   @ApiOperation({ summary: 'Use this endpoint to unblock user' })
   @ApiErrorResponse([
     {
