@@ -1,6 +1,7 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { UserDto } from '../../../users/dtos/response/user.dto';
 import { AddressDto } from './address.dto';
+import { GenderEnum } from '../../enums/gender.enum';
 
 @Exclude()
 export class PersonDto {
@@ -21,6 +22,9 @@ export class PersonDto {
 
   @Expose()
   readonly birthday: Date;
+
+  @Expose()
+  readonly gender: GenderEnum;
 
   @Expose()
   readonly candidateId: string;
