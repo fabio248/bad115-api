@@ -86,6 +86,7 @@ export class LaboralExperiencesService {
         id: id,
       },
     });
+
     if (!candidate) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -95,8 +96,9 @@ export class LaboralExperiencesService {
         }),
       );
     }
+
     const { skip, take } = getPaginationParams(pageDto);
-    const [allLaboralExperience, totalItems] = await Promise.all([
+    const [laboralExperiences, totalItems] = await Promise.all([
       this.prismaService.laboralExperience.findMany({
         skip,
         take,
@@ -107,15 +109,13 @@ export class LaboralExperiencesService {
           organizationContact: true,
         },
       }),
-      this.prismaService.laboralExperience.count({
-        skip,
-        take,
-      }),
+      this.prismaService.laboralExperience.count(),
     ]);
+
     const pagination = getPaginationInfo(pageDto, totalItems);
 
     return {
-      data: plainToInstance(LaboralExperienceDto, allLaboralExperience),
+      data: plainToInstance(LaboralExperienceDto, laboralExperiences),
       pagination,
     };
   }

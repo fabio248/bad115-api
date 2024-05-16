@@ -22,6 +22,7 @@ import { UpdateLaboralExperienceDto } from '../dto/request/update-laboral-expire
 //pagination
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 
 @Controller('candidates')
 @ApiTags('Candidates Endpoints')
@@ -50,7 +51,7 @@ export class LaboralExperiencesController {
     );
   }
 
-  @Get('/candidateId/laboral-experiences/:laboralExpirenceId')
+  @Get('/candidateId/laboral-experiences/:laboralExperienceId')
   @ApiErrorResponse([
     {
       status: 400,
@@ -63,12 +64,12 @@ export class LaboralExperiencesController {
     summary: 'Use this endpoint to search a LaboralExperience',
   })
   findOne(
-    @Param() { laboralExpirenceId }: LaboralExperienceIdDto,
+    @Param() { laboralExperienceId }: LaboralExperienceIdDto,
   ): Promise<LaboralExperienceDto> {
-    return this.laboralExperiencesService.findOne(laboralExpirenceId);
+    return this.laboralExperiencesService.findOne(laboralExperienceId);
   }
 
-  @Get(':candidateId/laboral-experiences/laboralExpirenceId')
+  @Get(':candidateId/laboral-experiences')
   @ApiErrorResponse([
     {
       status: 404,
@@ -79,8 +80,9 @@ export class LaboralExperiencesController {
   ])
   @ApiOperation({
     summary:
-      'Use this endpoint to search all LaboralExperience asignered a one user',
+      'Use this endpoint to search all labor experience assigned to a candidate.',
   })
+  @ApiPaginatedResponse(LaboralExperienceDto)
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -88,21 +90,21 @@ export class LaboralExperiencesController {
     return this.laboralExperiencesService.findAll(candidateId, pageDto);
   }
 
-  @Put(':candidateId/laboral-experiences/:laboralExpirenceId')
+  @Put(':candidateId/laboral-experiences/:laboralExperienceId')
   update(
     @Body() updateLaboralExperienceDto: UpdateLaboralExperienceDto,
-    @Param() { laboralExpirenceId }: LaboralExperienceIdDto,
+    @Param() { laboralExperienceId }: LaboralExperienceIdDto,
     @Param() { candidateId }: CandidateIdDto,
   ): Promise<LaboralExperienceDto> {
     return this.laboralExperiencesService.update(
       updateLaboralExperienceDto,
-      laboralExpirenceId,
+      laboralExperienceId,
       candidateId,
     );
   }
 
-  @Delete('/candidateId/laboral-experiences/:laboralExpirenceId')
-  remove(@Param() { laboralExpirenceId }: LaboralExperienceIdDto) {
-    return this.laboralExperiencesService.remove(laboralExpirenceId);
+  @Delete('/candidateId/laboral-experiences/:laboralExperienceId')
+  remove(@Param() { laboralExperienceId }: LaboralExperienceIdDto) {
+    return this.laboralExperiencesService.remove(laboralExperienceId);
   }
 }
