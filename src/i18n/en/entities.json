@@ -1,11 +1,15 @@
 {
   "USER": "User",
   "ROLE": "Role",
-  "PERSON": "Person",
   "CANDIDATE": "CANDIDATE",
   "PERSON": "Person",
   "COUNTRY": "Country",
   "DEPARTMENT": "Department",
   "MUNICIPALITY": "Municipality",
-  "CERTIFICATION": "Certification"
+  "CERTIFICATION": "Certification",
+  "ADACEMIC_KNOWLEDGE": "academic_knowledge",
+  "LANGUAGE_SKILL": "language_skill",
+  "RECOGNITION": "Recognition",
+  "TECHNICAL_SKILL_CANDIDATE": "technical_skill_candidate",
+  "PARTICIPATION": "Participation"
 }

@@ -144,7 +144,7 @@ export class LaboralExperiencesService {
         data: {
           ...updateLaboralExperienceDto,
           organizationContact: {
-            create: organizationContact,
+            update: organizationContact,
           },
           candidate: {
             connect: {
