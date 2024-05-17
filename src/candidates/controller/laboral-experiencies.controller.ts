@@ -24,7 +24,7 @@ import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 
-@Controller('candidates')
+@Controller('candidates/:candidateId/laboral-experiences')
 @ApiTags('Candidates Endpoints')
 export class LaboralExperiencesController {
   constructor(
@@ -32,7 +32,7 @@ export class LaboralExperiencesController {
   ) {}
 
   //LABORAL EXPERIENCE CRUD
-  @Post(':candidateId/laboral-experiences')
+  @Post('')
   @ApiErrorResponse([
     {
       status: 404,
@@ -51,7 +51,7 @@ export class LaboralExperiencesController {
     );
   }
 
-  @Get('/candidateId/laboral-experiences/:laboralExperienceId')
+  @Get('/:laboralExperienceId')
   @ApiErrorResponse([
     {
       status: 400,
@@ -69,7 +69,7 @@ export class LaboralExperiencesController {
     return this.laboralExperiencesService.findOne(laboralExperienceId);
   }
 
-  @Get(':candidateId/laboral-experiences')
+  @Get('')
   @ApiErrorResponse([
     {
       status: 404,
@@ -90,7 +90,7 @@ export class LaboralExperiencesController {
     return this.laboralExperiencesService.findAll(candidateId, pageDto);
   }
 
-  @Put(':candidateId/laboral-experiences/:laboralExperienceId')
+  @Put('/:laboralExperienceId')
   update(
     @Body() updateLaboralExperienceDto: UpdateLaboralExperienceDto,
     @Param() { laboralExperienceId }: LaboralExperienceIdDto,
@@ -103,7 +103,7 @@ export class LaboralExperiencesController {
     );
   }
 
-  @Delete('/candidateId/laboral-experiences/:laboralExperienceId')
+  @Delete('/:laboralExperienceId')
   remove(@Param() { laboralExperienceId }: LaboralExperienceIdDto) {
     return this.laboralExperiencesService.remove(laboralExperienceId);
   }

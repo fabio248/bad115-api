@@ -12,12 +12,12 @@ import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateParticipationDto } from '../dto/request/update-participation.dto';
 
-@Controller('candidates/participation')
+@Controller('candidates/:candidateId/participation')
 @ApiTags('Candidates Endpoints')
 export class ParticipationController {
   constructor(private readonly participationService: ParticipationService) {}
 
-  @Post('candidate/:candidateId/participation')
+  @Post('')
   create(
     @Param() { candidateId }: CandidateIdDto,
     @Body() createParticipationDto: CreateParticipationDto,
@@ -28,14 +28,14 @@ export class ParticipationController {
     );
   }
 
-  @Get('candidate/candidateId/participation/:participationId')
+  @Get('/:participationId')
   findOne(
     @Param() { participationId }: ParticipationIdDto,
   ): Promise<CreateParticipationDto> {
     return this.participationService.findOne(participationId);
   }
 
-  @Get('candidate/:candidateId/participation/participationId')
+  @Get('')
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -43,7 +43,7 @@ export class ParticipationController {
     return this.participationService.findAll(candidateId, pageDto);
   }
 
-  @Put('candidate/:candidateId/participation/:participationId')
+  @Put('/:participationId')
   update(
     @Param() { participationId }: ParticipationIdDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -56,7 +56,7 @@ export class ParticipationController {
     );
   }
 
-  @Delete('candidate/candidateId/participation/:participationId')
+  @Delete('/:participationId')
   remove(@Param() { participationId }: ParticipationIdDto) {
     return this.participationService.remove(participationId);
   }

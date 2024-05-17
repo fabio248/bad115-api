@@ -13,24 +13,30 @@ import { UpdateRecognitionDto } from '../dto/request/update-recognition.dto';
 //paginations
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
-@Controller('candidates/recognition')
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
+
+@Controller('candidates/:candidateId/recognition')
 @ApiTags('Candidates Endpoints')
 export class RecognitionController {
   constructor(private readonly recognitionService: RecognitionService) {}
-  @Post(':candidateId/recognition')
+
+  @Post('')
   create(
     @Param() { candidateId }: CandidateIdDto,
     @Body() createRecognitionDto: CreateRecognitionDto,
   ): Promise<RecognitionDto> {
     return this.recognitionService.create(candidateId, createRecognitionDto);
   }
-  @Get('candidateId/:recognitionId')
+
+  @Get('/:recognitionId')
   findOne(
     @Param() { recognitionId }: RecognitionIdDto,
   ): Promise<RecognitionDto> {
     return this.recognitionService.findOne(recognitionId);
   }
-  @Get(':candidateId/recognitionId')
+
+  @Get('')
+  @ApiPaginatedResponse(RecognitionDto)
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -38,7 +44,7 @@ export class RecognitionController {
     return this.recognitionService.findAll(candidateId, pageDto);
   }
 
-  @Put(':candidateId/:recognitionId')
+  @Put('/:recognitionId')
   update(
     @Body() updateRecognitionDto: UpdateRecognitionDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -50,7 +56,8 @@ export class RecognitionController {
       candidateId,
     );
   }
-  @Delete('candidateId/:recognitionId')
+
+  @Delete('/:recognitionId')
   remove(@Param() { recognitionId }: RecognitionIdDto) {
     return this.recognitionService.remove(recognitionId);
   }

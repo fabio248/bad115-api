@@ -10,7 +10,7 @@ import { PageDto } from 'src/common/dtos/request/page.dto';
 import { LanguageSkillDto } from '../dto/response/language-skill.dto';
 import { UpdateLanguageSkillDto } from '../dto/request/update-language-skill.dto';
 
-@Controller('candidates/language-skill')
+@Controller('candidates/:candidateId/language-skills')
 @ApiTags('Candidates Endpoints')
 export class LanguageSkillController {
   constructor(private readonly languageSkillService: LanguageSkillService) {}
@@ -19,8 +19,7 @@ export class LanguageSkillController {
     summary:
       'Use this endpoint to create an academic knowledge for candidate id',
   })
-  @Post(':candidateId/language-skill')
-  // @ApiErrorResponse([])
+  @Post('')
   create(
     @Body() createAcademicKnowledge: CreateLanguageSkillDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -34,14 +33,14 @@ export class LanguageSkillController {
   @ApiOperation({
     summary: 'Use this endpoint to search an languageSkill by id',
   })
-  @Get('/candidateId/:languageSkillId')
+  @Get('/:languageSkillId')
   findOne(
     @Param() { languageSkillId }: LanguageSkillIdDto,
   ): Promise<CreateLanguageSkillDto> {
     return this.languageSkillService.findOne(languageSkillId);
   }
 
-  @Get('/:candidateId/languageSkillId')
+  @Get('')
   @ApiOperation({
     summary:
       'Use this endpoint to search all language skills asignered a one user',
@@ -56,7 +55,7 @@ export class LanguageSkillController {
   @ApiOperation({
     summary: 'Use this endpoint to update language skills asignered',
   })
-  @Put(':candidateId/languageSkill/:languageSkillId')
+  @Put('/:languageSkillId')
   update(
     @Body() updateAcademicKnowledge: UpdateLanguageSkillDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -68,7 +67,8 @@ export class LanguageSkillController {
       candidateId,
     );
   }
-  @Delete('/candidateId/languageSkill/:languageSkillId')
+
+  @Delete('/:languageSkillId')
   remove(@Param() { languageSkillId }: LanguageSkillIdDto) {
     return this.languageSkillService.remove(languageSkillId);
   }

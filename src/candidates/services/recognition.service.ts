@@ -19,6 +19,7 @@ export class RecognitionService {
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
   ) {}
+
   async create(
     id: string,
     createRecognitionDto: CreateRecognitionDto,
@@ -53,6 +54,7 @@ export class RecognitionService {
     });
     return plainToInstance(RecognitionDto, recognition);
   }
+
   async findOne(id: string): Promise<RecognitionDto> {
     const recognition = await this.prismaService.recognition.findUnique({
       where: {
@@ -106,10 +108,7 @@ export class RecognitionService {
           recognitionType: true,
         },
       }),
-      this.prismaService.recognition.count({
-        skip,
-        take,
-      }),
+      this.prismaService.recognition.count(),
     ]);
     const pagination = getPaginationInfo(pageDto, totalItems);
 

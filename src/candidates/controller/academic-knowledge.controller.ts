@@ -18,9 +18,10 @@ import { UpdateAcademicKnowledgeDto } from '../dto/request/update-academic-knowl
 //pagination
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 
 @ApiTags('Candidates Endpoints')
-@Controller('candidates')
+@Controller('candidates/:candidateId/academic-knowledge')
 export class AcademicKnowledgeController {
   constructor(
     private readonly academicKnowledgeService: AcademicKnowledgeService,
@@ -30,7 +31,7 @@ export class AcademicKnowledgeController {
     summary:
       'Use this endpoint to create an academic knowledge for candidate id',
   })
-  @Post(':candidateId/academic-knowledge')
+  @Post('')
   // @ApiErrorResponse([])
   create(
     @Body() createAcademicKnowledge: CreateAcademicKnowledgeDto,
@@ -45,18 +46,19 @@ export class AcademicKnowledgeController {
   @ApiOperation({
     summary: 'Use this endpoint to search an academic knowledge by id',
   })
-  @Get('/candidateId/:academicKnowledgeId')
+  @Get('/:academicKnowledgeId')
   findOne(
     @Param() { academicKnowledgeId }: AcademicKnowlodgeIdDto,
   ): Promise<AcademicKnowledgeDto> {
     return this.academicKnowledgeService.findOne(academicKnowledgeId);
   }
 
-  @Get('/:candidateId/academicKnowledgeId')
+  @Get('')
   @ApiOperation({
     summary:
       'Use this endpoint to search all academicKnowledges asignered a one user',
   })
+  @ApiPaginatedResponse(AcademicKnowledgeDto)
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -64,7 +66,7 @@ export class AcademicKnowledgeController {
     return this.academicKnowledgeService.findAll(candidateId, pageDto);
   }
 
-  @Put('/:candidateId/academicKnowledge/:academicKnowledgeId')
+  @Put('/:academicKnowledgeId')
   @ApiOperation({
     summary: 'Use this endpoint to update academicKnowledges ',
   })
@@ -79,7 +81,8 @@ export class AcademicKnowledgeController {
       candidateId,
     );
   }
-  @Delete('/candidateIds/academicKnowledge/:academicKnowledgeId')
+
+  @Delete('/:academicKnowledgeId')
   remove(@Param() { academicKnowledgeId }: AcademicKnowlodgeIdDto) {
     return this.academicKnowledgeService.remove(academicKnowledgeId);
   }
