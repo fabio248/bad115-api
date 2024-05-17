@@ -12,7 +12,7 @@ import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateParticipationDto } from '../dto/request/update-participation.dto';
 
-@Controller('participation')
+@Controller('candidates/participation')
 @ApiTags('Candidates Endpoints')
 export class ParticipationController {
   constructor(private readonly participationService: ParticipationService) {}

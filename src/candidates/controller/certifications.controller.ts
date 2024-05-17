@@ -16,7 +16,7 @@ import { Auth } from '../../auth/decorators/auth.decorator';
 import { CertificationIdDto } from '../dto/request/certification-id.dto';
 import { UpdateCertificationDto } from '../dto/request/update-certification.dto';
 
-@Controller('certifications/:candidateId/certifications')
+@Controller('candidates/certifications/:candidateId/certifications')
 @ApiTags('Candidates Endpoints')
 export class CertificationsController {
   constructor(private readonly certificationsService: CertificationsService) {}

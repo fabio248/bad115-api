@@ -11,7 +11,7 @@ import { CategoryIdDto } from '../dto/request/category-id.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Candidates Endpoints')
-@Controller('tecnical-skill-candidate')
+@Controller('candidates/tecnical-skill-candidate')
 export class TecnicalSkillCandidateController {
   constructor(
     private readonly technicalSkillCandidateService: TechnicalSkillCandidateService,

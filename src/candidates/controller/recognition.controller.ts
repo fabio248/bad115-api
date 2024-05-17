@@ -13,7 +13,7 @@ import { UpdateRecognitionDto } from '../dto/request/update-recognition.dto';
 //paginations
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
-@Controller('recognition')
+@Controller('candidates/recognition')
 @ApiTags('Candidates Endpoints')
 export class RecognitionController {
   constructor(private readonly recognitionService: RecognitionService) {}

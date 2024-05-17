@@ -10,7 +10,7 @@ import { PageDto } from 'src/common/dtos/request/page.dto';
 import { LanguageSkillDto } from '../dto/response/language-skill.dto';
 import { UpdateLanguageSkillDto } from '../dto/request/update-language-skill.dto';
 
-@Controller('language-skill')
+@Controller('candidates/language-skill')
 @ApiTags('Candidates Endpoints')
 export class LanguageSkillController {
   constructor(private readonly languageSkillService: LanguageSkillService) {}
