@@ -7,12 +7,12 @@ import {
 import { CreateLanguageDto } from './create-language.dto';
 import { Type } from 'class-transformer';
 
-export class CreateAcademicKnowledgeDto {
+export class CreateLanguageSkillDto {
   /*Enum:
      // Enum: Escucha, lectura, escritura y conversacion
      */
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
-  @IsEnum(['Titulo', 'Diploma', 'Cursos'], {
+  @IsEnum(['Escucha', 'Lectura', 'Escritura'], {
     message: i18nValidationMessage('validation.IS_ENUM'),
   })
   readonly skill: LanguagueSkillsEnum;
@@ -20,7 +20,7 @@ export class CreateAcademicKnowledgeDto {
    A1 = "A1", A2 = "A2", B1 = "B1", B2 = "B2", C1 = "C1", C2 = "C2"
    */
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
-  @IsEnum(['Titulo', 'Diploma', 'Cursos'], {
+  @IsEnum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'], {
     message: i18nValidationMessage('validation.IS_ENUM'),
   })
   readonly level: LanguagueLevelEnum;
