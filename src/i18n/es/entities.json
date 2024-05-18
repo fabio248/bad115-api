@@ -7,9 +7,10 @@
   "DEPARTMENT": "Departamento",
   "MUNICIPALITY": "Municipio",
   "CERTIFICATION": "Certificación",
-  "CONOCIMIENTO_ACADEMICO": "Conocimiento_academico",
+  "CONOCIMIENTO_ACADEMICO": "conocimiento academico",
   "HABILIDAD_LENGUAJE": "Habilidad_lenguaje",
   "RECONOCIMIENTO": "Reconocimiento",
   "HABILIDAD_TECNICA_CANDIDATO": "Habilidad_tecnica_candidato",
-  "PARTICIPACION": "participacion"
+  "PARTICIPACION": "participacion",
+  "LABORAL_EXPERIENCE": "Experiencia laboral"
 }

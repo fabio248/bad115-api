@@ -5,6 +5,10 @@ import { permissions } from './permissions.seed';
 import { countriesSeed } from './country.seed';
 import { departmentSeed } from './deparment.seed';
 import { municipalitySeed } from './municipality.seed';
+import {
+  technicalSkillSeed,
+  categoryTechnicalSkillSeed,
+} from './technical-skill.seed';
 
 const prisma = new PrismaClient();
 
@@ -17,12 +21,16 @@ async function main() {
     storedCountries,
     storedDeparments,
     storedMunicipality,
+    categoriesTecnicalSkills,
+    tecnicalSkills,
   ] = await Promise.all([
     prisma.role.findMany(),
     prisma.permission.findMany(),
     prisma.country.findMany(),
     prisma.department.findMany(),
     prisma.municipality.findMany(),
+    prisma.categoryTechnicalSkill.findMany(),
+    prisma.technicalSkill.findMany(),
   ]);
 
   //Check if roles already exist, if not create them
@@ -125,6 +133,45 @@ async function main() {
     }
   }
 
+  for await (const category of categoryTechnicalSkillSeed) {
+    const existingCategory = categoriesTecnicalSkills.find(
+      (c) => c.name === category.name,
+    );
+
+    if (!existingCategory) {
+      const newCategory = await prisma.categoryTechnicalSkill.create({
+        data: {
+          name: category.name,
+        },
+      });
+
+      categoriesTecnicalSkills.push(newCategory);
+      Logger.log(`Category ${newCategory.name} created`, 'Seeder');
+    }
+  }
+  for await (const technicalSkill of technicalSkillSeed) {
+    const existingTechnicalSkill = tecnicalSkills.find(
+      (t) => t.name === technicalSkill.name,
+    );
+
+    if (!existingTechnicalSkill) {
+      const newTechnicalSkill = await prisma.technicalSkill.create({
+        data: {
+          name: technicalSkill.name,
+          categoryTechnicalSkill: {
+            connect: {
+              id: categoriesTecnicalSkills.find(
+                (c) => c.name === technicalSkill.category,
+              ).id,
+            },
+          },
+        },
+      });
+
+      tecnicalSkills.push(newTechnicalSkill);
+      Logger.log(`Technical Skill ${newTechnicalSkill.name} created`, 'Seeder');
+    }
+  }
   Logger.log('Seeding Finished', 'Seeder');
 }
 
@@ -133,6 +180,7 @@ main()
     await prisma.$disconnect();
   })
   .catch(async (e) => {
+    // eslint-disable-next-line no-console
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);

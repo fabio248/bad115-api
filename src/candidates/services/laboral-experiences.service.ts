@@ -60,7 +60,7 @@ export class LaboralExperiencesService {
   async findOne(id: string): Promise<LaboralExperienceDto> {
     const laboralExperience =
       await this.prismaService.laboralExperience.findFirst({
-        where: { id: id },
+        where: { id: id, deletedAt: null },
         include: {
           organizationContact: true,
         },
@@ -84,6 +84,7 @@ export class LaboralExperiencesService {
     const candidate = await this.prismaService.candidate.findUnique({
       where: {
         id: id,
+        deletedAt: null,
       },
     });
 
@@ -104,12 +105,18 @@ export class LaboralExperiencesService {
         take,
         where: {
           candidateId: id,
+          deletedAt: null,
         },
         include: {
           organizationContact: true,
         },
       }),
-      this.prismaService.laboralExperience.count(),
+      this.prismaService.laboralExperience.count({
+        where: {
+          candidateId: id,
+          deletedAt: null,
+        },
+      }),
     ]);
 
     const pagination = getPaginationInfo(pageDto, totalItems);

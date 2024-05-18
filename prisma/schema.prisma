@@ -321,10 +321,10 @@ model TechnicalSkill {
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
 
-  technicalSkillCandidates  TechnicalSkillCandidate[]
-  categoryTechnicalSkillId  String                    @unique()
-  categoryTecnicalHabilitie CategoryTechnicalSkill?   @relation(fields: [categoryTechnicalSkillId], references: [id])
-  jobPosition               JobPosition[]
+  technicalSkillCandidates TechnicalSkillCandidate[]
+  categoryTechnicalSkillId String
+  categoryTechnicalSkill   CategoryTechnicalSkill?   @relation(fields: [categoryTechnicalSkillId], references: [id])
+  jobPosition              JobPosition[]
 
   @@map("ctl_habilidad_tecnica")
 }
