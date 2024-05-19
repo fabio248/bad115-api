@@ -22,6 +22,8 @@ import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { permissions } from '../../../prisma/seeds/permissions.seed';
 import { CreateAddressDto } from '../dtos/request/create-address.dto';
 import { PersonIncludeDto } from '../dtos/request/person-include.dto';
+import { UpsertDocumentDto } from '../dtos/request/upsert-document.dto';
+import { DocumentDto } from '../dtos/response/document.dto';
 
 @Controller('persons')
 @ApiTags('Persons Endpoints')
@@ -108,5 +110,14 @@ export class PersonsController {
     @Body() createAddressDto: CreateAddressDto,
   ) {
     return this.personsService.addAddress(personId, createAddressDto);
+  }
+
+  @Auth({ permissions: [permissions.UPDATE_PERSON.codename] })
+  @Put(':personId/documents')
+  upsertDocuments(
+    @Param() { personId }: PersonIdDto,
+    @Body() upsertDocumentDto: UpsertDocumentDto,
+  ): Promise<DocumentDto> {
+    return this.personsService.upsertDocument(personId, upsertDocumentDto);
   }
 }

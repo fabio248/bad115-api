@@ -2,6 +2,7 @@ import { Exclude, Expose, Type } from 'class-transformer';
 import { UserDto } from '../../../users/dtos/response/user.dto';
 import { AddressDto } from './address.dto';
 import { GenderEnum } from '../../enums/gender.enum';
+import { DocumentDto } from './document.dto';
 
 @Exclude()
 export class PersonDto {
@@ -42,4 +43,8 @@ export class PersonDto {
   @Expose()
   @Type(() => AddressDto)
   readonly address?: AddressDto;
+
+  @Expose()
+  @Type(() => DocumentDto)
+  readonly documents?: DocumentDto[];
 }

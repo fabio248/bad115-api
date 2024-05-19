@@ -19,6 +19,8 @@ import { CreateAddressDto } from '../dtos/request/create-address.dto';
 import { AddressDto } from '../dtos/response/address.dto';
 import { EL_SALVADOR } from '../../common/utils/constants';
 import { Prisma } from '@prisma/client';
+import { UpsertDocumentDto } from '../dtos/request/upsert-document.dto';
+import { DocumentDto } from '../dtos/response/document.dto';
 
 @Injectable()
 export class PersonsService {
@@ -219,5 +221,24 @@ export class PersonsService {
     }
 
     return plainToInstance(AddressDto, address);
+  }
+
+  async upsertDocument(
+    personId: string,
+    upsertDocumentDto: UpsertDocumentDto,
+  ): Promise<DocumentDto> {
+    const document = await this.prismaService.document.upsert({
+      where: {
+        id: upsertDocumentDto.id,
+      },
+      create: {
+        ...upsertDocumentDto,
+
+        person: { connect: { id: personId } },
+      },
+      update: upsertDocumentDto,
+    });
+
+    return plainToInstance(DocumentDto, document);
   }
 }
