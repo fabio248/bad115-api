@@ -13,6 +13,8 @@ import { TecnicalSkillCandidateController } from './controller/technical-skill-c
 import { TechnicalSkillCandidateService } from './services/technical-skill-candidate.service';
 import { ParticipationController } from './controller/participation.controller';
 import { ParticipationService } from './services/participation.service';
+import { PruebaController } from './controller/prueba.controller';
+import { PruebaService } from './services/prueba.service';
 
 @Module({
   controllers: [
@@ -23,6 +25,7 @@ import { ParticipationService } from './services/participation.service';
     RecognitionController,
     TecnicalSkillCandidateController,
     ParticipationController,
+    PruebaController,
   ],
   providers: [
     LaboralExperiencesService,
@@ -32,6 +35,7 @@ import { ParticipationService } from './services/participation.service';
     RecognitionService,
     TechnicalSkillCandidateService,
     ParticipationService,
+    PruebaService,
   ],
 })
 export class CandidateModule {}

@@ -122,7 +122,7 @@ export class RecognitionService {
     updateRecognitionDto: UpdateRecognitionDto,
     id: string,
     candId: string,
-  ) {
+  ): Promise<RecognitionDto> {
     const recognition = this.findOne(id);
     if (!recognition) {
       throw new NotFoundException(

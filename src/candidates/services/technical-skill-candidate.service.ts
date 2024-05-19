@@ -17,7 +17,6 @@ export class TechnicalSkillCandidateService {
     candidateId: string,
     technicalSkillId: string,
     categoryId: string,
-    // createTechnicalSkillCandidateDto: CreateTechnicalSkillCandidateDto,
   ): Promise<TechnicalSkillCandidateDto> {
     const candidate = await this.prismaService.candidate.findFirst({
       where: {
@@ -41,18 +40,19 @@ export class TechnicalSkillCandidateService {
     });
     if (!technicalSkill) {
       throw new NotFoundException(
-        `Technical skill with ID ${technicalSkillId} and category ID ${categoryId} not found`,
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.TECHNICAL_SKILL'),
+          },
+        }),
       );
     }
-    //condition temporal for category
     const technicalSkillCandidate =
       await this.prismaService.technicalSkillCandidate.create({
         data: {
-          // ...createTechnicalSkillCandidateDto,
           technicalSkill: {
             connect: {
               id: technicalSkillId,
-              categoryTechnicalSkillId: categoryId,
             },
           },
           candidate: {

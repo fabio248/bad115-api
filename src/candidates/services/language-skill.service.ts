@@ -116,8 +116,10 @@ export class LanguageSkillService {
         },
       }),
       this.prismaService.languageSkill.count({
-        skip,
-        take,
+        where: {
+          candidateId: id,
+          deletedAt: null,
+        },
       }),
     ]);
     const pagination = getPaginationInfo(pageDto, totalItems);
