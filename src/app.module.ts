@@ -15,6 +15,7 @@ import { PersonsModule } from './persons/persons.module';
 import { AdminsModule } from './admins/admins.module';
 import { RolesModule } from './roles/roles.module';
 import { CandidateModule } from './candidates/candidate.module';
+import { CatalogsModule } from './catalogs/catalogs.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { CandidateModule } from './candidates/candidate.module';
     AdminsModule,
     RolesModule,
     CandidateModule,
+    CatalogsModule,
   ],
   controllers: [AppController],
   providers: [AuthModule, UsersModule],
