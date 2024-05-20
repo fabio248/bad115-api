@@ -90,7 +90,7 @@ export class RecognitionService {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
           args: {
-            entity: this.i18n.t('entities.RECOGNITION'),
+            entity: this.i18n.t('entities.CANDIDATE'),
           },
         }),
       );
@@ -108,7 +108,12 @@ export class RecognitionService {
           recognitionType: true,
         },
       }),
-      this.prismaService.recognition.count(),
+      this.prismaService.recognition.count({
+        where: {
+          id: id,
+          deletedAt: null,
+        },
+      }),
     ]);
     const pagination = getPaginationInfo(pageDto, totalItems);
 

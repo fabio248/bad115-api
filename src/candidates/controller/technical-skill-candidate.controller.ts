@@ -1,5 +1,4 @@
-import { Controller } from '@nestjs/common';
-import { Post, Param } from '@nestjs/common';
+import { Controller, Query, Post, Param, Get } from '@nestjs/common';
 import { TechnicalSkillCandidateService } from '../services/technical-skill-candidate.service';
 
 //dto's
@@ -8,7 +7,8 @@ import { TechnicalSkillCandidateDto } from '../dto/response/technical-skill-cand
 import { TechnicalSkillIdDto } from '../dto/request/technical-skill-id.dto';
 import { CategoryIdDto } from '../dto/request/category-id.dto';
 import { ApiTags } from '@nestjs/swagger';
-
+import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PageDto } from 'src/common/dtos/request/page.dto';
 @ApiTags('Candidates Endpoints')
 @Controller('candidates/')
 export class TecnicalSkillCandidateController {
@@ -28,5 +28,13 @@ export class TecnicalSkillCandidateController {
       technicalSkillId,
       categoryId,
     );
+  }
+
+  @Get(':candidateId/technical-skill-candidate/technical-skill/category')
+  findAll(
+    @Param() { candidateId }: CandidateIdDto,
+    @Query() pageDto: PageDto,
+  ): Promise<PaginatedDto<TechnicalSkillCandidateDto>> {
+    return this.technicalSkillCandidateService.findAll(candidateId, pageDto);
   }
 }

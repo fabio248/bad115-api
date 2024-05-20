@@ -25,7 +25,8 @@
     "DEFAULT": "No tienes acceso para hacer eso.",
     "EMAIL_ALREADY_TAKEN": "El correo electrónico {email} ya está en uso.",
     "ROLE_NAME_ALREADY_TAKEN": "El nombre del rol ya está en uso.",
-    "NO_ADMINS": "Debe haber al menos un administrador en el sistema."
+    "NO_ADMINS": "Debe haber al menos un administrador en el sistema.",
+    "NO_SUPPORTED": "Los atributos no deben estar vacíos."
   },
   "UNPROCESSABLE": {
     "ACCOUNT_ALREADY_ACTIVE": "La cuenta ya está activa."

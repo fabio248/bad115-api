@@ -15,6 +15,8 @@ import { ParticipationController } from './controller/participation.controller';
 import { ParticipationService } from './services/participation.service';
 import { PruebaController } from './controller/prueba.controller';
 import { PruebaService } from './services/prueba.service';
+import { PublicationController } from './controller/publication.controller';
+import { PublicationService } from './services/publication.service';
 
 @Module({
   controllers: [
@@ -26,6 +28,7 @@ import { PruebaService } from './services/prueba.service';
     TecnicalSkillCandidateController,
     ParticipationController,
     PruebaController,
+    PublicationController,
   ],
   providers: [
     LaboralExperiencesService,
@@ -36,6 +39,7 @@ import { PruebaService } from './services/prueba.service';
     TechnicalSkillCandidateService,
     ParticipationService,
     PruebaService,
+    PublicationService,
   ],
 })
 export class CandidateModule {}

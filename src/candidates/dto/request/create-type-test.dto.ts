@@ -4,5 +4,5 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateTypeTestDto {
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
-  name: string;
+  readonly name: string;
 }

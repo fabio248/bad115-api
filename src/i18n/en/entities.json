@@ -12,6 +12,7 @@
   "RECOGNITION": "Recognition",
   "TECHNICAL_SKILL_CANDIDATE": "technical_skill_candidate",
   "PARTICIPATION": "Participation",
-  "TECHNICAL_SKILL": "TECHNICAL_SKILL",
-  "TEST": "test"
+  "TECHNICAL_SKILL": "Tehcnical_skill",
+  "TEST": "Test",
+  "PUBLICATION": "Publication"
 }
