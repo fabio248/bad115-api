@@ -9,6 +9,7 @@ import {
   technicalSkillSeed,
   categoryTechnicalSkillSeed,
 } from './technical-skill.seed';
+import { typeRecognitionSeed } from './type-recognition.seed';
 
 const prisma = new PrismaClient();
 
@@ -19,10 +20,11 @@ async function main() {
     storedRoles,
     storedPermission,
     storedCountries,
-    storedDeparments,
+    storedDepartments,
     storedMunicipality,
-    categoriesTecnicalSkills,
-    tecnicalSkills,
+    categoriesTechnicalSkills,
+    technicalSkills,
+    recognitionTypes,
   ] = await Promise.all([
     prisma.role.findMany(),
     prisma.permission.findMany(),
@@ -31,6 +33,7 @@ async function main() {
     prisma.municipality.findMany(),
     prisma.categoryTechnicalSkill.findMany(),
     prisma.technicalSkill.findMany(),
+    prisma.recognitionType.findMany(),
   ]);
 
   //Check if roles already exist, if not create them
@@ -90,7 +93,7 @@ async function main() {
   }
 
   for await (const deparment of departmentSeed) {
-    const existingDepartment = storedDeparments.find(
+    const existingDepartment = storedDepartments.find(
       (d) => d.name === deparment.nam,
     );
 
@@ -102,7 +105,7 @@ async function main() {
         },
       });
 
-      storedDeparments.push(newDepartment);
+      storedDepartments.push(newDepartment);
       Logger.log(`Department ${newDepartment.name} created`, 'Seeder');
     }
   }
@@ -134,7 +137,7 @@ async function main() {
   }
 
   for await (const category of categoryTechnicalSkillSeed) {
-    const existingCategory = categoriesTecnicalSkills.find(
+    const existingCategory = categoriesTechnicalSkills.find(
       (c) => c.name === category.name,
     );
 
@@ -145,12 +148,12 @@ async function main() {
         },
       });
 
-      categoriesTecnicalSkills.push(newCategory);
+      categoriesTechnicalSkills.push(newCategory);
       Logger.log(`Category ${newCategory.name} created`, 'Seeder');
     }
   }
   for await (const technicalSkill of technicalSkillSeed) {
-    const existingTechnicalSkill = tecnicalSkills.find(
+    const existingTechnicalSkill = technicalSkills.find(
       (t) => t.name === technicalSkill.name,
     );
 
@@ -160,7 +163,7 @@ async function main() {
           name: technicalSkill.name,
           categoryTechnicalSkill: {
             connect: {
-              id: categoriesTecnicalSkills.find(
+              id: categoriesTechnicalSkills.find(
                 (c) => c.name === technicalSkill.category,
               ).id,
             },
@@ -168,10 +171,31 @@ async function main() {
         },
       });
 
-      tecnicalSkills.push(newTechnicalSkill);
+      technicalSkills.push(newTechnicalSkill);
       Logger.log(`Technical Skill ${newTechnicalSkill.name} created`, 'Seeder');
     }
   }
+
+  for await (const typeRecognition of typeRecognitionSeed) {
+    const existingTypeRecognition = recognitionTypes.find(
+      (m) => m.name === typeRecognition.name,
+    );
+
+    if (!existingTypeRecognition) {
+      const newTypeRecognition = await prisma.recognitionType.create({
+        data: {
+          name: typeRecognition.name,
+        },
+      });
+
+      recognitionTypes.push(newTypeRecognition);
+      Logger.log(
+        `Type Recognition ${newTypeRecognition.name} created`,
+        'Seeder',
+      );
+    }
+  }
+
   Logger.log('Seeding Finished', 'Seeder');
 }
 

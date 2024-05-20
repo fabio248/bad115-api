@@ -126,4 +126,24 @@ export const permissions = {
     codename: 'manage:candidate',
     roles: [roles.ADMIN],
   },
+  READ_CATALOG: {
+    name: 'Read catalog',
+    codename: 'read:catalog',
+    roles: [roles.ADMIN, roles.USER, roles.CANDIDATE, roles.RECRUITER],
+  },
+  MANAGE_CATALOG: {
+    name: 'Manage catalog',
+    codename: 'manage:catalog',
+    roles: [roles.ADMIN],
+  },
+  CREATE_CATALOG: {
+    name: 'Create catalog',
+    codename: 'create:catalog',
+    roles: [roles.ADMIN],
+  },
+  UPDATE_CATALOG: {
+    name: 'Update catalog',
+    codename: 'update:catalog',
+    roles: [roles.ADMIN],
+  },
 };
