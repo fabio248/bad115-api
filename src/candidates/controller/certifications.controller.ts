@@ -15,6 +15,9 @@ import { permissions } from '../../../prisma/seeds/permissions.seed';
 import { Auth } from '../../auth/decorators/auth.decorator';
 import { CertificationIdDto } from '../dto/request/certification-id.dto';
 import { UpdateCertificationDto } from '../dto/request/update-certification.dto';
+import { CertificationDto } from '../dto/response/certification.dto';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
+import { PageDto } from '../../common/dtos/request/page.dto';
 
 @Controller('candidates/:candidateId/certifications')
 @ApiTags('Candidates Endpoints')
@@ -35,8 +38,12 @@ export class CertificationsController {
 
   @Get()
   @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
-  async find(@Param() { candidateId }: CandidateIdDto) {
-    return this.certificationsService.find(candidateId);
+  @ApiPaginatedResponse(CertificationDto)
+  async find(
+    @Param() { candidateId }: CandidateIdDto,
+    @Param() pageDto: PageDto,
+  ) {
+    return this.certificationsService.find(candidateId, pageDto);
   }
 
   @Get(':certificationId')
