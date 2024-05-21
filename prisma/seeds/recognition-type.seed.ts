@@ -1,4 +1,4 @@
-export const typeRecognitionSeed = [
+export const recognitionTypeSeed = [
   {
     name: 'Logro',
   },

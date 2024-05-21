@@ -9,7 +9,8 @@ import {
   technicalSkillSeed,
   categoryTechnicalSkillSeed,
 } from './technical-skill.seed';
-import { typeRecognitionSeed } from './type-recognition.seed';
+import { recognitionTypeSeed } from './recognition-type.seed';
+import { participationTypeSeed } from './participation-type.seed';
 
 const prisma = new PrismaClient();
 
@@ -25,6 +26,7 @@ async function main() {
     categoriesTechnicalSkills,
     technicalSkills,
     recognitionTypes,
+    participationTypes,
   ] = await Promise.all([
     prisma.role.findMany(),
     prisma.permission.findMany(),
@@ -34,6 +36,7 @@ async function main() {
     prisma.categoryTechnicalSkill.findMany(),
     prisma.technicalSkill.findMany(),
     prisma.recognitionType.findMany(),
+    prisma.participacionType.findMany(),
   ]);
 
   //Check if roles already exist, if not create them
@@ -176,24 +179,45 @@ async function main() {
     }
   }
 
-  for await (const typeRecognition of typeRecognitionSeed) {
+  for await (const typeRecognition of recognitionTypeSeed) {
     const existingTypeRecognition = recognitionTypes.find(
       (m) => m.name === typeRecognition.name,
     );
 
-    if (!existingTypeRecognition) {
-      const newTypeRecognition = await prisma.recognitionType.create({
-        data: {
-          name: typeRecognition.name,
-        },
-      });
-
-      recognitionTypes.push(newTypeRecognition);
-      Logger.log(
-        `Type Recognition ${newTypeRecognition.name} created`,
-        'Seeder',
-      );
+    if (existingTypeRecognition) {
+      continue;
     }
+
+    const newTypeRecognition = await prisma.recognitionType.create({
+      data: {
+        name: typeRecognition.name,
+      },
+    });
+
+    recognitionTypes.push(newTypeRecognition);
+    Logger.log(`Type Recognition ${newTypeRecognition.name} created`, 'Seeder');
+  }
+
+  for await (const participationType of participationTypeSeed) {
+    const existingParticipationType = participationTypes.find(
+      (m) => m.name === participationType.name,
+    );
+
+    if (existingParticipationType) {
+      continue;
+    }
+
+    const newParticipationType = await prisma.participacionType.create({
+      data: {
+        name: participationType.name,
+      },
+    });
+
+    participationTypes.push(newParticipationType);
+    Logger.log(
+      `Participation Type ${newParticipationType.name} created`,
+      'Seeder',
+    );
   }
 
   Logger.log('Seeding Finished', 'Seeder');

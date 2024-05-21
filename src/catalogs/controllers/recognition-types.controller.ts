@@ -5,7 +5,7 @@ import { permissions } from '../../../prisma/seeds/permissions.seed';
 import { RecognitionTypesDto } from '../dtos/response/recognition-types.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Catalogs Endpoints')
+@ApiTags('Recognition Types Endpoints')
 @Controller('catalogs/recognition-types')
 export class RecognitionTypesController {
   constructor(
