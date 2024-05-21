@@ -229,14 +229,15 @@ export class PersonsService {
   ): Promise<DocumentDto> {
     const document = await this.prismaService.document.upsert({
       where: {
-        id: upsertDocumentDto.id,
+        id: upsertDocumentDto?.id ?? ' ',
       },
       create: {
         ...upsertDocumentDto,
-
         person: { connect: { id: personId } },
       },
-      update: upsertDocumentDto,
+      update: {
+        number: upsertDocumentDto.number,
+      },
     });
 
     return plainToInstance(DocumentDto, document);

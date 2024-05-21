@@ -1,9 +1,9 @@
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { DocumentTypeEnum } from '../../enums/document-type.enum';
 
 export class UpsertDocumentDto {
-  @IsUUID('4', { message: i18nValidationMessage('validation.IS_UUID') })
+  @IsOptional()
   readonly id?: string;
 
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
