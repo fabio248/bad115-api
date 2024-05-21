@@ -5,7 +5,10 @@ import { CreateCertificationDto } from '../dto/request/create-certification.dto'
 import { CertificationDto } from '../dto/response/certification.dto';
 import { plainToInstance } from 'class-transformer';
 import { UpdateCertificationDto } from '../dto/request/update-certification.dto';
-import { getPaginationInfo } from '../../common/utils/pagination.utils';
+import {
+  getPaginationInfo,
+  getPaginationParams,
+} from '../../common/utils/pagination.utils';
 import { PageDto } from '../../common/dtos/request/page.dto';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 
@@ -57,8 +60,12 @@ export class CertificationsService {
     candidateId: string,
     pageDto: PageDto,
   ): Promise<PaginatedDto<CertificationDto>> {
+    const { skip, take } = getPaginationParams(pageDto);
+
     const [certifications, totalItems] = await Promise.all([
       this.prismaService.certification.findMany({
+        skip,
+        take,
         where: {
           candidateId,
           deletedAt: null,
