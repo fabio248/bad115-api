@@ -29,7 +29,6 @@ export class RecognitionTypesService {
     pageDto: PageDto,
   ): Promise<PaginatedDto<RecognitionTypesDto>> {
     const { skip, take } = getPaginationParams(pageDto);
-
     const [recognitionTypes, totalItems] = await Promise.all([
       this.prismaService.recognitionType.findMany({
         skip,

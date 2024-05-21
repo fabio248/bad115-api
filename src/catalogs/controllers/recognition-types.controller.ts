@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from '../../../prisma/seeds/permissions.seed';
@@ -34,7 +35,7 @@ export class RecognitionTypesController {
   @Get('paginated')
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })
   @ApiPaginatedResponse(RecognitionTypesDto)
-  async findAllPaginated(@Param() pageDto: PageDto) {
+  async findAllPaginated(@Query() pageDto: PageDto) {
     return this.recognitionTypesService.findAllPaginated(pageDto);
   }
 

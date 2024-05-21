@@ -26,7 +26,7 @@ export class CertificationsController {
   constructor(private readonly certificationsService: CertificationsService) {}
 
   @Post()
-  // @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
+  @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
   async create(
     @Param() { candidateId }: CandidateIdDto,
     @Body() createCertificationDto: CreateCertificationDto,
@@ -38,7 +38,7 @@ export class CertificationsController {
   }
 
   @Get()
-  // @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   @ApiPaginatedResponse(CertificationDto)
   async findAll(
     @Param() { candidateId }: CandidateIdDto,
