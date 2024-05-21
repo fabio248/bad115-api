@@ -13,8 +13,8 @@ import { TecnicalSkillCandidateController } from './controller/technical-skill-c
 import { TechnicalSkillCandidateService } from './services/technical-skill-candidate.service';
 import { ParticipationController } from './controller/participation.controller';
 import { ParticipationService } from './services/participation.service';
-import { PruebaController } from './controller/prueba.controller';
-import { PruebaService } from './services/prueba.service';
+import { PruebaController } from './controller/test.controller';
+import { TestService } from './services/test.service';
 import { PublicationController } from './controller/publication.controller';
 import { PublicationService } from './services/publication.service';
 
@@ -38,7 +38,7 @@ import { PublicationService } from './services/publication.service';
     RecognitionService,
     TechnicalSkillCandidateService,
     ParticipationService,
-    PruebaService,
+    TestService,
     PublicationService,
   ],
 })

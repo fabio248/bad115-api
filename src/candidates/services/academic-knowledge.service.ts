@@ -104,9 +104,15 @@ export class AcademicKnowledgeService {
         take,
         where: {
           candidateId: id,
+          deletedAt: null,
         },
       }),
-      this.prismaService.academicKnowledge.count(),
+      this.prismaService.academicKnowledge.count({
+        where: {
+          candidateId: id,
+          deletedAt: null,
+        },
+      }),
     ]);
     const pagination = getPaginationInfo(pageDto, totalItems);
 

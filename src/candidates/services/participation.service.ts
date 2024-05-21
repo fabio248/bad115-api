@@ -114,7 +114,12 @@ export class ParticipationService {
           participacionType: true,
         },
       }),
-      this.prismaService.languageSkill.count(),
+      this.prismaService.participation.count({
+        where: {
+          candidateId: id,
+          deletedAt: null,
+        },
+      }),
     ]);
     const pagination = getPaginationInfo(pageDto, totalItems);
 

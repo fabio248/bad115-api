@@ -108,7 +108,12 @@ export class RecognitionService {
           recognitionType: true,
         },
       }),
-      this.prismaService.recognition.count(),
+      this.prismaService.recognition.count({
+        where: {
+          candidateId: id,
+          deletedAt: null,
+        },
+      }),
     ]);
     const pagination = getPaginationInfo(pageDto, totalItems);
 

@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Post, Body, Param, Get, Delete, Query, Put } from '@nestjs/common';
-import { PruebaService } from '../services/prueba.service';
+import { TestService } from '../services/test.service';
 import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-response.decorator';
 
 //Dto's
@@ -8,15 +8,15 @@ import { CandidateIdDto } from '../dto/request/candidate-id.dto';
 import { CreateTestDto } from '../dto/request/create-prueba.dto';
 import { TestDto } from '../dto/response/test.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PruebaIdDto } from '../dto/request/prueba-id.dto';
+import { TestIdDto } from '../dto/request/test-id.dto';
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { UpdateTestDto } from '../dto/request/update-test.dto';
 
-@Controller('candidates/:candidateId/prueba')
+@Controller('candidates/:candidateId/test')
 @ApiTags('Candidates Endpoints')
 export class PruebaController {
-  constructor(private readonly pruebaServices: PruebaService) {}
+  constructor(private readonly pruebaServices: TestService) {}
 
   @Post('')
   create(
@@ -26,10 +26,10 @@ export class PruebaController {
     return this.pruebaServices.create(candidateId, createTestDto);
   }
 
-  @Get('/:pruebaId')
+  @Get('/:testId')
   @ApiOperation({ summary: 'Get a test by id' })
-  findOne(@Param() { pruebaId }: PruebaIdDto): Promise<TestDto> {
-    return this.pruebaServices.findOne(pruebaId);
+  findOne(@Param() { testId }: TestIdDto): Promise<TestDto> {
+    return this.pruebaServices.findOne(testId);
   }
 
   @Get('')
@@ -41,17 +41,17 @@ export class PruebaController {
     return this.pruebaServices.findAll(candidateId, pageDto);
   }
 
-  @Put('/:pruebaId')
+  @Put('/:testId')
   update(
     @Body() updateTestDto: UpdateTestDto,
     @Param() { candidateId }: CandidateIdDto,
-    @Param() { pruebaId }: PruebaIdDto,
+    @Param() { testId }: TestIdDto,
   ): Promise<TestDto> {
-    return this.pruebaServices.update(updateTestDto, candidateId, pruebaId);
+    return this.pruebaServices.update(updateTestDto, candidateId, testId);
   }
 
-  @Delete('/:pruebaId')
-  remove(@Param() { pruebaId }: PruebaIdDto) {
-    return this.pruebaServices.remove(pruebaId);
+  @Delete('/:testId')
+  remove(@Param() { testId }: TestIdDto) {
+    return this.pruebaServices.remove(testId);
   }
 }

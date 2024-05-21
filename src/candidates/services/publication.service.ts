@@ -118,14 +118,19 @@ export class PublicationService {
         skip,
         take,
         where: {
-          candidateId: id,
+          candidateId: candidate.id,
           deletedAt: null,
         },
         include: {
           candidate: true,
         },
       }),
-      this.prismaService.recognition.count(),
+      this.prismaService.publication.count({
+        where: {
+          candidateId: candidate.id,
+          deletedAt: null,
+        },
+      }),
     ]);
     const pagination = getPaginationInfo(pageDto, totalItems);
 

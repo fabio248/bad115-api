@@ -15,7 +15,7 @@ import {
 } from 'src/common/utils/pagination.utils';
 
 @Injectable()
-export class PruebaService {
+export class TestService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
