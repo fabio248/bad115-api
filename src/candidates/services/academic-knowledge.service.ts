@@ -106,10 +106,7 @@ export class AcademicKnowledgeService {
           candidateId: id,
         },
       }),
-      this.prismaService.academicKnowledge.count({
-        skip,
-        take,
-      }),
+      this.prismaService.academicKnowledge.count(),
     ]);
     const pagination = getPaginationInfo(pageDto, totalItems);
 

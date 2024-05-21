@@ -125,12 +125,7 @@ export class PublicationService {
           candidate: true,
         },
       }),
-      this.prismaService.recognition.count({
-        where: {
-          id: id,
-          deletedAt: null,
-        },
-      }),
+      this.prismaService.recognition.count(),
     ]);
     const pagination = getPaginationInfo(pageDto, totalItems);
 
