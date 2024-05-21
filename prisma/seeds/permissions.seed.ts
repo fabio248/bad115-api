@@ -146,4 +146,9 @@ export const permissions = {
     codename: 'update:catalog',
     roles: [roles.ADMIN],
   },
+  DELETE_CATALOG: {
+    name: 'Delete catalog',
+    codename: 'delete:catalog',
+    roles: [roles.ADMIN],
+  },
 };
