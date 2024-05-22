@@ -1,14 +1,14 @@
 export const participationTypeSeed = [
   {
-    name: 'Congresos',
+    name: 'Congreso',
   },
   {
-    name: 'Cumbres',
+    name: 'Cumbre',
   },
   {
-    name: 'Talleres',
+    name: 'Taller',
   },
   {
-    name: 'Foros',
+    name: 'Foro',
   },
 ];
