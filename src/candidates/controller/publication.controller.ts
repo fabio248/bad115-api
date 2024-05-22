@@ -34,11 +34,12 @@ export class PublicationController {
     return this.publicationService.create(candidateId, createPublicationDto);
   }
 
-  @Get('candidateId/publication/:publicationId')
+  @Get(':candidateId/publication/:publicationId')
   findOne(
+    @Param() { candidateId }: CandidateIdDto,
     @Param() { publicationId }: PublicationIdDto,
   ): Promise<PublicationDto> {
-    return this.publicationService.findOne(publicationId);
+    return this.publicationService.findOne(publicationId, candidateId);
   }
 
   @Get(':candidateId/publication/')
@@ -63,8 +64,11 @@ export class PublicationController {
     );
   }
 
-  @Delete('candidateId/publication/:publicationId')
-  remove(@Param() { publicationId }: PublicationIdDto) {
-    return this.publicationService.remove(publicationId);
+  @Delete(':candidateId/publication/:publicationId')
+  remove(
+    @Param() { candidateId }: CandidateIdDto,
+    @Param() { publicationId }: PublicationIdDto,
+  ) {
+    return this.publicationService.remove(publicationId, candidateId);
   }
 }

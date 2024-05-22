@@ -34,10 +34,10 @@ export class CreatePublicationDto {
   @ValidateIf((obj) => obj.type === PublicationEnum.Libro)
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
   @IsOptional({ message: i18nValidationMessage('validation.IS_OPTIONAL') })
-  readonly isbn?: string;
+  isbn?: string;
 
   @ValidateIf((obj) => obj.type == PublicationEnum.Libro)
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
   @IsOptional({ message: i18nValidationMessage('validation.IS_OPTIONAL') })
-  readonly edition?: string;
+  edition?: string;
 }

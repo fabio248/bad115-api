@@ -72,10 +72,11 @@ export class PublicationService {
     return plainToInstance(PublicationDto, publication);
   }
 
-  async findOne(id: string): Promise<PublicationDto> {
+  async findOne(id: string, candidateId: string): Promise<PublicationDto> {
     const publication = await this.prismaService.publication.findUnique({
       where: {
         id: id,
+        candidateId,
         deletedAt: null,
       },
       include: {
@@ -143,9 +144,9 @@ export class PublicationService {
   async update(
     updatePublication: UpdatePublicationDto,
     id: string,
-    candId: string,
+    candidateId: string,
   ): Promise<PublicationDto> {
-    const publication = this.findOne(id);
+    const publication = this.findOne(id, candidateId);
     if (!publication) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -174,13 +175,13 @@ export class PublicationService {
     const updatePublicationData = await this.prismaService.publication.update({
       where: {
         id,
-        candidateId: candId,
+        candidateId: candidateId,
       },
       data: {
         ...newCreatePublicationDto,
         candidate: {
           connect: {
-            id: candId,
+            id: candidateId,
           },
         },
       },
@@ -189,12 +190,13 @@ export class PublicationService {
     return plainToInstance(PublicationDto, updatePublicationData);
   }
 
-  async remove(id: string) {
-    await this.findOne(id);
+  async remove(id: string, candidateId: string) {
+    await this.findOne(id, candidateId);
 
     await this.prismaService.publication.update({
       where: {
         id,
+        candidateId,
       },
       data: {
         deletedAt: new Date(),
