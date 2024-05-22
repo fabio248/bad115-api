@@ -9,6 +9,6 @@ export const recognitionTypeSeed = [
     name: 'Labor social',
   },
   {
-    name: 'Labor aultruista',
+    name: 'Labor altruista',
   },
 ];
