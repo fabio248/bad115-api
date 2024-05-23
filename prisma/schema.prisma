@@ -24,6 +24,9 @@ model User {
   roles  UserRole[]
   person Person?
 
+  recomendationId String?
+  recomendation Recomendation? @relation(fields: [recomendationId], references: [id])
+
   @@map("mnt_usuario")
 }
 
@@ -91,7 +94,7 @@ model Person {
   deletedAt      DateTime? @map("eliminado_en")
 
   userId        String          @unique
-  user          User            @relation(fields: [userId], references: [id])
+  user          User            @relation(fields: [userId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   candidateId   String?         @unique()
   candidate     Candidate?      @relation(fields: [candidateId], references: [id])
   recruiterId   String?         @unique
@@ -479,17 +482,16 @@ model TestType {
 
 model Recomendation {
   id        String    @id @default(uuid())
-  name      String    @map("nombre_del_recomendado")
-  lastName  String    @map("apellido_del_recomendado")
-  email     String    @map("correo_del_recomendado")
-  phone     String?   @map("telefono_del_recomendado")
   type      String    @map("tipo") // this is ENUM and contain two options: Laboral and personal
+  recomendation String? @map("recomendacion")
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
 
   candidateId String
   candidate   Candidate @relation(fields: [candidateId], references: [id])
+
+  users User[]
 
   @@map("mnt_recomendacion")
 }

@@ -17,6 +17,8 @@ import { PruebaController } from './controller/test.controller';
 import { TestService } from './services/test.service';
 import { PublicationController } from './controller/publication.controller';
 import { PublicationService } from './services/publication.service';
+import { RecomendationController } from './controller/recomendation.controller';
+import { RecomendationService } from './services/recomendation.service';
 
 @Module({
   controllers: [
@@ -29,6 +31,7 @@ import { PublicationService } from './services/publication.service';
     ParticipationController,
     PruebaController,
     PublicationController,
+    RecomendationController,
   ],
   providers: [
     LaboralExperiencesService,
@@ -40,6 +43,7 @@ import { PublicationService } from './services/publication.service';
     ParticipationService,
     TestService,
     PublicationService,
+    RecomendationService,
   ],
 })
 export class CandidateModule {}
