@@ -29,6 +29,7 @@ export class RecognitionService {
         id: id,
       },
     });
+
     if (!candidate) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -38,12 +39,16 @@ export class RecognitionService {
         }),
       );
     }
-    const { recognitionType } = createRecognitionDto;
+
+    const { recognitionTypeId, ...createData } = createRecognitionDto;
+
     const recognition = await this.prismaService.recognition.create({
       data: {
-        ...createRecognitionDto,
+        ...createData,
         recognitionType: {
-          create: recognitionType,
+          connect: {
+            id: recognitionTypeId,
+          },
         },
         candidate: {
           connect: {
@@ -65,6 +70,7 @@ export class RecognitionService {
         recognitionType: true,
       },
     });
+
     if (!recognition) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -74,6 +80,7 @@ export class RecognitionService {
         }),
       );
     }
+
     return plainToInstance(RecognitionDto, recognition);
   }
 
@@ -126,9 +133,9 @@ export class RecognitionService {
   async update(
     updateRecognitionDto: UpdateRecognitionDto,
     id: string,
-    candId: string,
   ): Promise<RecognitionDto> {
     const recognition = this.findOne(id);
+
     if (!recognition) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -139,20 +146,15 @@ export class RecognitionService {
       );
     }
 
-    const { recognitionType } = updateRecognitionDto;
+    const { recognitionTypeId, ...updateData } = updateRecognitionDto;
     const updateRecognition = await this.prismaService.recognition.update({
       where: {
         id,
       },
       data: {
-        ...updateRecognitionDto,
+        ...updateData,
         recognitionType: {
-          update: recognitionType,
-        },
-        candidate: {
-          connect: {
-            id: candId,
-          },
+          connect: { id: recognitionTypeId },
         },
       },
       include: {

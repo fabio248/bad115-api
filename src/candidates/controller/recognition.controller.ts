@@ -47,14 +47,9 @@ export class RecognitionController {
   @Put('/:recognitionId')
   update(
     @Body() updateRecognitionDto: UpdateRecognitionDto,
-    @Param() { candidateId }: CandidateIdDto,
     @Param() { recognitionId }: RecognitionIdDto,
   ): Promise<RecognitionDto> {
-    return this.recognitionService.update(
-      updateRecognitionDto,
-      recognitionId,
-      candidateId,
-    );
+    return this.recognitionService.update(updateRecognitionDto, recognitionId);
   }
 
   @Delete('/:recognitionId')

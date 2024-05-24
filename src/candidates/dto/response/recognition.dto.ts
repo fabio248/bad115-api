@@ -1,7 +1,8 @@
 import { Exclude, Expose } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { CreateRecognitionTypeDto } from '../request/create-recognition-type.dto';
+import { RecognitionTypesDto } from '../../../catalogs/dtos/response/recognition-types.dto';
+
 @Exclude()
 export class RecognitionDto {
   @Expose()
@@ -17,8 +18,8 @@ export class RecognitionDto {
   readonly candidateId: string;
 
   @Expose()
-  @Type(() => CreateRecognitionTypeDto)
-  readonly recognitionType?: CreateRecognitionTypeDto;
+  @Type(() => RecognitionTypesDto)
+  readonly recognitionType?: RecognitionTypesDto;
 
   @ApiHideProperty()
   readonly createdAt: Date;

@@ -236,6 +236,7 @@ export class PersonsService {
         person: { connect: { id: personId } },
       },
       update: {
+        id: upsertDocumentDto.id,
         number: upsertDocumentDto.number,
       },
     });
