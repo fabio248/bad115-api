@@ -13,9 +13,11 @@ import {
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { UpdateParticipationDto } from '../dto/request/update-participation.dto';
+
 @Injectable()
 export class ParticipationService {
   private readonly logger = new Logger(ParticipationService.name);
+
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
@@ -40,12 +42,14 @@ export class ParticipationService {
         }),
       );
     }
-    const { participacionType } = createParticipationDto;
+    const { participationTypeId, ...createData } = createParticipationDto;
     const participation = this.prismaService.participation.create({
       data: {
-        ...createParticipationDto,
-        participacionType: {
-          create: participacionType,
+        ...createData,
+        participationType: {
+          connect: {
+            id: participationTypeId,
+          },
         },
         candidate: {
           connect: {
@@ -66,7 +70,7 @@ export class ParticipationService {
         deletedAt: null,
       },
       include: {
-        participacionType: true,
+        participationType: true,
       },
     });
 
@@ -111,7 +115,7 @@ export class ParticipationService {
           deletedAt: null,
         },
         include: {
-          participacionType: true,
+          participationType: true,
         },
       }),
       this.prismaService.participation.count({
@@ -132,7 +136,6 @@ export class ParticipationService {
   async update(
     updateParticipationDto: UpdateParticipationDto,
     id: string,
-    candId: string,
   ): Promise<ParticipationDto> {
     this.logger.log('update informacion of participacions');
     const participation = this.findOne(id);
@@ -146,20 +149,15 @@ export class ParticipationService {
       );
     }
 
-    const { participacionType } = updateParticipationDto;
+    const { participationTypeId, ...updateData } = updateParticipationDto;
     const updateParticipation = await this.prismaService.participation.update({
       where: {
         id,
       },
       data: {
-        ...updateParticipationDto,
-        participacionType: {
-          update: participacionType,
-        },
-        candidate: {
-          connect: {
-            id: candId,
-          },
+        ...updateData,
+        participationType: {
+          connect: { id: participationTypeId },
         },
       },
     });
