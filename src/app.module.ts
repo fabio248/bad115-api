@@ -16,6 +16,8 @@ import { AdminsModule } from './admins/admins.module';
 import { RolesModule } from './roles/roles.module';
 import { CandidateModule } from './candidates/candidate.module';
 import { CatalogsModule } from './catalogs/catalogs.module';
+import { JobpositionController } from './recruiter/controller/jobposition.controller';
+import { JobpositionService } from './recruiter/services/jobposition.service';
 
 @Module({
   imports: [
@@ -57,7 +59,7 @@ import { CatalogsModule } from './catalogs/catalogs.module';
     CandidateModule,
     CatalogsModule,
   ],
-  controllers: [AppController],
-  providers: [AuthModule, UsersModule],
+  controllers: [AppController, JobpositionController],
+  providers: [AuthModule, UsersModule, JobpositionService],
 })
 export class AppModule {}

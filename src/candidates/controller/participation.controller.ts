@@ -11,12 +11,15 @@ import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateParticipationDto } from '../dto/request/update-participation.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { permissions } from 'prisma/seeds/permissions.seed';
 
 @Controller('candidates/:candidateId/participation')
 @ApiTags('Candidates Endpoints')
 export class ParticipationController {
   constructor(private readonly participationService: ParticipationService) {}
 
+  @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
   @Post('')
   create(
     @Param() { candidateId }: CandidateIdDto,
@@ -29,6 +32,7 @@ export class ParticipationController {
   }
 
   @Get('/:participationId')
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findOne(
     @Param() { participationId }: ParticipationIdDto,
   ): Promise<CreateParticipationDto> {
@@ -36,6 +40,7 @@ export class ParticipationController {
   }
 
   @Get('')
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -44,6 +49,7 @@ export class ParticipationController {
   }
 
   @Put('/:participationId')
+  @Auth({ permissions: [permissions.UPDATE_CANDIDATE.codename] })
   update(
     @Param() { participationId }: ParticipationIdDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -56,6 +62,7 @@ export class ParticipationController {
     );
   }
 
+  @Auth({ permissions: [permissions.DELETE_CANDIDATE.codename] })
   @Delete('/:participationId')
   remove(@Param() { participationId }: ParticipationIdDto) {
     return this.participationService.remove(participationId);

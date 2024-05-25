@@ -19,6 +19,8 @@ import { UpdateAcademicKnowledgeDto } from '../dto/request/update-academic-knowl
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { permissions } from 'prisma/seeds/permissions.seed';
 
 @ApiTags('Candidates Endpoints')
 @Controller('candidates/:candidateId/academic-knowledge')
@@ -32,7 +34,7 @@ export class AcademicKnowledgeController {
       'Use this endpoint to create an academic knowledge for candidate id',
   })
   @Post('')
-  // @ApiErrorResponse([])
+  @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
   create(
     @Body() createAcademicKnowledge: CreateAcademicKnowledgeDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -47,6 +49,7 @@ export class AcademicKnowledgeController {
     summary: 'Use this endpoint to search an academic knowledge by id',
   })
   @Get('/:academicKnowledgeId')
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findOne(
     @Param() { academicKnowledgeId }: AcademicKnowlodgeIdDto,
   ): Promise<AcademicKnowledgeDto> {
@@ -59,6 +62,7 @@ export class AcademicKnowledgeController {
       'Use this endpoint to search all academicKnowledges asignered a one user',
   })
   @ApiPaginatedResponse(AcademicKnowledgeDto)
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -70,6 +74,7 @@ export class AcademicKnowledgeController {
   @ApiOperation({
     summary: 'Use this endpoint to update academicKnowledges ',
   })
+  @Auth({ permissions: [permissions.UPDATE_CANDIDATE.codename] })
   update(
     @Body() updateAcademicKnowledge: UpdateAcademicKnowledgeDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -81,7 +86,7 @@ export class AcademicKnowledgeController {
       candidateId,
     );
   }
-
+  @Auth({ permissions: [permissions.DELETE_CANDIDATE.codename] })
   @Delete('/:academicKnowledgeId')
   remove(@Param() { academicKnowledgeId }: AcademicKnowlodgeIdDto) {
     return this.academicKnowledgeService.remove(academicKnowledgeId);

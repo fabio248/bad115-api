@@ -23,6 +23,8 @@ import { UpdateLaboralExperienceDto } from '../dto/request/update-laboral-expire
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { permissions } from 'prisma/seeds/permissions.seed';
 
 @Controller('candidates/:candidateId/laboral-experiences')
 @ApiTags('Candidates Endpoints')
@@ -41,6 +43,7 @@ export class LaboralExperiencesController {
       errorType: 'Not Found',
     },
   ])
+  @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
   create(
     @Body() createLaboralExperienceDto: CreateLaboralExperienceDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -63,6 +66,7 @@ export class LaboralExperiencesController {
   @ApiOperation({
     summary: 'Use this endpoint to search a LaboralExperience',
   })
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findOne(
     @Param() { laboralExperienceId }: LaboralExperienceIdDto,
   ): Promise<LaboralExperienceDto> {
@@ -83,6 +87,7 @@ export class LaboralExperiencesController {
       'Use this endpoint to search all labor experience assigned to a candidate.',
   })
   @ApiPaginatedResponse(LaboralExperienceDto)
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -91,6 +96,7 @@ export class LaboralExperiencesController {
   }
 
   @Put('/:laboralExperienceId')
+  @Auth({ permissions: [permissions.UPDATE_CANDIDATE.codename] })
   update(
     @Body() updateLaboralExperienceDto: UpdateLaboralExperienceDto,
     @Param() { laboralExperienceId }: LaboralExperienceIdDto,
@@ -102,7 +108,7 @@ export class LaboralExperiencesController {
       candidateId,
     );
   }
-
+  @Auth({ permissions: [permissions.DELETE_CANDIDATE.codename] })
   @Delete('/:laboralExperienceId')
   remove(@Param() { laboralExperienceId }: LaboralExperienceIdDto) {
     return this.laboralExperiencesService.remove(laboralExperienceId);

@@ -9,6 +9,8 @@ import { CategoryIdDto } from '../dto/request/category-id.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from 'src/common/dtos/request/page.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { permissions } from 'prisma/seeds/permissions.seed';
 @ApiTags('Candidates Endpoints')
 @Controller('candidates/')
 export class TecnicalSkillCandidateController {
@@ -18,6 +20,7 @@ export class TecnicalSkillCandidateController {
   @Post(
     ':candidateId/technical-skill-candidate/:technicalSkillId/category/:categoryId',
   )
+  @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
   create(
     @Param() { candidateId }: CandidateIdDto,
     @Param() { technicalSkillId }: TechnicalSkillIdDto,
@@ -31,6 +34,7 @@ export class TecnicalSkillCandidateController {
   }
 
   @Get(':candidateId/technical-skill-candidate/technical-skill/category')
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,

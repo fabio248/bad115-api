@@ -20,6 +20,8 @@ import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-respon
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { UpdatePublicationDto } from '../dto/request/update-publication.dto';
+import { permissions } from 'prisma/seeds/permissions.seed';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('candidates/')
 @ApiTags('Candidates Endpoints')
@@ -27,6 +29,7 @@ export class PublicationController {
   constructor(private readonly publicationService: PublicationService) {}
 
   @Post(':candidateId/publication')
+  @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
   create(
     @Param() { candidateId }: CandidateIdDto,
     @Body() createPublicationDto: CreatePublicationDto,
@@ -35,6 +38,7 @@ export class PublicationController {
   }
 
   @Get('candidateId/publication/:publicationId')
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findOne(
     @Param() { publicationId }: PublicationIdDto,
   ): Promise<PublicationDto> {
@@ -43,6 +47,7 @@ export class PublicationController {
 
   @Get(':candidateId/publication/')
   @ApiPaginatedResponse(PublicationDto)
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -51,6 +56,7 @@ export class PublicationController {
   }
 
   @Put(':candidateId/publication/:publicationId')
+  @Auth({ permissions: [permissions.UPDATE_CANDIDATE.codename] })
   update(
     @Body() updatePublicationDto: UpdatePublicationDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -62,7 +68,7 @@ export class PublicationController {
       candidateId,
     );
   }
-
+  @Auth({ permissions: [permissions.DELETE_CANDIDATE.codename] })
   @Delete('candidateId/publication/:publicationId')
   remove(@Param() { publicationId }: PublicationIdDto) {
     return this.publicationService.remove(publicationId);
