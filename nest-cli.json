@@ -9,6 +9,11 @@
         "include": "i18n/**/*.json",
         "watchAssets": true,
         "outDir": "dist/src"
+      },
+      {
+        "include": "pdfs/templates/*.hbs",
+        "watchAssets": true,
+        "outDir": "dist/src"
       }
     ],
     "plugins": [

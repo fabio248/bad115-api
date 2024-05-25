@@ -69,7 +69,7 @@ export class RecomendationService {
         }),
       );
     }
-    const recomendation = await this.prismaService.recomendation.create({
+    const recommendation = await this.prismaService.recomendation.create({
       data: {
         ...createRecomendationDto,
         candidate: {
@@ -84,7 +84,7 @@ export class RecomendationService {
         },
       },
     });
-    return plainToInstance(RecomendationDto, recomendation);
+    return plainToInstance(RecomendationDto, recommendation);
   }
 
   async findOne(id: string): Promise<RecomendationDto> {
