@@ -14,6 +14,8 @@ import { UpdateRecognitionDto } from '../dto/request/update-recognition.dto';
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { permissions } from 'prisma/seeds/permissions.seed';
 
 @Controller('candidates/:candidateId/recognition')
 @ApiTags('Candidates Endpoints')
@@ -21,6 +23,7 @@ export class RecognitionController {
   constructor(private readonly recognitionService: RecognitionService) {}
 
   @Post('')
+  @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
   create(
     @Param() { candidateId }: CandidateIdDto,
     @Body() createRecognitionDto: CreateRecognitionDto,
@@ -29,6 +32,7 @@ export class RecognitionController {
   }
 
   @Get('/:recognitionId')
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findOne(
     @Param() { recognitionId }: RecognitionIdDto,
   ): Promise<RecognitionDto> {
@@ -37,6 +41,7 @@ export class RecognitionController {
 
   @Get('')
   @ApiPaginatedResponse(RecognitionDto)
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -45,13 +50,14 @@ export class RecognitionController {
   }
 
   @Put('/:recognitionId')
+  @Auth({ permissions: [permissions.UPDATE_CANDIDATE.codename] })
   update(
     @Body() updateRecognitionDto: UpdateRecognitionDto,
     @Param() { recognitionId }: RecognitionIdDto,
   ): Promise<RecognitionDto> {
     return this.recognitionService.update(updateRecognitionDto, recognitionId);
   }
-
+  @Auth({ permissions: [permissions.DELETE_CANDIDATE.codename] })
   @Delete('/:recognitionId')
   remove(@Param() { recognitionId }: RecognitionIdDto) {
     return this.recognitionService.remove(recognitionId);

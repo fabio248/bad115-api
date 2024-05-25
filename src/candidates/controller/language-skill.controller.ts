@@ -9,6 +9,8 @@ import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { LanguageSkillDto } from '../dto/response/language-skill.dto';
 import { UpdateLanguageSkillDto } from '../dto/request/update-language-skill.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { permissions } from 'prisma/seeds/permissions.seed';
 
 @Controller('candidates/:candidateId/language-skills')
 @ApiTags('Candidates Endpoints')
@@ -20,6 +22,7 @@ export class LanguageSkillController {
       'Use this endpoint to create an academic knowledge for candidate id',
   })
   @Post('')
+  @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
   create(
     @Body() createAcademicKnowledge: CreateLanguageSkillDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -34,6 +37,7 @@ export class LanguageSkillController {
     summary: 'Use this endpoint to search an languageSkill by id',
   })
   @Get('/:languageSkillId')
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findOne(
     @Param() { languageSkillId }: LanguageSkillIdDto,
   ): Promise<CreateLanguageSkillDto> {
@@ -45,6 +49,7 @@ export class LanguageSkillController {
     summary:
       'Use this endpoint to search all language skills asignered a one user',
   })
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -56,6 +61,7 @@ export class LanguageSkillController {
     summary: 'Use this endpoint to update language skills asignered',
   })
   @Put('/:languageSkillId')
+  @Auth({ permissions: [permissions.UPDATE_CANDIDATE.codename] })
   update(
     @Body() updateAcademicKnowledge: UpdateLanguageSkillDto,
     @Param() { candidateId }: CandidateIdDto,
@@ -67,7 +73,7 @@ export class LanguageSkillController {
       candidateId,
     );
   }
-
+  @Auth({ permissions: [permissions.DELETE_CANDIDATE.codename] })
   @Delete('/:languageSkillId')
   remove(@Param() { languageSkillId }: LanguageSkillIdDto) {
     return this.languageSkillService.remove(languageSkillId);
