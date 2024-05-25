@@ -23,5 +23,5 @@ export class ParticipationDto {
 
   @Expose()
   @Type(() => ParticipationTypeDto)
-  readonly participacionType?: ParticipationTypeDto;
+  readonly participationType?: ParticipationTypeDto;
 }

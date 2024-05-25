@@ -431,7 +431,7 @@ model Participation {
   deletedAt DateTime? @map("eliminado_en")
 
   participationTypeId String            @unique
-  participacionType   ParticipacionType @relation(fields: [participationTypeId], references: [id])
+  participationType   ParticipacionType @relation(fields: [participationTypeId], references: [id])
 
   candidateId String
   candidate   Candidate @relation(fields: [candidateId], references: [id])

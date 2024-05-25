@@ -1,7 +1,5 @@
 import { i18nValidationMessage } from 'nestjs-i18n';
-import { IsNotEmpty, IsString } from 'class-validator';
-import { CreateRecognitionTypeDto } from './create-recognition-type.dto';
-import { Type } from 'class-transformer';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateRecognitionDto {
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
@@ -13,6 +11,6 @@ export class CreateRecognitionDto {
   readonly finishDate: Date;
 
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
-  @Type(() => CreateRecognitionTypeDto)
-  readonly recognitionType?: CreateRecognitionTypeDto;
+  @IsUUID('4', { message: i18nValidationMessage('validation.IS_UUID') })
+  readonly recognitionTypeId: string;
 }

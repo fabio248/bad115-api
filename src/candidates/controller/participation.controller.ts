@@ -11,6 +11,8 @@ import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateParticipationDto } from '../dto/request/update-participation.dto';
+import { ParticipationDto } from '../dto/response/participation.dto';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 
 @Controller('candidates/:candidateId/participation')
 @ApiTags('Candidates Endpoints')
@@ -21,7 +23,7 @@ export class ParticipationController {
   create(
     @Param() { candidateId }: CandidateIdDto,
     @Body() createParticipationDto: CreateParticipationDto,
-  ): Promise<CreateParticipationDto> {
+  ): Promise<ParticipationDto> {
     return this.participationService.create(
       candidateId,
       createParticipationDto,
@@ -31,28 +33,27 @@ export class ParticipationController {
   @Get('/:participationId')
   findOne(
     @Param() { participationId }: ParticipationIdDto,
-  ): Promise<CreateParticipationDto> {
+  ): Promise<ParticipationDto> {
     return this.participationService.findOne(participationId);
   }
 
   @Get('')
+  @ApiPaginatedResponse(ParticipationDto)
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
-  ): Promise<PaginatedDto<CreateParticipationDto>> {
+  ): Promise<PaginatedDto<ParticipationDto>> {
     return this.participationService.findAll(candidateId, pageDto);
   }
 
   @Put('/:participationId')
   update(
     @Param() { participationId }: ParticipationIdDto,
-    @Param() { candidateId }: CandidateIdDto,
     @Body() updateParticipationDto: UpdateParticipationDto,
-  ): Promise<CreateParticipationDto> {
+  ): Promise<ParticipationDto> {
     return this.participationService.update(
       updateParticipationDto,
       participationId,
-      candidateId,
     );
   }
 

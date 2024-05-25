@@ -1,7 +1,5 @@
-import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsDateString, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
-import { CreateParticipationTypeDto } from './create-participation-type.dto';
 
 export class CreateParticipationDto {
   /**
@@ -24,6 +22,6 @@ export class CreateParticipationDto {
   eventHost: string;
 
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
-  @Type(() => CreateParticipationTypeDto)
-  readonly participacionType?: CreateParticipationTypeDto;
+  @IsUUID('4', { message: i18nValidationMessage('validation.IS_UUID') })
+  readonly participationTypeId: string;
 }
