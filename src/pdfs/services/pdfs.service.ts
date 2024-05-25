@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'nestjs-prisma';
 import * as puppeteer from 'puppeteer';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -10,7 +9,7 @@ import { CvDataTemplate } from '../interfaces';
 export class PdfsService {
   private readonly logger = new Logger(PdfsService.name);
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor() {}
 
   async generate(data: CvDataTemplate): Promise<Buffer> {
     try {
