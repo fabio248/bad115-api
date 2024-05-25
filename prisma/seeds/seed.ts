@@ -11,6 +11,7 @@ import {
 } from './technical-skill.seed';
 import { recognitionTypeSeed } from './recognition-type.seed';
 import { participationTypeSeed } from './participation-type.seed';
+import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -219,6 +220,60 @@ async function main() {
       'Seeder',
     );
   }
+
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  if (isProduction) {
+    Logger.log('Seeding Finished', 'Seeder');
+    return;
+  }
+
+  const existAdmin = prisma.user.findFirst({
+    where: { email: 'admin@gmail.com' },
+  });
+
+  if (existAdmin) {
+    Logger.log('User admin already exist', 'Seeder');
+    Logger.log('Seeding Finished', 'Seeder');
+    return;
+  }
+
+  await prisma.$transaction(async (tPrisma) => {
+    const person = await tPrisma.person.create({
+      data: {
+        firstName: 'Admin',
+        lastName: 'Admin',
+        birthday: new Date(),
+        gender: 'F',
+        user: {
+          create: {
+            email: 'admin@gmail.com',
+            password: bcrypt.hashSync('admin', 10),
+          },
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    await tPrisma.userRole.create({
+      data: {
+        role: {
+          connect: {
+            name: roles.ADMIN,
+          },
+        },
+        user: {
+          connect: {
+            id: person.user.id,
+          },
+        },
+      },
+    });
+
+    Logger.log('User admin created', 'Seeder');
+  });
 
   Logger.log('Seeding Finished', 'Seeder');
 }
