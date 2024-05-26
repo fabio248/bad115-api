@@ -36,7 +36,7 @@ export class RecomendationController {
     );
   }
   @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
-  @Get('/:recomendationId')
+  @Get('/recomendation/:recomendationId')
   @ApiOperation({ summary: 'Get a recomendation by id' })
   findOne(
     @Param() { recomendationId }: RecomendationIdDto,
@@ -44,7 +44,7 @@ export class RecomendationController {
     return this.recomendationService.findOne(recomendationId);
   }
 
-  @Get('')
+  @Get('/recomendation')
   @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   @ApiPaginatedResponse(RecomendationDto)
   findAll(

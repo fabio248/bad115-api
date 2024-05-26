@@ -11,7 +11,7 @@
         "outDir": "dist/src"
       },
       {
-        "include": "pdfs/templates/*.hbs",
+        "include": "candidates/templates/*.hbs",
         "watchAssets": true,
         "outDir": "dist/src"
       }

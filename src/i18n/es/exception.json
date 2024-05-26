@@ -13,7 +13,8 @@
     "DEFAULT": "Algo salió mal."
   },
   "BAD_REQUEST": {
-    "DEFAULT": "Algo salió mal con la solicitud."
+    "DEFAULT": "Algo salió mal con la solicitud.",
+    "PDF_ERROR": "Error al generar el documento pdf"
   },
   "OK": {
     "DEFAULT": "Exitosamente"

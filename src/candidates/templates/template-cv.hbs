@@ -1,0 +1,132 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <title>Curriculum Vitae</title>
+    <style>
+      body { font-family: 'Arial', sans-serif; color: #333; margin: 20px 20px
+      20px 20px; padding: 0; background: #f4f4f4; } .container { width: 95%;
+      background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      } .header { text-align: center; padding-bottom: 20px; border-bottom: 2px
+      solid #333; position: relative; } .avatar { position: absolute; top: 20px;
+      left: 20px; width: 60px; height: 60px; border-radius: 50%; border: 2px
+      solid #fff; background: #333; overflow: hidden; } .avatar img { width:
+      100%; height: 100%; object-fit: cover; } .header h1 { margin: 10px 0 5px;
+      font-size: 24px; color: #333; } .header h2 { margin: 0; font-size: 18px;
+      color: #777; } .section { margin: 20px 0; } .section h2 { margin-bottom:
+      10px; font-size: 20px; color: #333; border-bottom: 2px solid #333;
+      padding-bottom: 5px; } .section ul { list-style-type: none; padding: 0; }
+      .section ul li { margin-bottom: 5px; padding: 5px; background: #f9f9f9;
+      border: 1px solid #ddd; border-radius: 5px; } .contact-info, .skills,
+      .experience, .education, .projects, .certifications, .recognitions,
+      .languages, .participations, .recommendations { margin-bottom: 20px; }
+      .contact-info ul li { display: inline-block; margin-right: 20px; }
+      .contact-info ul li::before { content: '•'; margin-right: 5px; color:
+      #333; } .skills ul { column-count: 2; column-gap: 5px; padding-left: 0; }
+      .skills ul li { margin-bottom: 5px; padding: 2px 5px; } .skills-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(120px,
+      1fr)); grid-gap: 5px; } .skill-item { padding: 5px; background: #f9f9f9;
+      border: 1px solid #ddd; border-radius: 5px; }
+    </style>
+  </head>
+  <body>
+    <div class='container'>
+      <div class='header'>
+        {{!-- <div class='avatar'>
+          <img src='{{profilePicture}}' alt='Profile Avatar' />
+        </div> --}}
+        <h1>{{fullName}}</h1>
+        <h2>{{jobTitle}}</h2>
+      </div>
+      <div class='contact-info section'>
+        <h2>Información de contacto</h2>
+        <ul>
+          <li>Correo: {{email}}</li>
+          <li>Teléfono: {{phone}}</li>
+          <li>Dirección: {{address}}</li>
+        </ul>
+      </div>
+      <div class='technical-skills section'>
+        <h2>Habilidades Técnicas</h2>
+        <ul>
+          {{#each technicalSkills}}
+            <li>{{this.name}} ({{this.category}})</li>
+          {{/each}}
+        </ul>
+      </div>
+
+      <div class='experience section'>
+        <h2>Experiencia Profesional</h2>
+        <ul>
+          {{#each experience}}
+            <li>
+              <strong>{{this.company}}</strong><br />
+              {{this.position}}
+              ({{this.startDate}}
+              -
+              {{this.endDate}})<br />
+              {{this.description}}
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class='education section'>
+        <h2>Educación</h2>
+        <ul>
+          {{#each education}}
+            <li>
+              <strong>{{this.institution}}</strong><br />
+              {{this.degree}}
+              ({{this.startDate}}
+              -
+              {{this.endDate}})<br />
+              {{this.description}}
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class='certifications section'>
+        <h2>Certificaciones</h2>
+        <ul>
+          {{#each certifications}}
+            <li>
+              <strong>{{this.nombreCertification}}</strong><br />
+              {{this.type}}
+              ({{this.startDate}}
+              -
+              {{this.endDate}})<br />
+              {{this.nombreDeLaOrganizacion}}
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class='recognitions section'>
+        <h2>Reconocimientos</h2>
+        <ul>
+          {{#each recognitions}}
+            <li>
+              <strong>{{this.nombreCertification}}</strong><br />
+              <span>Finalizo: </span>{{this.endDate}}<br />
+            </li>
+          {{/each}}
+        </ul>
+
+      </div>
+      <div class='languages section'>
+        <h2>Languages</h2>
+        <ul>
+          {{#each languageSkills}}
+            <li>{{this.language}} - {{this.level}}</li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class='participations section'>
+        <h2>Participations</h2>
+        <ul>
+          {{#each participations}}
+            <li>{{this.Lugar}}, {{this.ciudad}} ({{this.LugarDelEvento}})</li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

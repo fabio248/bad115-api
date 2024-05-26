@@ -13,7 +13,8 @@
     "DEFAULT": "Something went wrong."
   },
   "BAD_REQUEST": {
-    "DEFAULT": "Something went wrong with the request."
+    "DEFAULT": "Something went wrong with the request.",
+    "PDF_ERROR": "Error to generating PDF document"
   },
   "OK": {
     "DEFAULT": "Successfully"
