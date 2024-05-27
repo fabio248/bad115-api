@@ -59,6 +59,18 @@ async function main() {
       (p) => p.name === permission.name,
     );
 
+    if (existingPermission.description !== permission.description) {
+      await prisma.permission.update({
+        where: {
+          id: existingPermission.id,
+        },
+        data: {
+          description: permission.description,
+        },
+      });
+      Logger.log(`Permission ${existingPermission.name} updated`, 'Seeder');
+    }
+
     if (!existingPermission) {
       const newPermission = await prisma.permission.create({
         data: {
