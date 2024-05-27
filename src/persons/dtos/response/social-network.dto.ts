@@ -1,9 +1,9 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
-import { CreateTypeReSocialDto } from '../request/create-type-social-network.dto';
+import { SocialNetworkTypesDto } from '../../../catalogs/dtos/response/social-network-types.dto';
 
 @Exclude()
-export class RedSocialDto {
+export class SocialNetworkDto {
   @Expose()
   readonly id: string;
 
@@ -17,8 +17,8 @@ export class RedSocialDto {
   personId: string;
 
   @Expose()
-  @Type(() => CreateTypeReSocialDto)
-  readonly typeSocialNetwork?: CreateTypeReSocialDto;
+  @Type(() => SocialNetworkTypesDto)
+  readonly typeSocialNetwork?: SocialNetworkTypesDto;
 
   @ApiHideProperty()
   readonly createdAt: Date;

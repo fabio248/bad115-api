@@ -41,4 +41,7 @@ export const typeSocialNetworkSeed = [
   {
     name: 'Discord',
   },
+  {
+    name: 'GitHub',
+  },
 ];

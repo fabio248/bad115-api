@@ -3,7 +3,6 @@
   "ROLE": "Rol",
   "PERSON": "Persona",
   "CANDIDATE": "Candidato",
-  "SOCIAL_NETWORK": "red_social",
   "COUNTRY": "País",
   "DEPARTMENT": "Departamento",
   "MUNICIPALITY": "Municipio",
@@ -17,5 +16,6 @@
   "TEST": "prueba",
   "PUBLICATION": "Publicacion",
   "RECOMENDATION": "Recomendacion",
-  "PERMISSION": "Permiso"
+  "PERMISSION": "Permiso",
+  "SOCIAL_NETWORK": "Red social"
 }

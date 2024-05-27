@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 //Dto's
-import { RedSocialDto } from '../dtos/response/red-social.dto';
+import { SocialNetworkDto } from '../dtos/response/social-network.dto';
 import { CreateSocialNetworkDto } from '../dtos/request/create-social-network.dto';
 import { plainToInstance } from 'class-transformer';
 import { PrismaService } from 'nestjs-prisma';
@@ -20,10 +20,11 @@ export class SocialNetworkService {
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
   ) {}
+
   async create(
     createRedSocialDto: CreateSocialNetworkDto,
     id: string,
-  ): Promise<RedSocialDto> {
+  ): Promise<SocialNetworkDto> {
     const person = await this.prismaService.person.findUnique({
       where: {
         id: id,
@@ -39,12 +40,12 @@ export class SocialNetworkService {
         }),
       );
     }
-    const { typeSocialNetwork } = createRedSocialDto;
+    const { typeSocialNetworkId, ...createData } = createRedSocialDto;
     const redSocial = this.prismaService.socialNetwork.create({
       data: {
-        ...createRedSocialDto,
+        ...createData,
         typeSocialNetwork: {
-          create: typeSocialNetwork,
+          connect: { id: typeSocialNetworkId },
         },
         person: {
           connect: {
@@ -54,10 +55,10 @@ export class SocialNetworkService {
       },
     });
 
-    return plainToInstance(RedSocialDto, redSocial);
+    return plainToInstance(SocialNetworkDto, redSocial);
   }
 
-  async findOne(id: string): Promise<RedSocialDto> {
+  async findOne(id: string): Promise<SocialNetworkDto> {
     const socialNetwork = await this.prismaService.socialNetwork.findUnique({
       where: {
         id: id,
@@ -77,13 +78,13 @@ export class SocialNetworkService {
         }),
       );
     }
-    return plainToInstance(RedSocialDto, socialNetwork);
+    return plainToInstance(SocialNetworkDto, socialNetwork);
   }
 
   async findAll(
     id: string,
     pageDto: PageDto,
-  ): Promise<PaginatedDto<RedSocialDto>> {
+  ): Promise<PaginatedDto<SocialNetworkDto>> {
     const person = await this.prismaService.person.findUnique({
       where: {
         id: id,
@@ -121,7 +122,7 @@ export class SocialNetworkService {
     const pagination = getPaginationInfo(pageDto, totalItems);
 
     return {
-      data: plainToInstance(RedSocialDto, allSocialNetwork),
+      data: plainToInstance(SocialNetworkDto, allSocialNetwork),
       pagination,
     };
   }
@@ -129,7 +130,7 @@ export class SocialNetworkService {
   async update(
     updateSocialNetworkDto: UpdateSocialNetworkDto,
     id: string,
-  ): Promise<RedSocialDto> {
+  ): Promise<SocialNetworkDto> {
     const socialNetwork = this.findOne(id);
     if (!socialNetwork) {
       throw new NotFoundException(
@@ -141,20 +142,20 @@ export class SocialNetworkService {
       );
     }
 
-    const { typeSocialNetwork } = updateSocialNetworkDto;
+    const { typeSocialNetworkId, ...updateData } = updateSocialNetworkDto;
     const updateSocialNetwork = await this.prismaService.socialNetwork.update({
       where: {
         id,
       },
       data: {
-        ...updateSocialNetworkDto,
+        ...updateData,
         typeSocialNetwork: {
-          update: typeSocialNetwork,
+          connect: { id: typeSocialNetworkId },
         },
       },
     });
 
-    return plainToInstance(RedSocialDto, updateSocialNetwork);
+    return plainToInstance(SocialNetworkDto, updateSocialNetwork);
   }
 
   async remove(id: string) {

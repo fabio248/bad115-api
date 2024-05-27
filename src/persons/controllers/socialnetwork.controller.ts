@@ -14,14 +14,14 @@ import { SocialNetworkService } from '../services/socialnetwork.service';
 //Dto's
 import { CreateSocialNetworkDto } from '../dtos/request/create-social-network.dto';
 import { PersonIdDto } from '../dtos/request/person-id.dto';
-import { RedSocialDto } from '../dtos/response/red-social.dto';
+import { SocialNetworkDto } from '../dtos/response/social-network.dto';
 import { SocialNetworkIdDto } from '../dtos/request/social-network-id.dto';
 import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-response.decorator';
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { UpdateSocialNetworkDto } from '../dtos/request/update-red-social.dto';
 
-@Controller('person/:personId/social_network')
+@Controller('person/:personId/social-network')
 @ApiTags('Persons Endpoints')
 export class SocialNetworkController {
   constructor(private readonly socialNetworkService: SocialNetworkService) {}
@@ -30,11 +30,11 @@ export class SocialNetworkController {
     summary: 'Use this endpoint to create an red social for a person by',
   })
   @Post('')
-  //   @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
+  // @Auth({ permissions: [permissions.CREATE_CANDIDATE.codename] })
   create(
     @Body() createRedSocialDto: CreateSocialNetworkDto,
     @Param() { personId }: PersonIdDto,
-  ): Promise<RedSocialDto> {
+  ): Promise<SocialNetworkDto> {
     return this.socialNetworkService.create(createRedSocialDto, personId);
   }
 
@@ -44,7 +44,7 @@ export class SocialNetworkController {
   @Get('/:socialNetworkId')
   findOne(
     @Param() { socialNetworkId }: SocialNetworkIdDto,
-  ): Promise<RedSocialDto> {
+  ): Promise<SocialNetworkDto> {
     return this.socialNetworkService.findOne(socialNetworkId);
   }
 
@@ -53,11 +53,11 @@ export class SocialNetworkController {
     summary:
       'Use this endpoint to search all social networks asignered a one person',
   })
-  @ApiPaginatedResponse(RedSocialDto)
+  @ApiPaginatedResponse(SocialNetworkDto)
   findAll(
     @Param() { personId }: PersonIdDto,
     @Query() pageDto: PageDto,
-  ): Promise<PaginatedDto<RedSocialDto>> {
+  ): Promise<PaginatedDto<SocialNetworkDto>> {
     return this.socialNetworkService.findAll(personId, pageDto);
   }
 
@@ -68,7 +68,7 @@ export class SocialNetworkController {
   update(
     @Body() updateRedSocialDto: UpdateSocialNetworkDto,
     @Param() { socialNetworkId }: SocialNetworkIdDto,
-  ): Promise<RedSocialDto> {
+  ): Promise<SocialNetworkDto> {
     return this.socialNetworkService.update(
       updateRedSocialDto,
       socialNetworkId,
