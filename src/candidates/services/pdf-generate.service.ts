@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
@@ -12,11 +11,10 @@ import { CvDataTemplate } from '../interfaces';
 import { Response } from 'express';
 import { I18nService } from 'nestjs-i18n';
 import { PrismaService } from 'nestjs-prisma';
+import { AddressDto } from '../../persons/dtos/response/address.dto';
 
 @Injectable()
 export class PdfGenerateService {
-  private readonly logger = new Logger(PdfGenerateService.name);
-
   constructor(
     private readonly i18n: I18nService,
     private readonly prismaService: PrismaService,
@@ -32,7 +30,13 @@ export class PdfGenerateService {
           person: {
             include: {
               user: true,
-              address: true,
+              address: {
+                include: {
+                  country: true,
+                  department: true,
+                  municipality: true,
+                },
+              },
               socialNetwork: true,
             },
           },
@@ -56,6 +60,7 @@ export class PdfGenerateService {
           },
         },
       });
+
       if (!candidate) {
         throw new NotFoundException(
           this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -93,7 +98,7 @@ export class PdfGenerateService {
       // Cambiamos el formato del buffer a un formato pdf
       res.set({
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename=CV - ${candidate.person.firstName} ${candidate.person.middleName} ${candidate.person.lastName} ${candidate.person.secondLastName}.pdf`,
+        'Content-Disposition': `attachment; filename=CV - ${candidate.person?.firstName} ${candidate.person?.middleName} ${candidate.person?.lastName} ${candidate.person?.secondLastName}.pdf`,
         'Content-Length': buffer.length,
       });
       // Retornamos el buffer
@@ -234,11 +239,17 @@ export class PdfGenerateService {
     };
   }
 
-  private formatAddress(address: any): string {
+  private formatAddress(address: AddressDto): string {
     if (!address) return '';
-    const { street, city, state, postalCode, country } = address;
-    return `${street ?? ''}, ${city ?? ''}, ${state ?? ''}, ${
-      postalCode ?? ''
-    }, ${country ?? ''}`.trim();
+
+    const { street, country, department, municipality, numberHouse } = address;
+
+    if (country.name === 'El Salvador') {
+      return `${street ?? ''}, ${numberHouse ?? ''}, ${
+        municipality?.name ?? ''
+      }, ${department?.name ?? ''}, ${country.name}`.trim();
+    }
+
+    return `${street}, ${numberHouse}, ${country.name}`.trim();
   }
 }
