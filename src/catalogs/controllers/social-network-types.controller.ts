@@ -3,7 +3,7 @@ import { SocialNetworkTypesService } from '../services/social-network-types.serv
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Social Network Types Endpoints')
-@Controller('social-network-types')
+@Controller('catalogs/social-network-types')
 export class SocialNetworkTypesController {
   constructor(private readonly socialNetworkTypes: SocialNetworkTypesService) {}
 
