@@ -104,10 +104,13 @@ async function main() {
       Logger.log(`Permission ${newPermission.name} created`, 'Seeder');
     }
 
-    if (existingPermission?.description !== permission.description) {
+    if (
+      existingPermission &&
+      existingPermission?.description !== permission.description
+    ) {
       await prisma.permission.update({
         where: {
-          id: existingPermission.id,
+          id: existingPermission?.id,
         },
         data: {
           description: permission.description,
