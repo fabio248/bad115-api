@@ -25,7 +25,7 @@ model User {
   person Person?
 
   recomendationId String?
-  recomendation Recomendation? @relation(fields: [recomendationId], references: [id])
+  recomendation   Recomendation? @relation(fields: [recomendationId], references: [id])
 
   @@map("mnt_usuario")
 }
@@ -46,6 +46,7 @@ model UserRole {
 model Role {
   id          String          @id @default(uuid())
   name        String          @unique @map("nombre")
+  description String?         @map("descripcion")
   createdAt   DateTime        @default(now()) @map("creado_en")
   updatedAt   DateTime        @updatedAt @map("modificado_en")
   deletedAt   DateTime?       @map("eliminado_en")
@@ -69,13 +70,14 @@ model RolPermission {
 }
 
 model Permission {
-  id        String          @id @default(uuid())
-  name      String          @map("nombre")
-  codename  String          @map("codigo")
-  createdAt DateTime        @default(now()) @map("creado_en")
-  updatedAt DateTime        @updatedAt @map("modificado_en")
-  deletedAt DateTime?       @map("eliminado_en")
-  roles     RolPermission[]
+  id          String          @id @default(uuid())
+  name        String          @map("nombre")
+  description String?         @map("descripcion")
+  codename    String          @map("codigo")
+  createdAt   DateTime        @default(now()) @map("creado_en")
+  updatedAt   DateTime        @updatedAt @map("modificado_en")
+  deletedAt   DateTime?       @map("eliminado_en")
+  roles       RolPermission[]
 
   @@map("mnt_permiso")
 }
@@ -481,12 +483,12 @@ model TestType {
 }
 
 model Recomendation {
-  id        String    @id @default(uuid())
-  type      String    @map("tipo") // this is ENUM and contain two options: Laboral and personal
-  recomendation String? @map("recomendacion")
-  createdAt DateTime  @default(now()) @map("creado_en")
-  updatedAt DateTime  @updatedAt @map("modificado_en")
-  deletedAt DateTime? @map("eliminado_en")
+  id            String    @id @default(uuid())
+  type          String    @map("tipo") // this is ENUM and contain two options: Laboral and personal
+  recomendation String?   @map("recomendacion")
+  createdAt     DateTime  @default(now()) @map("creado_en")
+  updatedAt     DateTime  @updatedAt @map("modificado_en")
+  deletedAt     DateTime? @map("eliminado_en")
 
   candidateId String
   candidate   Candidate @relation(fields: [candidateId], references: [id])
