@@ -85,7 +85,7 @@ async function main() {
       (p) => p.name === permission.name,
     );
 
-    if (existingPermission.description !== permission.description) {
+    if (existingPermission?.description !== permission.description) {
       await prisma.permission.update({
         where: {
           id: existingPermission.id,
@@ -102,6 +102,7 @@ async function main() {
         data: {
           name: permission.name,
           codename: permission.codename,
+          description: permission.description,
         },
       });
       storedPermission.push(newPermission);
