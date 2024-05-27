@@ -25,6 +25,19 @@ export class RecognitionTypesService {
     return plainToInstance(RecognitionTypesDto, recognitionTypes);
   }
 
+  async delete(id: string): Promise<RecognitionTypesDto> {
+    const participationType = await this.prismaService.recognitionType.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    return plainToInstance(RecognitionTypesDto, participationType);
+  }
+
   async findAllPaginated(
     pageDto: PageDto,
   ): Promise<PaginatedDto<RecognitionTypesDto>> {
@@ -57,6 +70,7 @@ export class RecognitionTypesService {
       {
         where: {
           id,
+          deletedAt: null,
         },
       },
     );
@@ -83,19 +97,6 @@ export class RecognitionTypesService {
         id,
       },
       data: updateParticipationTypesDto,
-    });
-
-    return plainToInstance(RecognitionTypesDto, participationType);
-  }
-
-  async delete(id: string): Promise<RecognitionTypesDto> {
-    const participationType = await this.prismaService.recognitionType.update({
-      where: {
-        id,
-      },
-      data: {
-        deletedAt: new Date(),
-      },
     });
 
     return plainToInstance(RecognitionTypesDto, participationType);

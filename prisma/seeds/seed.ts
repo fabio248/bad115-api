@@ -96,16 +96,16 @@ async function main() {
     }
   }
 
-  for await (const deparment of departmentSeed) {
+  for await (const department of departmentSeed) {
     const existingDepartment = storedDepartments.find(
-      (d) => d.name === deparment.nam,
+      (d) => d.name === department.nam,
     );
 
     if (!existingDepartment) {
       const newDepartment = await prisma.department.create({
         data: {
-          name: deparment.nam,
-          codename: deparment.codigo.toString(),
+          name: department.nam,
+          codename: department.codigo.toString(),
         },
       });
 
@@ -228,7 +228,7 @@ async function main() {
     return;
   }
 
-  const existAdmin = prisma.user.findFirst({
+  const existAdmin = await prisma.user.findFirst({
     where: { email: 'admin@gmail.com' },
   });
 
