@@ -12,5 +12,7 @@
   "IS_POSITIVE": "{property} debe ser un número positivo.",
   "IS_URL": "{property} debe ser una dirección URL.",
   "IS_TIME": "{property} debe ser una hora válida en formato 'hh:mm:ss'",
-  "IS_VALID_TOKEN": "{property} debe ser un tipo de token valido 'refresh token'"
+  "IS_VALID_TOKEN": "{property} debe ser un tipo de token valido 'refresh token'",
+  "ARRAY_UNIQUE": "{property} debe ser un array con valores únicos.",
+  "ARRAY_MIN_SIZE": "{property} debe ser un array con un tamaño mínimo de {constraint}."
 }
