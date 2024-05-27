@@ -43,18 +43,18 @@ export class RolesController {
     return this.rolesService.create(createRoleDto);
   }
 
-  // @Auth({
-  //   permissions: [permissions.READ_ROLE.codename],
-  // })
+  @Auth({
+    permissions: [permissions.READ_ROLE.codename],
+  })
   @ApiPaginatedResponse(RoleDto)
   @Get('')
   findAll(@Query() pageDto: PageDto): Promise<PaginatedDto<RoleDto>> {
     return this.rolesService.findAll(pageDto);
   }
 
-  // @Auth({
-  //   permissions: [permissions.READ_ROLE.codename],
-  // })
+  @Auth({
+    permissions: [permissions.READ_ROLE.codename],
+  })
   @ApiErrorResponse([
     {
       status: HttpStatus.NOT_FOUND,
