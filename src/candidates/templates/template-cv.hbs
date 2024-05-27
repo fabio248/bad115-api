@@ -3,36 +3,46 @@
     <meta charset='UTF-8' />
     <title>Curriculum Vitae</title>
     <style>
-      body { font-family: 'Arial', sans-serif; color: #333; margin: 20px 20px
-      20px 20px; padding: 0; background: #f4f4f4; } .container { width: 95%;
-      background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      } .header { text-align: center; padding-bottom: 20px; border-bottom: 2px
-      solid #333; position: relative; } .avatar { position: absolute; top: 20px;
-      left: 20px; width: 60px; height: 60px; border-radius: 50%; border: 2px
-      solid #fff; background: #333; overflow: hidden; } .avatar img { width:
-      100%; height: 100%; object-fit: cover; } .header h1 { margin: 10px 0 5px;
-      font-size: 24px; color: #333; } .header h2 { margin: 0; font-size: 18px;
-      color: #777; } .section { margin: 20px 0; } .section h2 { margin-bottom:
-      10px; font-size: 20px; color: #333; border-bottom: 2px solid #333;
-      padding-bottom: 5px; } .section ul { list-style-type: none; padding: 0; }
-      .section ul li { margin-bottom: 5px; padding: 5px; background: #f9f9f9;
-      border: 1px solid #ddd; border-radius: 5px; } .contact-info, .skills,
-      .experience, .education, .projects, .certifications, .recognitions,
-      .languages, .participations, .recommendations { margin-bottom: 20px; }
-      .contact-info ul li { display: inline-block; margin-right: 20px; }
-      .contact-info ul li::before { content: '•'; margin-right: 5px; color:
-      #333; } .skills ul { column-count: 2; column-gap: 5px; padding-left: 0; }
-      .skills ul li { margin-bottom: 5px; padding: 2px 5px; } .skills-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(120px,
-      1fr)); grid-gap: 5px; } .skill-item { padding: 5px; background: #f9f9f9;
-      border: 1px solid #ddd; border-radius: 5px; }
+      body { font-family: 'Arial', sans-serif; color: #333; margin: 20px;
+      padding: 0; background: #f4f4f4; } .container { width: 95%; max-width:
+      1200px; margin: 0 auto; background: #fff; padding: 20px; box-shadow: 0 0
+      10px rgba(0, 0, 0, 0.1); } .header { text-align: center; padding-bottom:
+      20px; border-bottom: 2px solid #333; position: relative; } .avatar {
+      position: absolute; top: 20px; left: 20px; width: 60px; height: 60px;
+      border-radius: 50%; border: 2px solid #fff; background: #333; overflow:
+      hidden; } .avatar img { width: 100%; height: 100%; object-fit: cover; }
+      .header h1 { margin: 10px 0 5px; font-size: 24px; color: #333; } .header
+      h2 { margin: 0; font-size: 18px; color: #777; } .section { margin: 20px 0;
+      } .section h2 { margin-bottom: 10px; font-size: 20px; color: #333;
+      border-bottom: 2px solid #333; padding-bottom: 5px; } .section ul {
+      list-style-type: none; padding: 0; } .section ul li { margin-bottom: 5px;
+      padding: 5px; background: #f9f9f9; border: 1px solid #ddd; border-radius:
+      5px; } .contact-info, .skills, .experience, .education, .projects,
+      .certifications, .recognitions, .languages, .participations,
+      .recommendations { margin-bottom: 20px; } .contact-info ul li { display:
+      inline-block; margin-right: 20px; } .contact-info ul li::before { content:
+      '•'; margin-right: 5px; color: #333; } .skills ul { column-count: 2;
+      column-gap: 5px; padding-left: 0; } .skills ul li { margin-bottom: 5px;
+      padding: 2px 5px; } .skills-grid { display: grid; grid-template-columns:
+      repeat(auto-fill, minmax(120px, 1fr)); grid-gap: 5px; } .skill-item {
+      padding: 5px; background: #f9f9f9; border: 1px solid #ddd; border-radius:
+      5px; } @media (max-width: 768px) { body { margin: 10px; } .container {
+      padding: 10px; } .header { padding-bottom: 10px; } .header h1 { font-size:
+      20px; } .header h2 { font-size: 16px; } .avatar { width: 50px; height:
+      50px; top: 10px; left: 10px; } .section h2 { font-size: 18px; } .section
+      ul li { padding: 5px; font-size: 14px; } .contact-info ul li {
+      margin-right: 10px; } .skills ul { column-count: 1; } .skills-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); } } @media
+      (max-width: 480px) { .header h1 { font-size: 18px; } .header h2 {
+      font-size: 14px; } .avatar { width: 40px; height: 40px; } .section h2 {
+      font-size: 16px; } .section ul li { font-size: 12px; } }
     </style>
   </head>
   <body>
     <div class='container'>
       <div class='header'>
-        {{!-- <div class='avatar'>
-          <img src='{{profilePicture}}' alt='Profile Avatar' />
+        {{!-- <div class="avatar">
+          <img src="{{profilePicture}}" alt="Profile Avatar" />
         </div> --}}
         <h1>{{fullName}}</h1>
         <h2>{{jobTitle}}</h2>
@@ -53,7 +63,6 @@
           {{/each}}
         </ul>
       </div>
-
       <div class='experience section'>
         <h2>Experiencia Profesional</h2>
         <ul>
@@ -70,7 +79,7 @@
         </ul>
       </div>
       <div class='education section'>
-        <h2>Educación</h2>
+        <h2>Educación Adquirida</h2>
         <ul>
           {{#each education}}
             <li>
@@ -109,10 +118,9 @@
             </li>
           {{/each}}
         </ul>
-
       </div>
       <div class='languages section'>
-        <h2>Languages</h2>
+        <h2>Idiomas Dominados</h2>
         <ul>
           {{#each languageSkills}}
             <li>{{this.language}} - {{this.level}}</li>
@@ -120,7 +128,7 @@
         </ul>
       </div>
       <div class='participations section'>
-        <h2>Participations</h2>
+        <h2>Participaciones Destacables</h2>
         <ul>
           {{#each participations}}
             <li>{{this.Lugar}}, {{this.ciudad}} ({{this.LugarDelEvento}})</li>

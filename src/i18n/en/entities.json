@@ -3,6 +3,7 @@
   "ROLE": "Role",
   "CANDIDATE": "CANDIDATE",
   "PERSON": "Person",
+  "SOCIAL_NETWORK": "Social_network",
   "COUNTRY": "Country",
   "DEPARTMENT": "Department",
   "MUNICIPALITY": "Municipality",

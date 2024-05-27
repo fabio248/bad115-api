@@ -122,68 +122,123 @@ export class PdfGenerateService {
   private mapCandidateInfoToCvDataTemplate(candidateInfo: any): CvDataTemplate {
     return {
       profilePicture: '',
-      fullName: `${candidateInfo.person.firstName} ${
-        candidateInfo.person.middleName || ''
-      } ${candidateInfo.person.lastName} ${
-        candidateInfo.person.secondLastName || ''
+      fullName: `${candidateInfo.person?.firstName ?? 'Nombre no disponible'} ${
+        candidateInfo.person?.middleName ?? ''
+      } ${candidateInfo.person?.lastName ?? 'Apellido no disponible'} ${
+        candidateInfo.person?.secondLastName ?? ''
       }`.trim(),
-      email: candidateInfo.person.user.email, // Asigna el email si está disponible
-      phone: candidateInfo.person.user.phone || '',
+      email: candidateInfo.person?.user?.email ?? 'Email no disponible',
+      phone: candidateInfo.person?.user?.phone ?? 'Teléfono no disponible',
       address:
-        this.formatAddress(candidateInfo.person.address) ||
-        'Direccion temporal', // Asigna la dirección si está disponible
-      // skills: candidateInfo.technicalSkills.technicalSkill.map(
-      //   (skill) => skill.technicalSkills.technicalSkill.name,
-      // ),
-      technicalSkills: candidateInfo.technicalSkills.map((skill) => ({
-        name: skill.technicalSkill.name,
-        category: skill.technicalSkill.categoryTechnicalSkill.name,
-      })),
-      experience: candidateInfo.laboralExperiences.map((exp) => ({
-        company: exp.organizationName,
-        position: exp.name,
-        startDate: new Date(exp.initDate).toLocaleDateString(),
+        this.formatAddress(candidateInfo.person?.address) ||
+        'No posee dirección registrada',
+      technicalSkills: candidateInfo.technicalSkills?.map((skill) => ({
+        name: skill.technicalSkill?.name ?? 'Habilidad técnica no disponible',
+        category:
+          skill.technicalSkill?.categoryTechnicalSkill?.name ??
+          'Categoría no disponible',
+      })) ?? [
+        {
+          name: 'Habilidad técnica no disponible',
+          category: 'Categoría no disponible',
+        },
+      ],
+      experience: candidateInfo.laboralExperiences?.map((exp) => ({
+        company: exp.organizationName ?? 'Empresa no disponible',
+        position: exp.name ?? 'Posición no disponible',
+        startDate: exp.initDate
+          ? new Date(exp.initDate).toLocaleDateString()
+          : 'Fecha de inicio no disponible',
         endDate: exp.currentJob
-          ? 'Present'
-          : new Date(exp.finishDate).toLocaleDateString(),
-        description: exp.functionPerformed,
-      })),
-      education: candidateInfo.academicKnowledges.map((edu) => ({
-        institution: edu.organizationName,
-        degree: edu.type,
-        startDate: new Date(edu.initDate).toLocaleDateString(),
-        endDate: new Date(edu.finishDate).toLocaleDateString(),
-        description: edu.name,
-      })),
-      certifications: candidateInfo.certifications.map((cer) => ({
-        nombreCertification: cer.name,
-        type: cer.type,
-        startDate: new Date(cer.initDate).toLocaleDateString(),
-        endDate: new Date(cer.finishDate).toLocaleDateString(),
-        nombreDeLaOrganizacion: cer.organizationName,
-      })),
-
-      recognitions: candidateInfo.certifications.map((re) => ({
-        nombreCertification: re.name,
-        endDate: new Date(re.finishDate).toLocaleDateString(),
-      })),
-      languageSkills: candidateInfo.languageSkills.map((langSkill) => ({
-        language: langSkill.skill,
-        level: langSkill.level,
-      })),
-      participations: candidateInfo.participations.map((parti) => ({
-        Lugar: parti.place,
-        ciudad: parti.country,
-        LugarDelEvento: parti.eventHost,
-      })),
+          ? 'Presente'
+          : exp.finishDate
+          ? new Date(exp.finishDate).toLocaleDateString()
+          : 'Fecha de fin no disponible',
+        description: exp.functionPerformed ?? 'Descripción no disponible',
+      })) ?? [
+        {
+          company: 'Empresa no disponible',
+          position: 'Posición no disponible',
+          startDate: 'Fecha de inicio no disponible',
+          endDate: 'Fecha de fin no disponible',
+          description: 'Descripción no disponible',
+        },
+      ],
+      education: candidateInfo.academicKnowledges?.map((edu) => ({
+        institution: edu.organizationName ?? 'Institución no disponible',
+        degree: edu.type ?? 'Título no disponible',
+        startDate: edu.initDate
+          ? new Date(edu.initDate).toLocaleDateString()
+          : 'Fecha de inicio no disponible',
+        endDate: edu.finishDate
+          ? new Date(edu.finishDate).toLocaleDateString()
+          : 'Fecha de fin no disponible',
+        description: edu.name ?? 'Descripción no disponible',
+      })) ?? [
+        {
+          institution: 'Institución no disponible',
+          degree: 'Título no disponible',
+          startDate: 'Fecha de inicio no disponible',
+          endDate: 'Fecha de fin no disponible',
+          description: 'Descripción no disponible',
+        },
+      ],
+      certifications: candidateInfo.certifications?.map((cer) => ({
+        nombreCertification: cer.name ?? 'Certificación no disponible',
+        type: cer.type ?? 'Tipo no disponible',
+        startDate: cer.initDate
+          ? new Date(cer.initDate).toLocaleDateString()
+          : 'Fecha de inicio no disponible',
+        endDate: cer.finishDate
+          ? new Date(cer.finishDate).toLocaleDateString()
+          : 'Fecha de fin no disponible',
+        nombreDeLaOrganizacion:
+          cer.organizationName ?? 'Organización no disponible',
+      })) ?? [
+        {
+          nombreCertification: 'Certificación no disponible',
+          type: 'Tipo no disponible',
+          startDate: 'Fecha de inicio no disponible',
+          endDate: 'Fecha de fin no disponible',
+          nombreDeLaOrganizacion: 'Organización no disponible',
+        },
+      ],
+      recognitions: candidateInfo.certifications?.map((re) => ({
+        nombreCertification: re.name ?? 'Reconocimiento no disponible',
+        endDate: re.finishDate
+          ? new Date(re.finishDate).toLocaleDateString()
+          : 'Fecha de fin no disponible',
+      })) ?? [
+        {
+          nombreCertification: 'Reconocimiento no disponible',
+          endDate: 'Fecha de fin no disponible',
+        },
+      ],
+      languageSkills: candidateInfo.languageSkills?.map((langSkill) => ({
+        language: langSkill.skill ?? 'Idioma no disponible',
+        level: langSkill.level ?? 'Nivel no disponible',
+      })) ?? [
+        { language: 'Idioma no disponible', level: 'Nivel no disponible' },
+      ],
+      participations: candidateInfo.participations?.map((parti) => ({
+        Lugar: parti.place ?? 'Lugar no disponible',
+        ciudad: parti.country ?? 'Ciudad no disponible',
+        LugarDelEvento: parti.eventHost ?? 'Lugar del evento no disponible',
+      })) ?? [
+        {
+          Lugar: 'Lugar no disponible',
+          ciudad: 'Ciudad no disponible',
+          LugarDelEvento: 'Lugar del evento no disponible',
+        },
+      ],
     };
   }
 
   private formatAddress(address: any): string {
     if (!address) return '';
     const { street, city, state, postalCode, country } = address;
-    return `${street || ''}, ${city || ''}, ${state || ''}, ${
-      postalCode || ''
-    }, ${country || ''}`.trim();
+    return `${street ?? ''}, ${city ?? ''}, ${state ?? ''}, ${
+      postalCode ?? ''
+    }, ${country ?? ''}`.trim();
   }
 }
