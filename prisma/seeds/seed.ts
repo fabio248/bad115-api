@@ -11,6 +11,8 @@ import {
 } from './technical-skill.seed';
 import { recognitionTypeSeed } from './recognition-type.seed';
 import { participationTypeSeed } from './participation-type.seed';
+import { typeSocialNetworkSeed } from './type-social-network.seed';
+
 import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -28,6 +30,7 @@ async function main() {
     technicalSkills,
     recognitionTypes,
     participationTypes,
+    typeSocialNetworks,
   ] = await Promise.all([
     prisma.role.findMany(),
     prisma.permission.findMany(),
@@ -38,6 +41,7 @@ async function main() {
     prisma.technicalSkill.findMany(),
     prisma.recognitionType.findMany(),
     prisma.participacionType.findMany(),
+    prisma.typeSocialNetwork.findMany(),
   ]);
 
   //Check if roles already exist, if not create them
@@ -51,6 +55,28 @@ async function main() {
       storedRoles.push(newRole);
       Logger.log(`Role ${newRole.name} created`, 'Seeder');
     }
+  }
+
+  for await (const typeSocialNetwork of typeSocialNetworkSeed) {
+    const existingTypeSocialNetwork = typeSocialNetworks.find(
+      (m) => m.name === typeSocialNetwork.name,
+    );
+
+    if (existingTypeSocialNetwork) {
+      continue;
+    }
+
+    const newTypeSocialNetwork = await prisma.typeSocialNetwork.create({
+      data: {
+        name: typeSocialNetwork.name,
+      },
+    });
+
+    typeSocialNetworks.push(newTypeSocialNetwork);
+    Logger.log(
+      `Type Social Network ${newTypeSocialNetwork.name} created`,
+      'Seeder',
+    );
   }
 
   //Check if permissions already exist, if not create them, and assign them to the roles
