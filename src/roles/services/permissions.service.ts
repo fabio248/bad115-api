@@ -29,7 +29,9 @@ export class PermissionsService {
     return plainToInstance(PermissionDto, permission);
   }
 
-  async findAll(pageDto: PageDto): Promise<PaginatedDto<PermissionDto>> {
+  async findAllPaginated(
+    pageDto: PageDto,
+  ): Promise<PaginatedDto<PermissionDto>> {
     const { skip, take } = getPaginationParams(pageDto);
 
     const [permissions, totalItems] = await Promise.all([
@@ -44,6 +46,14 @@ export class PermissionsService {
     const pagination = getPaginationInfo(pageDto, totalItems);
 
     return { data: plainToInstance(PermissionDto, permissions), pagination };
+  }
+
+  async findAll(): Promise<PermissionDto[]> {
+    const permission = await this.prismaService.permission.findMany({
+      where: { deletedAt: null },
+    });
+
+    return plainToInstance(PermissionDto, permission);
   }
 
   async findOne(id: string): Promise<PermissionDto> {

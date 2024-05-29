@@ -26,9 +26,15 @@ export class PermissionsController {
 
   @Auth({ permissions: [permissions.READ_PERMISSION.codename] })
   @ApiPaginatedResponse(PermissionDto)
+  @Get('/paginated')
+  async findAllPaginated(@Query() pageDto: PageDto) {
+    return this.permissionsService.findAllPaginated(pageDto);
+  }
+
+  @Auth({ permissions: [permissions.READ_PERMISSION.codename] })
   @Get('')
-  async findAll(@Query() pageDto: PageDto) {
-    return this.permissionsService.findAll(pageDto);
+  async findAll() {
+    return this.permissionsService.findAll();
   }
 
   @Auth({ permissions: [permissions.READ_PERMISSION.codename] })
