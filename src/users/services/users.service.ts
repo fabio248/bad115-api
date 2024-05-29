@@ -17,6 +17,12 @@ import { ConfigService } from '@nestjs/config';
 import { CreateRegisterDto } from '../../auth/dtos/request/create-register.dto';
 import { CreatePersonDto } from '../../persons/dtos/request/create-person.dto';
 import { RegisterDto } from '../../auth/dtos/response/register.dto';
+import {
+  getPaginationInfo,
+  getPaginationParams,
+} from 'src/common/utils/pagination.utils';
+import { PageDto } from 'src/common/dtos/request/page.dto';
+import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 
 @Injectable()
 export class UsersService {
@@ -199,5 +205,59 @@ export class UsersService {
         },
       },
     });
+  }
+
+  async findAll(id: string, pageDto: PageDto): Promise<PaginatedDto<UserDto>> {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.USER'),
+          },
+        }),
+      );
+    }
+    const { skip, take } = getPaginationParams(pageDto);
+    const [allUserWithRoleConditioned, totalItems] = await Promise.all([
+      this.prismaService.user.findMany({
+        skip,
+        take,
+        where: {
+          roles: {
+            some: {
+              role: {
+                name: { in: [roles.CANDIDATE, roles.RECRUITER] },
+              },
+            },
+          },
+        },
+        include: {
+          person: true,
+        },
+      }),
+      this.prismaService.user.count({
+        where: {
+          deletedAt: null,
+          roles: {
+            some: {
+              role: {
+                name: { in: [roles.CANDIDATE, roles.RECRUITER] },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+    const pagination = getPaginationInfo(pageDto, totalItems);
+
+    return {
+      data: plainToInstance(UserDto, allUserWithRoleConditioned),
+      pagination,
+    };
   }
 }
