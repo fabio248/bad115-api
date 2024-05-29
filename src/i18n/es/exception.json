@@ -7,7 +7,7 @@
     "INVALID_TOKEN": "Token inválid o expirado.",
     "PERMISSIONS": "El usuario no tiene los permisos necesarios para realizar esta acción, permisos requeridos: {permissions}",
     "INVALID_CREDENTIALS": "Credenciales inválidas.",
-    "MAX_LOGIN_ATTEMPTS": "Has excedido el número máximo de intentos de inicio de sesión."
+    "MAX_LOGIN_ATTEMPTS": "Tu cuenta está bloqueada, has excedido el número máximo de intentos de inicio de sesión."
   },
   "INTERNAL_SERVER": {
     "DEFAULT": "Algo salió mal."
