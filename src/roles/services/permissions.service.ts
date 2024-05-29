@@ -39,6 +39,9 @@ export class PermissionsService {
         skip,
         take,
         where: { deletedAt: null },
+        orderBy: {
+          name: 'asc',
+        },
       }),
       this.prismaService.permission.count({ where: { deletedAt: null } }),
     ]);
@@ -51,6 +54,9 @@ export class PermissionsService {
   async findAll(): Promise<PermissionDto[]> {
     const permission = await this.prismaService.permission.findMany({
       where: { deletedAt: null },
+      orderBy: {
+        name: 'asc',
+      },
     });
 
     return plainToInstance(PermissionDto, permission);
