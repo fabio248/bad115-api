@@ -55,7 +55,15 @@ export class RolesService {
             include: {
               permission: true,
             },
+            orderBy: {
+              permission: {
+                name: 'asc',
+              },
+            },
           },
+        },
+        orderBy: {
+          name: 'asc',
         },
         skip,
         take,

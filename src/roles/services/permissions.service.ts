@@ -11,6 +11,8 @@ import {
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { I18nService } from 'nestjs-i18n';
 import { UpdatePermissionDto } from '../dto/request/update-permission.dto';
+import { PermissionFilterDto } from '../dto/request/permission-filter.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PermissionsService {
@@ -31,14 +33,24 @@ export class PermissionsService {
 
   async findAllPaginated(
     pageDto: PageDto,
+    permissionFilterDto?: PermissionFilterDto,
   ): Promise<PaginatedDto<PermissionDto>> {
     const { skip, take } = getPaginationParams(pageDto);
+
+    const filter: Prisma.PermissionWhereInput = {
+      deletedAt: null,
+    };
+
+    filter.name = { contains: permissionFilterDto?.name };
 
     const [permissions, totalItems] = await Promise.all([
       this.prismaService.permission.findMany({
         skip,
         take,
-        where: { deletedAt: null },
+        where: filter,
+        orderBy: {
+          name: 'asc',
+        },
       }),
       this.prismaService.permission.count({ where: { deletedAt: null } }),
     ]);
@@ -51,6 +63,9 @@ export class PermissionsService {
   async findAll(): Promise<PermissionDto[]> {
     const permission = await this.prismaService.permission.findMany({
       where: { deletedAt: null },
+      orderBy: {
+        name: 'asc',
+      },
     });
 
     return plainToInstance(PermissionDto, permission);

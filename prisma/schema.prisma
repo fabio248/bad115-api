@@ -21,8 +21,9 @@ model User {
   updatedAt    DateTime  @updatedAt @map("modificado_en")
   deletedAt    DateTime? @map("eliminado_en")
 
-  roles  UserRole[]
-  person Person?
+  roles   UserRole[]
+  person  Person?
+  company Company?
 
   recomendationId String?
   recomendation   Recomendation? @relation(fields: [recomendationId], references: [id])
@@ -150,6 +151,7 @@ model Country {
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
   Address   Address[]
+  companies Company[]
 
   @@map("ctl_pais")
 }
@@ -505,6 +507,7 @@ model Recruiter {
   deletedAt DateTime? @map("eliminado_en")
 
   jobPosition JobPosition[]
+  companies   CompanyRecruiter[]
 
   persons Person?
 
@@ -513,7 +516,6 @@ model Recruiter {
 
 model JobPosition {
   id            String    @id @default(uuid())
-  company       String    @map("empresa")
   salarialRange String    @map("rango_salarial")
   modality      String    @map("modalidad") // Enum: presencial, semipresencial, remoto
   location      String    @map("ubicacion")
@@ -524,6 +526,8 @@ model JobPosition {
 
   recruiterId String
   recruiter   Recruiter @relation(fields: [recruiterId], references: [id])
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id])
 
   requirement     Requirement[]
   jobApplications JobApplication[]
@@ -552,11 +556,51 @@ model JobApplication {
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
 
-  jobPositionId String      @unique
+  jobPositionId String      @unique @map("id_puesto_trabajo")
   jobPosition   JobPosition @relation(fields: [jobPositionId], references: [id])
 
-  candidateId String     @unique
-  candidate   Candidate? @relation(fields: [candidateId], references: [id])
+  candidateId String?    @map("id_candidato")
+  candidate   Candidate? @relation(fields: [candidateId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("mnt_aplicacion_puesto_trabajo")
+}
+
+model Company {
+  id                String             @id @default(uuid())
+  name              String             @map("nombre_empresa")
+  description       String?            @map("descripcion_empresa") @db.NVarChar(MAX)
+  sector            String?            @map("sector")
+  size              String             @map("tamanio")
+  sitioWeb          String?            @map("sitio_web")
+  phone             String?            @map("telefono_contacto")
+  logo              String?            @map("logo_empresa")
+  type              String?            @map("tipo_empresa") // startup, corporación, ONG
+  // Añadir trigger que aumente el contador de usuarios asignados, cuando se asigne un usuario a la empresa
+  assignedRecruiter Int?               @default(0) @map("usuarios_asignados")
+  userId            String             @unique @map("id_usuario")
+  user              User               @relation(fields: [userId], references: [id])
+  countryId         String             @map("id_pais")
+  country           Country            @relation(fields: [countryId], references: [id])
+  recruiters        CompanyRecruiter[]
+  jobPositions      JobPosition[]
+
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  @@map("mnt_empresa")
+}
+
+model CompanyRecruiter {
+  id          String    @id @default(uuid())
+  companyId   String    @map("id_empresa")
+  company     Company   @relation(fields: [companyId], references: [id])
+  recruiterId String    @map("id_reclutador")
+  recruiter   Recruiter @relation(fields: [recruiterId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  @@map("empresa_usuarios")
 }
