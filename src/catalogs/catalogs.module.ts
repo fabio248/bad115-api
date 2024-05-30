@@ -5,17 +5,21 @@ import { ParticipationTypesService } from './services/participation-types.servic
 import { ParticipationTypesController } from './controllers/participation-types.controller';
 import { SocialNetworkTypesService } from './services/social-network-types.service';
 import { SocialNetworkTypesController } from './controllers/social-network-types.controller';
+import { TechnicalSkillController } from './controllers/category-technical-skill.controller';
+import { TechnicalSkillService } from './services/category-technical-skill.service';
 
 @Module({
   providers: [
     RecognitionTypesService,
     ParticipationTypesService,
     SocialNetworkTypesService,
+    TechnicalSkillService,
   ],
   controllers: [
     RecognitionTypesController,
     ParticipationTypesController,
     SocialNetworkTypesController,
+    TechnicalSkillController,
   ],
 })
 export class CatalogsModule {}
