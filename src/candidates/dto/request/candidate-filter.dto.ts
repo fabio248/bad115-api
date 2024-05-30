@@ -8,6 +8,9 @@ export class CandidateFilterDto {
   @IsString({ message: i18nValidationMessage('VALIDATION.IS_STRING') })
   readonly search?: string;
 
+  /*
+   * Este campo es para ordenar los resultados, solamente cuando el campo search no está presente, en caso de que este presente se ordenarán por relevancia.
+   */
   @IsIn(
     getSortOptions<Person>([
       'firstName',

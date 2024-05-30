@@ -91,6 +91,73 @@ export class CandidateService {
           ],
         },
       }));
+
+      const searchQuery = Prisma.sql([
+        searchParams
+          .map(
+            (param, index) =>
+              `CASE
+                WHEN person.primer_nombre LIKE '%${param}%' THEN ${index + 1}
+                WHEN person.segundo_nombre LIKE '%${param}%' THEN ${index + 1}
+                WHEN person.primer_apellido LIKE '%${param}%' THEN ${index + 1}
+                WHEN person.segundo_apellido LIKE '%${param}%' THEN ${index + 1}
+                ELSE 0
+              END`,
+          )
+          .join(' + '),
+      ]);
+
+      const [rawCandidates, totalItems] = await Promise.all([
+        this.prismaService.$queryRaw<any[]>`
+            SELECT person.id,
+                   person.fecha_nacimiento as "birthday",
+                   person.primer_nombre    as "firstName",
+                   person.segundo_nombre   as "middleName",
+                   person.primer_apellido  as "lastName",
+                   person.segundo_apellido as "secondLastName",
+                   person.genero           as "gender",
+                   person.telefono         as "phone",
+                   person.userId,
+                   person.candidateId,
+                   person.recruiterId,
+                   (${searchQuery})        as score
+            FROM mnt_cantidato candidate
+                     LEFT JOIN mnt_persona person ON candidate.id = person.candidateId
+            WHERE candidate.eliminado_en IS NULL
+              AND ${searchQuery} > 0
+            ORDER BY score DESC
+            OFFSET ${skip} ROWS FETCH NEXT ${take} ROWS ONLY
+        `,
+        this.prismaService.candidate.count({
+          where: whereInput,
+        }),
+      ]);
+
+      const candidates = rawCandidates.map((rawCandidate) => ({
+        id: rawCandidate.candidateId,
+        person: {
+          id: rawCandidate.id,
+          firstName: rawCandidate.firstName,
+          middleName: rawCandidate.middleName,
+          lastName: rawCandidate.lastName,
+          secondLastName: rawCandidate.secondLastName,
+          birthday: rawCandidate.birthday,
+          gender: rawCandidate.gender,
+          candidateId: rawCandidate.candidateId,
+          recruiterId: rawCandidate.recruiterId,
+          userId: rawCandidate.userId,
+          user: {
+            id: rawCandidate.userId,
+            email: rawCandidate.email,
+            avatar: rawCandidate.avatar,
+          },
+        },
+      }));
+
+      return {
+        data: plainToInstance(CandidateDto, candidates),
+        pagination: getPaginationInfo(pageDto, totalItems),
+      };
     }
 
     const [candidates, totalItems] = await Promise.all([
@@ -110,6 +177,7 @@ export class CandidateService {
         where: whereInput,
       }),
     ]);
+
     return {
       data: plainToInstance(CandidateDto, candidates),
       pagination: getPaginationInfo(pageDto, totalItems),
