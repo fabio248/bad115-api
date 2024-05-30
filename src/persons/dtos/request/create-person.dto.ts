@@ -35,4 +35,8 @@ export class CreatePersonDto {
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
   @IsDateString({}, { message: i18nValidationMessage('validation.IS_DATE') })
   readonly birthday: Date;
+
+  @IsOptional()
+  @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
+  readonly phone?: string;
 }
