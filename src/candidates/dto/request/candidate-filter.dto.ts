@@ -6,7 +6,7 @@ import { Person } from '@prisma/client';
 export class CandidateFilterDto {
   @IsOptional()
   @IsString({ message: i18nValidationMessage('VALIDATION.IS_STRING') })
-  readonly search: string;
+  readonly search?: string;
 
   @IsIn(
     getSortOptions<Person>([

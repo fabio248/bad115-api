@@ -8,7 +8,6 @@ import {
 } from '../../common/utils/pagination.utils';
 import { CandidateFilterDto } from '../dto/request/candidate-filter.dto';
 import { Prisma } from '@prisma/client';
-import { getSortObject } from '../../common/utils/sort.utils';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { plainToInstance } from 'class-transformer';
 import { I18nService } from 'nestjs-i18n';
@@ -74,53 +73,43 @@ export class CandidateService {
     candidateFilterDto: CandidateFilterDto,
   ): Promise<PaginatedDto<CandidateDto>> {
     const { skip, take } = getPaginationParams(pageDto);
-    const { search, sort } = candidateFilterDto;
+    const { search } = candidateFilterDto;
     const whereInput: Prisma.CandidateWhereInput = {
       deletedAt: null,
     };
 
     if (search) {
-      whereInput.person = {
-        OR: [
-          {
-            firstName: {
-              contains: search,
-            },
-          },
-          {
-            lastName: {
-              contains: search,
-            },
-          },
-          {
-            middleName: {
-              contains: search,
-            },
-          },
-          {
-            secondLastName: {
-              contains: search,
-            },
-          },
-        ],
-      };
+      const searchParams = search.split(' ');
+
+      whereInput.OR = searchParams.map((param) => ({
+        person: {
+          OR: [
+            { firstName: { contains: param } },
+            { lastName: { contains: param } },
+            { middleName: { contains: param } },
+            { secondLastName: { contains: param } },
+          ],
+        },
+      }));
     }
 
     const [candidates, totalItems] = await Promise.all([
       this.prismaService.candidate.findMany({
         take,
         skip,
-        orderBy: getSortObject(sort),
         where: whereInput,
-        include: this.includeCandidate,
-      }),
-      this.prismaService.candidate.count({
-        where: {
-          deletedAt: null,
+        include: {
+          person: {
+            include: {
+              user: true,
+            },
+          },
         },
       }),
+      this.prismaService.candidate.count({
+        where: whereInput,
+      }),
     ]);
-
     return {
       data: plainToInstance(CandidateDto, candidates),
       pagination: getPaginationInfo(pageDto, totalItems),
