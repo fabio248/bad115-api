@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CandidateDto } from '../dto/response/candidate.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { PageDto } from '../../common/dtos/request/page.dto';
@@ -11,6 +11,7 @@ import { Prisma } from '@prisma/client';
 import { getSortObject } from '../../common/utils/sort.utils';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { plainToInstance } from 'class-transformer';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class CandidateService {
@@ -42,11 +43,30 @@ export class CandidateService {
     recomendations: true,
   };
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly i18n: I18nService,
+  ) {}
 
   async findOne(id: string): Promise<CandidateDto> {
     this.logger.log(`Finding candidate with id: ${id}`);
-    return;
+    const candidate = await this.prismaService.candidate.findFirst({
+      where: {
+        id: id,
+        deletedAt: null,
+      },
+      include: this.includeCandidate,
+    });
+    if (!candidate) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.CANDIDATE'),
+          },
+        }),
+      );
+    }
+    return plainToInstance(CandidateDto, candidate);
   }
 
   async findAll(
