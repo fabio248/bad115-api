@@ -36,12 +36,26 @@ export class PermissionsService {
     permissionFilterDto?: PermissionFilterDto,
   ): Promise<PaginatedDto<PermissionDto>> {
     const { skip, take } = getPaginationParams(pageDto);
+    const { search } = permissionFilterDto;
 
     const filter: Prisma.PermissionWhereInput = {
       deletedAt: null,
     };
 
-    filter.name = { contains: permissionFilterDto?.name };
+    if (search) {
+      filter.OR = [
+        {
+          name: {
+            contains: search,
+          },
+        },
+        {
+          codename: {
+            contains: search,
+          },
+        },
+      ];
+    }
 
     const [permissions, totalItems] = await Promise.all([
       this.prismaService.permission.findMany({
@@ -52,7 +66,7 @@ export class PermissionsService {
           name: 'asc',
         },
       }),
-      this.prismaService.permission.count({ where: { deletedAt: null } }),
+      this.prismaService.permission.count({ where: filter }),
     ]);
 
     const pagination = getPaginationInfo(pageDto, totalItems);
