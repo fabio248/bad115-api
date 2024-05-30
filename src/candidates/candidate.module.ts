@@ -21,6 +21,8 @@ import { RecomendationController } from './controller/recomendation.controller';
 import { RecomendationService } from './services/recomendation.service';
 import { PdfGenerateController } from './controller/pdf-generate.controller';
 import { PdfGenerateService } from './services/pdf-generate.service';
+import { CandidateController } from './controller/candidate.controller';
+import { CandidateService } from './services/candidate.service';
 
 @Module({
   controllers: [
@@ -35,6 +37,7 @@ import { PdfGenerateService } from './services/pdf-generate.service';
     PublicationController,
     RecomendationController,
     PdfGenerateController,
+    CandidateController,
   ],
   providers: [
     LaboralExperiencesService,
@@ -48,6 +51,7 @@ import { PdfGenerateService } from './services/pdf-generate.service';
     PublicationService,
     RecomendationService,
     PdfGenerateService,
+    CandidateService,
   ],
 })
 export class CandidateModule {}
