@@ -571,7 +571,7 @@ model Company {
   description       String?            @map("descripcion_empresa") @db.NVarChar(MAX)
   sector            String?            @map("sector")
   size              String             @map("tamanio")
-  sitioWeb          String?            @map("sitio_web")
+  website           String?            @map("sitio_web")
   phone             String?            @map("telefono_contacto")
   logo              String?            @map("logo_empresa")
   type              String?            @map("tipo_empresa") // startup, corporación, ONG
