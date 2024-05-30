@@ -18,6 +18,10 @@ import { PageDto } from '../../common/dtos/request/page.dto';
 import { CompanyDto } from '../dtos/response/company.dto';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 import { UpdateCompanyDto } from '../dtos/request/update-company.dto';
+import { AddRecruiterCompanyDto } from '../dtos/request/add-recruiter-company.dto';
+import { PersonDto } from '../../persons/dtos/response/person.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
+import { RecruiterIdDto } from '../../recruiters/dtos/request/recruiter-id.dto';
 
 @ApiTags('Companies Endpoints')
 @Controller('companies')
@@ -57,5 +61,38 @@ export class CompaniesController {
   @Delete(':id')
   async remove(@Param() { id }: IdDto): Promise<void> {
     return this.companiesService.remove(id);
+  }
+
+  @ApiPaginatedResponse(PersonDto)
+  @Get(':id/recruiters')
+  async getRecruiters(
+    @Param() { id }: IdDto,
+    @Query() pageDto: PageDto,
+  ): Promise<PaginatedDto<PersonDto>> {
+    return this.companiesService.findAllRecruiters(id, pageDto);
+  }
+
+  @Get(':id/recruiters/:recruiterId')
+  async getRecruiter(
+    @Param() { id }: IdDto,
+    @Param() { recruiterId }: RecruiterIdDto,
+  ): Promise<PersonDto> {
+    return this.companiesService.findOneRecruiter(id, recruiterId);
+  }
+
+  @Post(':id/recruiters')
+  async addRecruiter(
+    @Param() { id }: IdDto,
+    @Body() addRecruiterCompanyDto: AddRecruiterCompanyDto,
+  ): Promise<void> {
+    return this.companiesService.addRecruiter(id, addRecruiterCompanyDto);
+  }
+
+  @Delete(':id/recruiters/:recruiterId')
+  async removeRecruiter(
+    @Param() { id }: IdDto,
+    @Param() { recruiterId }: RecruiterIdDto,
+  ): Promise<void> {
+    return this.companiesService.removeRecruiter(id, recruiterId);
   }
 }

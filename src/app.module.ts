@@ -17,6 +17,7 @@ import { RolesModule } from './roles/roles.module';
 import { CandidateModule } from './candidates/candidate.module';
 import { CatalogsModule } from './catalogs/catalogs.module';
 import { CompaniesModule } from './companies/companies.module';
+import { RecruitersModule } from './recruiters/recruiters.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { CompaniesModule } from './companies/companies.module';
     CandidateModule,
     CatalogsModule,
     CompaniesModule,
+    RecruitersModule,
   ],
   controllers: [AppController],
   providers: [AuthModule, UsersModule],
