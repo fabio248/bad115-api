@@ -18,6 +18,7 @@ import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-resp
 import { IdDto } from '../../common/dtos/request/id.dto';
 import { CreatePermissionDto } from '../dto/request/create-permission.dto';
 import { UpdatePermissionDto } from '../dto/request/update-permission.dto';
+import { PermissionFilterDto } from '../dto/request/permission-filter.dto';
 
 @ApiTags('Permissions Endpoint')
 @Controller('permissions')
@@ -27,8 +28,14 @@ export class PermissionsController {
   @Auth({ permissions: [permissions.READ_PERMISSION.codename] })
   @ApiPaginatedResponse(PermissionDto)
   @Get('/paginated')
-  async findAllPaginated(@Query() pageDto: PageDto) {
-    return this.permissionsService.findAllPaginated(pageDto);
+  async findAllPaginated(
+    @Query() pageDto: PageDto,
+    @Query() permissionFilterDto: PermissionFilterDto,
+  ) {
+    return this.permissionsService.findAllPaginated(
+      pageDto,
+      permissionFilterDto,
+    );
   }
 
   @Auth({ permissions: [permissions.READ_PERMISSION.codename] })
