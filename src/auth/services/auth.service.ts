@@ -48,6 +48,7 @@ export class AuthService {
     const user = await this.usersServices.findOneByEmail(email, {
       roles: true,
       person: true,
+      company: true,
     });
 
     if (!user) {
@@ -101,7 +102,8 @@ export class AuthService {
       userId: user.id,
       candidateId: user.person?.candidateId,
       recruiterId: user.person?.recruiterId,
-      personId: user.person.id,
+      personId: user.person?.id,
+      companyId: user.company?.id,
       permissions: user.permissions,
       roles: user.roles,
     };

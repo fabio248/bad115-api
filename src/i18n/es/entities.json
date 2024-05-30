@@ -8,14 +8,15 @@
   "MUNICIPALITY": "Municipio",
   "CERTIFICATION": "Certificación",
   "ADACEMIC_KNOWLEDGE": "Conocimiento_academico",
-  "LANGUAGE_SKILL": "Habilidad_lenguaje",
+  "LANGUAGE_SKILL": "Habilidad lenguaje",
   "RECOGNITION": "Reconocimiento",
-  "TECHNICAL_SKILL_CANDIDATE": "Habilidad_tecnica_candidato",
-  "PARTICIPATION": "participacion",
-  "TECHNICAL_SKILL": "habilidad_tecnica",
-  "TEST": "prueba",
+  "TECHNICAL_SKILL_CANDIDATE": "Habilidad tecnica candidato",
+  "PARTICIPATION": "Participacion",
+  "TECHNICAL_SKILL": "Habilidad tecnica",
+  "TEST": "Prueba",
   "PUBLICATION": "Publicacion",
   "RECOMENDATION": "Recomendacion",
   "PERMISSION": "Permiso",
-  "SOCIAL_NETWORK": "Red social"
+  "SOCIAL_NETWORK": "Red social",
+  "COMPANY": "Empresa"
 }

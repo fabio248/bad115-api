@@ -8,14 +8,15 @@
   "DEPARTMENT": "Department",
   "MUNICIPALITY": "Municipality",
   "CERTIFICATION": "Certification",
-  "ADACEMIC_KNOWLEDGE": "academic_knowledge",
-  "LANGUAGE_SKILL": "language_skill",
+  "ADACEMIC_KNOWLEDGE": "Academic knowledge",
+  "LANGUAGE_SKILL": "Language skill",
   "RECOGNITION": "Recognition",
-  "TECHNICAL_SKILL_CANDIDATE": "technical_skill_candidate",
+  "TECHNICAL_SKILL_CANDIDATE": "Technical skill candidate",
   "PARTICIPATION": "Participation",
-  "TECHNICAL_SKILL": "Tehcnical_skill",
+  "TECHNICAL_SKILL": "Tehcnical skill",
   "TEST": "Test",
   "PUBLICATION": "Publication",
   "RECOMENDATION": "Recomendation",
-  "PERMISSION": "Permission"
+  "PERMISSION": "Permission",
+  "COMPANY": "Company"
 }

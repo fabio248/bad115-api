@@ -1,7 +1,7 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
 import { CountryDto } from '../../../persons/dtos/response/country.dto';
-import { UserDto } from '../../../users/dtos/response/user.dto';
 import { CompanySizeEnum } from '../../enums/company-size.enum';
+import { UserCompanyDto } from './user-company.dto';
 
 @Exclude()
 export class CompanyDto {
@@ -33,8 +33,10 @@ export class CompanyDto {
   readonly assignedRecruiter: number;
 
   @Expose()
-  readonly user: UserDto;
+  @Type(() => UserCompanyDto)
+  readonly user: UserCompanyDto;
 
   @Expose()
+  @Type(() => CountryDto)
   readonly country?: CountryDto;
 }
