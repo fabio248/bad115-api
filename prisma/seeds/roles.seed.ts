@@ -3,4 +3,5 @@ export const roles = {
   USER: 'user',
   CANDIDATE: 'candidate',
   RECRUITER: 'recruiter',
+  COMPANY: 'company',
 };
