@@ -26,7 +26,8 @@ model User {
   company Company?
 
   recomendationId String?
-  recomendation   Recomendation? @relation(fields: [recomendationId], references: [id])
+  recomendation   Recomendation?  @relation(fields: [recomendationId], references: [id])
+  UnlockRequest   UnlockRequest[]
 
   @@map("mnt_usuario")
 }
@@ -603,4 +604,18 @@ model CompanyRecruiter {
   deletedAt DateTime? @map("eliminado_en")
 
   @@map("empresa_usuarios")
+}
+
+model UnlockRequest {
+  id     String  @id @default(uuid())
+  status String  @map("estado") // Enum: pendiente, aprobado, rechazado
+  reason String? @map("razon")
+  userId String  @map("usuario_id")
+  user   User    @relation(fields: [userId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  @@map("mnt_solicitud_desbloqueo")
 }
