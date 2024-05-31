@@ -23,6 +23,8 @@ import {
 } from 'src/common/utils/pagination.utils';
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { UserFilterDto } from '../dtos/request/user-filter.dto';
+import { getSortObject } from '../../common/utils/sort.utils';
 
 @Injectable()
 export class UsersService {
@@ -149,6 +151,7 @@ export class UsersService {
       },
       include: {
         person: true,
+        company: true,
         roles: {
           include: {
             role: {
@@ -224,17 +227,68 @@ export class UsersService {
     });
   }
 
-  async findAll(pageDto: PageDto): Promise<PaginatedDto<UserDto>> {
+  async findAll(
+    pageDto: PageDto,
+    { sort, search }: UserFilterDto,
+  ): Promise<PaginatedDto<UserDto>> {
     const { skip, take } = getPaginationParams(pageDto);
+    const whereInput: Prisma.UserWhereInput = {
+      deletedAt: null,
+    };
+
+    if (search) {
+      whereInput.OR = [
+        {
+          email: {
+            contains: search,
+          },
+        },
+        {
+          person: {
+            firstName: {
+              contains: search,
+            },
+          },
+        },
+        {
+          person: {
+            lastName: {
+              contains: search,
+            },
+          },
+        },
+        {
+          person: {
+            middleName: {
+              contains: search,
+            },
+          },
+        },
+        {
+          person: {
+            secondLastName: {
+              contains: search,
+            },
+          },
+        },
+        {
+          company: {
+            name: {
+              contains: search,
+            },
+          },
+        },
+      ];
+    }
+
     const [users, totalItems] = await Promise.all([
       this.prismaService.user.findMany({
         skip,
         take,
-        where: {
-          deletedAt: null,
-        },
+        where: whereInput,
         include: {
           person: true,
+          company: true,
           roles: {
             include: {
               role: {
@@ -249,6 +303,7 @@ export class UsersService {
             },
           },
         },
+        orderBy: getSortObject(sort),
       }),
       this.prismaService.user.count({
         where: {

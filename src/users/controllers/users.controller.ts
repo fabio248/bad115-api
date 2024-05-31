@@ -7,6 +7,7 @@ import { UserIdDto } from '../dtos/request/user-id.dto';
 import { UserDto } from '../dtos/response/user.dto';
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { UserFilterDto } from '../dtos/request/user-filter.dto';
 
 @ApiTags('Users Endpoints')
 @Controller('users')
@@ -25,7 +26,10 @@ export class UsersController {
     permissions: [permissions.MANAGE_USER.codename],
   })
   @Get('')
-  findAll(@Query() pageDto: PageDto): Promise<PaginatedDto<UserDto>> {
-    return this.usersService.findAll(pageDto);
+  findAll(
+    @Query() pageDto: PageDto,
+    @Query() userFilterDto: UserFilterDto,
+  ): Promise<PaginatedDto<UserDto>> {
+    return this.usersService.findAll(pageDto, userFilterDto);
   }
 }

@@ -8,19 +8,20 @@ import { CategoryIdDto } from 'src/candidates/dto/request/category-id.dto';
 import { TechnicalSkillDto } from '../dtos/response/technical-skill.dto';
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 
-@Controller('catalogs/technical-skill-candidate')
+@Controller('catalogs/category-technical-skills')
 @ApiTags('Technical Skill Candidate Endpoints')
 export class TechnicalSkillController {
   constructor(private readonly technicalSkillService: TechnicalSkillService) {}
 
-  @Get('/category-technical-skill')
+  @Get('')
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })
   findAll(): Promise<CategoryTechnicalSkillDto[]> {
     return this.technicalSkillService.findAll();
   }
 
-  @Get('technical-skill/:categoryId')
+  @Get('technical-skills/:categoryId')
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })
   findAllById(
     @Query() { categoryId }: CategoryIdDto,
@@ -28,7 +29,8 @@ export class TechnicalSkillController {
     return this.technicalSkillService.findAllById(categoryId);
   }
 
-  @Get('/category-technical-skill-paginated')
+  @ApiPaginatedResponse(CategoryTechnicalSkillDto)
+  @Get('/paginated')
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })
   findAllPaginated(
     @Query() pageDto: PageDto,
@@ -36,7 +38,8 @@ export class TechnicalSkillController {
     return this.technicalSkillService.findAllPaginated(pageDto);
   }
 
-  @Get('technical-skill-paginated/:categoryId')
+  @ApiPaginatedResponse(TechnicalSkillDto)
+  @Get('technical-skills/:categoryId/paginated')
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })
   findAllByIdPaginated(
     @Query() { categoryId }: CategoryIdDto,
