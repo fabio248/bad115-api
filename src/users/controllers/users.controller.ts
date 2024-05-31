@@ -21,11 +21,11 @@ export class UsersController {
     return this.usersService.findOne(userId);
   }
 
-  @Get('/:userId/all-user-conditioned')
-  findAll(
-    @Param() { userId }: UserIdDto,
-    @Query() pageDto: PageDto,
-  ): Promise<PaginatedDto<UserDto>> {
-    return this.usersService.findAll(userId, pageDto);
+  @Auth({
+    permissions: [permissions.MANAGE_USER.codename],
+  })
+  @Get('')
+  findAll(@Query() pageDto: PageDto): Promise<PaginatedDto<UserDto>> {
+    return this.usersService.findAll(pageDto);
   }
 }

@@ -8,7 +8,7 @@ import { PrismaService } from 'nestjs-prisma';
 import { I18nService, I18nContext } from 'nestjs-i18n';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { UserDto } from '../dtos/response/user.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { UpdateUserDto } from '../dtos/request/update-user.dto';
 import { roles } from '../../../prisma/seeds/roles.seed';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -147,6 +147,22 @@ export class UsersService {
       where: {
         id,
       },
+      include: {
+        person: true,
+        roles: {
+          include: {
+            role: {
+              include: {
+                permissions: {
+                  include: {
+                    permission: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!user) {
@@ -158,8 +174,9 @@ export class UsersService {
         }),
       );
     }
+    const [transformedUser] = this.transformUsers([user]);
 
-    return plainToInstance(UserDto, user);
+    return plainToInstance(UserDto, transformedUser);
   }
 
   async findOneByEmail(email: string, include: Prisma.UserInclude = {}) {
@@ -207,57 +224,56 @@ export class UsersService {
     });
   }
 
-  async findAll(id: string, pageDto: PageDto): Promise<PaginatedDto<UserDto>> {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        id: id,
-      },
-    });
-    if (!user) {
-      throw new NotFoundException(
-        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
-          args: {
-            entity: this.i18n.t('entities.USER'),
-          },
-        }),
-      );
-    }
+  async findAll(pageDto: PageDto): Promise<PaginatedDto<UserDto>> {
     const { skip, take } = getPaginationParams(pageDto);
-    const [allUserWithRoleConditioned, totalItems] = await Promise.all([
+    const [users, totalItems] = await Promise.all([
       this.prismaService.user.findMany({
         skip,
         take,
         where: {
-          roles: {
-            some: {
-              role: {
-                name: { in: [roles.CANDIDATE, roles.RECRUITER] },
-              },
-            },
-          },
+          deletedAt: null,
         },
         include: {
           person: true,
+          roles: {
+            include: {
+              role: {
+                include: {
+                  permissions: {
+                    include: {
+                      permission: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       }),
       this.prismaService.user.count({
         where: {
           deletedAt: null,
-          roles: {
-            some: {
-              role: {
-                name: { in: [roles.CANDIDATE, roles.RECRUITER] },
-              },
-            },
-          },
         },
       }),
     ]);
-    const pagination = getPaginationInfo(pageDto, totalItems);
 
     return {
-      data: plainToInstance(UserDto, allUserWithRoleConditioned),
-      pagination,
+      data: plainToInstance(UserDto, this.transformUsers(users)),
+      pagination: getPaginationInfo(pageDto, totalItems),
     };
+  }
+
+  transformUsers(users): Array<User> {
+    return users.map((user) => ({
+      ...user,
+      roles: user.roles.map((role) => {
+        return {
+          ...role.role,
+          permissions: role.role.permissions.map(
+            (permission) => permission.permission,
+          ),
+        };
+      }),
+    }));
   }
 }
