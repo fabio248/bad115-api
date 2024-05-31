@@ -264,16 +264,14 @@ export class UsersService {
   }
 
   transformUsers(users): Array<User> {
-    return users.map((user) => ({
+    return users.map(({ roles, ...user }) => ({
       ...user,
-      roles: user.roles.map((role) => {
-        return {
-          ...role.role,
-          permissions: role.role.permissions.map(
-            (permission) => permission.permission,
-          ),
-        };
-      }),
+      roles: roles.map(({ role }) => ({
+        ...role,
+        permissions: role.permissions.map(
+          (permission) => permission.permission,
+        ),
+      })),
     }));
   }
 }
