@@ -6,6 +6,9 @@ export class UpdateUnlockRequestDto {
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
   readonly status: UnlockRequestStatusEnum;
 
+  /*
+   * Si el status es REJECTED, entonces el campo reason es requerido
+   */
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
   @ValidateIf((value) => value === UnlockRequestStatusEnum.REJECTED)
   readonly reason?: string;
