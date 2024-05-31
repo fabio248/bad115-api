@@ -27,7 +27,8 @@
     "EMAIL_ALREADY_TAKEN": "El correo electrónico {email} ya está en uso.",
     "ROLE_NAME_ALREADY_TAKEN": "El nombre del rol ya está en uso.",
     "NO_ADMINS": "Debe haber al menos un administrador en el sistema.",
-    "NO_SUPPORTED": "Los atributos no deben estar vacíos."
+    "NO_SUPPORTED": "Los atributos no deben estar vacíos.",
+    "REQUEST_ALREADY_EXISTS": "Ya haz enviado una solicitud de desbloqueo, por favor espera a recibir respuesta."
   },
   "UNPROCESSABLE": {
     "ACCOUNT_ALREADY_ACTIVE": "La cuenta ya está activa."

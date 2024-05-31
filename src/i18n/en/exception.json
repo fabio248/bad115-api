@@ -27,7 +27,8 @@
     "EMAIL_ALREADY_TAKEN": "The email {email} is already in use.",
     "ROLE_NAME_ALREADY_TAKEN": "The role name is already in use.",
     "NO_ADMINS": "There must be at least one admin user.",
-    "NO_SUPPORTED": "Attributes must not be empty"
+    "NO_SUPPORTED": "Attributes must not be empty",
+    "REQUEST_ALREADY_EXISTS": "Request already sent, please wait for the response."
   },
   "UNPROCESSABLE": {
     "ACCOUNT_ALREADY_ACTIVE": "Account is already active."

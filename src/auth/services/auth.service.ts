@@ -23,6 +23,8 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SEND_EMAIL_EVENT } from '../../common/events/mail.event';
 import { MailUnblockUserTemplateData } from '../../common/types/mail.types';
 import { roles } from '../../../prisma/seeds/roles.seed';
+import { PrismaService } from 'nestjs-prisma';
+import { UnlockRequestStatusEnum } from '../enums/unlock-request-status.enum';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +36,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly prismaService: PrismaService,
   ) {}
 
   async register(createUserDto: CreateRegisterDto) {
@@ -153,6 +156,13 @@ export class AuthService {
       this.usersServices.findByRole([roles.ADMIN]),
     ]);
 
+    const existRequest = await this.prismaService.unlockRequest.findFirst({
+      where: {
+        userId: user.id,
+        status: UnlockRequestStatusEnum.PENDING,
+      },
+    });
+
     if (!user) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -167,6 +177,12 @@ export class AuthService {
       throw new UnprocessableEntityException(
         this.i18n.t('exception.UNPROCESSABLE.ACCOUNT_ALREADY_ACTIVE'),
       );
+    }
+
+    if (existRequest) {
+      throw new ConflictException({
+        message: this.i18n.t('exception.CONFLICT.REQUEST_ALREADY_EXISTS'),
+      });
     }
 
     if (admins.length === 0) {
@@ -186,6 +202,18 @@ export class AuthService {
       to: admins.map((admin) => admin.email),
     };
 
-    this.eventEmitter.emit(SEND_EMAIL_EVENT, mailBody);
+    await Promise.all([
+      this.eventEmitter.emitAsync(SEND_EMAIL_EVENT, mailBody),
+      this.prismaService.unlockRequest.create({
+        data: {
+          user: {
+            connect: {
+              id: user.id,
+            },
+          },
+          status: UnlockRequestStatusEnum.PENDING,
+        },
+      }),
+    ]);
   }
 }
