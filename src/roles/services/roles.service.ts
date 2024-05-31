@@ -147,4 +147,17 @@ export class RolesService {
 
     return plainToInstance(RoleDto, role);
   }
+
+  async remove(id: string) {
+    await this.findOne(id);
+
+    await this.prismaService.role.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+  }
 }

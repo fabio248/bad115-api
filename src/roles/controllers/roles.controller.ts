@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Query,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { RolesService } from '../services/roles.service';
 import { CreateRoleDto } from '../dto/request/create-role.dto';
@@ -93,5 +94,19 @@ export class RolesController {
       id,
       updateAssignPermissionDto,
     );
+  }
+
+  @Auth({ permissions: [permissions.DELETE_ROLE.codename] })
+  @ApiErrorResponse([
+    {
+      status: HttpStatus.NOT_FOUND,
+      message: 'Rol no encontrado.',
+      errorType: 'Not Found',
+      path: 'roles',
+    },
+  ])
+  @Delete(':id')
+  async remove(@Param() { id }: IdDto): Promise<void> {
+    return this.rolesService.remove(id);
   }
 }
