@@ -271,4 +271,16 @@ export const permissions = {
     description: 'Permiso para gestionar aplicaciones',
     roles: [roles.ADMIN],
   },
+  UNLOCK_USER: {
+    name: 'Unlock user',
+    codename: 'unlock:user',
+    description: 'Permiso para desbloquear usuarios',
+    roles: [roles.ADMIN],
+  },
+  READ_UNLOCK_REQUEST: {
+    name: 'Read unlock request',
+    codename: 'read:unlock-request',
+    description: 'Permiso para leer solicitudes de desbloqueo',
+    roles: [roles.ADMIN],
+  },
 };

@@ -1,5 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { IAppConfig } from './app.interface';
+import * as process from 'node:process';
 
 export default registerAs(
   'app',
@@ -17,6 +18,10 @@ export default registerAs(
       templates: {
         welcome: process.env.SENDGRID_WELCOME_MAIL_TEMPLATE_ID,
         unblock: process.env.SENDGRID_UNBLOCK_USER_MAIL_TEMPLATE_ID,
+        rejectUnblock:
+          process.env.SENDGRID_REJECT_REQUEST_UNBLOCK_USER_MAIL_TEMPLATE_ID,
+        approveUnblock:
+          process.env.SENDFRID_APPROVED_REQUEST_UNBLOCK_USER_MAIL_TEMPLATE_ID,
       },
     },
   }),

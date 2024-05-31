@@ -7,3 +7,10 @@ export type MailUnblockUserTemplateData = {
     userId: string;
   };
 } & sendgrid.MailDataRequired;
+
+export type MailRejectUnblockUserTemplateData = {
+  dynamicTemplateData: {
+    userName: string;
+    reason: string;
+  };
+} & sendgrid.MailDataRequired;

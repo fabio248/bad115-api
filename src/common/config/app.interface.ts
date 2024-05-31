@@ -12,6 +12,8 @@ export interface IAppConfig {
     templates: {
       welcome: string;
       unblock: string;
+      rejectUnblock: string;
+      approveUnblock: string;
     };
   };
 }
