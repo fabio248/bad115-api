@@ -51,7 +51,7 @@ export class TestTypeController {
   }
 
   @Delete('/:testTypeId')
-  //   @Auth({ permissions: [permissions.DELETE_CATALOG.codename] })
+  @Auth({ permissions: [permissions.DELETE_CATALOG.codename] })
   async remove(@Param() { testTypeId }: TestTypeIdDto) {
     return this.testTypeService.remove(testTypeId);
   }
