@@ -127,14 +127,28 @@ export class AuthService {
         refreshLoginDto.refreshToken,
       );
 
+      const user = await this.usersServices.findOneByEmail(
+        currentPayload.email,
+        {
+          roles: true,
+        },
+      );
+
+      const [roles, permissions] = await Promise.all([
+        this.usersServices.findRoles(user.id),
+        this.usersServices.findPermissions(
+          user.roles.map((userRole) => userRole.roleId),
+        ),
+      ]);
+
       const payload: IPayload = {
         email: currentPayload.email,
         userId: currentPayload.userId,
         candidateId: currentPayload.candidateId,
         recruiterId: currentPayload.recruiterId,
         personId: currentPayload.personId,
-        permissions: currentPayload.permissions,
-        roles: currentPayload.roles,
+        permissions: permissions.map((permission) => permission.codename),
+        roles: roles.map((role) => role.name),
       };
 
       return plainToInstance(RefreshDto, {
