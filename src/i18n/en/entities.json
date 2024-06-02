@@ -20,5 +20,7 @@
   "PERMISSION": "Permission",
   "COMPANY": "Company",
   "RECRUITER": "Recruiter",
-  "UNLOCK_REQUEST": "Unlock Request"
+  "UNLOCK_REQUEST": "Unlock Request",
+  "LANGUAGE": "Language",
+  "CATEGORY": "Category"
 }

@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { PrismaService } from 'nestjs-prisma';
 import { CategoryTechnicalSkillDto } from '../dtos/response/category-technical-skill.dto';
@@ -9,10 +13,69 @@ import {
   getPaginationParams,
 } from 'src/common/utils/pagination.utils';
 import { PageDto } from 'src/common/dtos/request/page.dto';
+import { I18nService } from 'nestjs-i18n';
+import { CreateTechnicalSkillDto } from '../dtos/request/create-technical-skill.dto';
+import { UpdateTechnicalSkillTypeDto } from '../dtos/request/update-technical-skill.dto';
+import { CreateCategoryDto } from 'src/candidates/dto/request/create-category.dto';
+import { UpdateCategoryDto } from '../dtos/request/update-category.dto';
 
 @Injectable()
 export class TechnicalSkillService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly i18n: I18nService,
+  ) {}
+
+  async create(
+    id: string,
+    createTechnicalSkillDto: CreateTechnicalSkillDto,
+  ): Promise<TechnicalSkillDto> {
+    const category = this.prismaService.categoryTechnicalSkill.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!category) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.CATEGORY'),
+          },
+        }),
+      );
+    }
+
+    const technicalSkill = await this.prismaService.technicalSkill.create({
+      data: {
+        ...createTechnicalSkillDto,
+        categoryTechnicalSkill: {
+          connect: {
+            id: id,
+          },
+        },
+      },
+    });
+
+    return plainToInstance(TechnicalSkillDto, technicalSkill);
+  }
+
+  async findOne(id: string): Promise<TechnicalSkillDto> {
+    const technicalSkill = await this.prismaService.technicalSkill.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!technicalSkill) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.TECHNICAL_SKILL'),
+          },
+        }),
+      );
+    }
+    return plainToInstance(TechnicalSkillDto, technicalSkill);
+  }
 
   async findAll(): Promise<CategoryTechnicalSkillDto[]> {
     const categoryTechnicalSkill =
@@ -86,5 +149,102 @@ export class TechnicalSkillService {
       data: plainToInstance(TechnicalSkillDto, allTechnicalSkill),
       pagination,
     };
+  }
+
+  async update(
+    id: string,
+    updateTechnicalSkillTypeDto: UpdateTechnicalSkillTypeDto,
+  ): Promise<TechnicalSkillDto> {
+    await this.findOne(id);
+    const technicalSkill = await this.prismaService.technicalSkill.update({
+      where: {
+        id,
+      },
+      data: updateTechnicalSkillTypeDto,
+    });
+
+    return plainToInstance(TechnicalSkillDto, technicalSkill);
+  }
+
+  async remove(id: string): Promise<void> {
+    this.findOne(id);
+    await this.prismaService.technicalSkill.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    return;
+  }
+
+  async createCategory(
+    createCategoryDto: CreateCategoryDto,
+  ): Promise<CategoryTechnicalSkillDto> {
+    const category = await this.prismaService.categoryTechnicalSkill.create({
+      data: {
+        ...createCategoryDto,
+      },
+    });
+    if (!category) {
+      throw new BadGatewayException(
+        this.i18n.t('exception.INTERNAL_SERVER.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.CATEGORY'),
+          },
+        }),
+      );
+    }
+
+    return plainToInstance(CategoryTechnicalSkillDto, category);
+  }
+
+  async findOneCategory(id: string): Promise<CategoryTechnicalSkillDto> {
+    const category = await this.prismaService.categoryTechnicalSkill.findUnique(
+      {
+        where: {
+          id,
+        },
+      },
+    );
+    if (!category) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.CATEGORY'),
+          },
+        }),
+      );
+    }
+    return plainToInstance(CategoryTechnicalSkillDto, category);
+  }
+
+  async updateCategory(
+    id: string,
+    updateCategoryDto: UpdateCategoryDto,
+  ): Promise<TechnicalSkillDto> {
+    await this.findOneCategory(id);
+    const category = await this.prismaService.categoryTechnicalSkill.update({
+      where: {
+        id,
+      },
+      data: updateCategoryDto,
+    });
+
+    return plainToInstance(TechnicalSkillDto, category);
+  }
+
+  async removeCategory(id: string): Promise<void> {
+    this.findOneCategory(id);
+    await this.prismaService.categoryTechnicalSkill.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    return;
   }
 }

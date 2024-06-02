@@ -20,5 +20,7 @@
   "SOCIAL_NETWORK": "Red social",
   "COMPANY": "Empresa",
   "RECRUITER": "Reclutador",
-  "UNLOCK_REQUEST": "Solicitud desbloqueo"
+  "UNLOCK_REQUEST": "Solicitud desbloqueo",
+  "LANGUAGE": "Lenguaje",
+  "CATEGORY": "Categoria"
 }
