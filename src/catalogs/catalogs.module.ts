@@ -9,6 +9,8 @@ import { TechnicalSkillController } from './controllers/category-technical-skill
 import { TechnicalSkillService } from './services/category-technical-skill.service';
 import { LanguagetypeController } from './controllers/languagetype.controller';
 import { LanguagetypeService } from './services/languagetype.service';
+import { TestTypeController } from './controllers/test-type.controller';
+import { TestTypeService } from './services/test-type.service';
 
 @Module({
   providers: [
@@ -17,6 +19,7 @@ import { LanguagetypeService } from './services/languagetype.service';
     SocialNetworkTypesService,
     TechnicalSkillService,
     LanguagetypeService,
+    TestTypeService,
   ],
   controllers: [
     RecognitionTypesController,
@@ -24,6 +27,7 @@ import { LanguagetypeService } from './services/languagetype.service';
     SocialNetworkTypesController,
     TechnicalSkillController,
     LanguagetypeController,
+    TestTypeController,
   ],
 })
 export class CatalogsModule {}

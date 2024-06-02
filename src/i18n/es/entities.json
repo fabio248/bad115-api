@@ -22,5 +22,6 @@
   "RECRUITER": "Reclutador",
   "UNLOCK_REQUEST": "Solicitud desbloqueo",
   "LANGUAGE": "Lenguaje",
-  "CATEGORY": "Categoria"
+  "CATEGORY": "Categoria",
+  "TEST_TYPE": "tipo de prueba"
 }

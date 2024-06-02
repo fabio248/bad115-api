@@ -22,5 +22,6 @@
   "RECRUITER": "Recruiter",
   "UNLOCK_REQUEST": "Unlock Request",
   "LANGUAGE": "Language",
-  "CATEGORY": "Category"
+  "CATEGORY": "Category",
+  "TEST_TYPE": "Test Type"
 }
