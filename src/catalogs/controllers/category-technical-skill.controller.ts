@@ -156,7 +156,7 @@ export class TechnicalSkillController {
     );
   }
   @Delete('/category/:categoryId')
-  // @Auth({ permissions: [permissions.DELETE_CATALOG.codename] })
+  @Auth({ permissions: [permissions.DELETE_CATALOG.codename] })
   @ApiOperation({
     summary: 'Use this endpoint to delete a category',
   })
