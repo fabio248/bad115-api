@@ -170,6 +170,7 @@ export class TestService {
         }),
       );
     }
+
     const { skip, take } = getPaginationParams(pageDto);
     const [allTest, totalItems] = await Promise.all([
       this.prismaService.test.findMany({
@@ -181,6 +182,8 @@ export class TestService {
         },
         include: {
           testType: true,
+          file: true,
+          candidate: true,
         },
       }),
       this.prismaService.test.count({
@@ -192,8 +195,23 @@ export class TestService {
     ]);
     const pagination = getPaginationInfo(pageDto, totalItems);
 
+    const allTestWithUrlDocs = await Promise.all(
+      allTest.map(async (test) => {
+        let urlDocs = null;
+
+        if (test.file) {
+          urlDocs = await this.filesService.getSignedUrlForFileRetrieval({
+            keyNameFile: test.file.name,
+            folderName: test.candidate.id,
+          });
+        }
+
+        return plainToInstance(TestDto, { ...test, urlDocs });
+      }),
+    );
+
     return {
-      data: plainToInstance(TestDto, allTest),
+      data: allTestWithUrlDocs,
       pagination,
     };
   }
