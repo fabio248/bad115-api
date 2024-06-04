@@ -2,7 +2,7 @@ import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { IFileUpload } from '../interfaces';
+import { IFileRetrieval, IFileUpload } from '../interfaces';
 
 @Injectable()
 export class FilesService {
@@ -28,7 +28,7 @@ export class FilesService {
     folderName,
     mimeType,
   }: IFileUpload): Promise<string> {
-    const path = folderName ? `${folderName}/${key}` : key;
+    const path = folderName ? `bad/${folderName}/${key}` : `bad/${key}`;
 
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
@@ -41,10 +41,17 @@ export class FilesService {
     });
   }
 
-  async getSignedUrlForFileRetrieval(keyNameFile: string): Promise<string> {
+  async getSignedUrlForFileRetrieval({
+    keyNameFile,
+    folderName,
+  }: IFileRetrieval): Promise<string> {
+    const path = folderName
+      ? `bad/${folderName}/${keyNameFile}`
+      : `bad/${keyNameFile}`;
+
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
-      Key: keyNameFile,
+      Key: path,
     });
 
     return getSignedUrl(this.s3Client, command, {

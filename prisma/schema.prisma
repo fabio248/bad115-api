@@ -464,7 +464,7 @@ model Test {
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
 
-  testTypeId String   @unique
+  testTypeId String
   testType   TestType @relation(fields: [testTypeId], references: [id])
 
   fileId String?

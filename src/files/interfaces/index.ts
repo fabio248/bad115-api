@@ -3,3 +3,8 @@ export interface IFileUpload {
   folderName?: string;
   mimeType?: string;
 }
+
+export interface IFileRetrieval {
+  keyNameFile: string;
+  folderName?: string;
+}

@@ -25,6 +25,7 @@ export class TestService {
   ) {}
 
   async create(id: string, createTestDto: CreateTestDto): Promise<TestDto> {
+    const { testTypeId, mimeTypeFile, ...createData } = createTestDto;
     const candidate = await this.prismaService.candidate.findFirst({
       where: {
         id: id,
@@ -40,8 +41,6 @@ export class TestService {
         }),
       );
     }
-
-    const { testTypeId, mimeTypeFile, ...createData } = createTestDto;
 
     const testType = await this.prismaService.testType.findUnique({
       where: {
@@ -59,16 +58,36 @@ export class TestService {
       );
     }
 
-    const [urlDocs, testT] = await this.prismaService.$transaction(
+    const [testT, urlDocs] = await this.prismaService.$transaction(
       async (tPrisma) => {
+        if (!mimeTypeFile) {
+          return [
+            tPrisma.test.create({
+              data: {
+                ...createData,
+                testType: {
+                  connect: {
+                    id: testTypeId,
+                  },
+                },
+                candidate: {
+                  connect: {
+                    id: id,
+                  },
+                },
+              },
+            }),
+          ];
+        }
+
         const keyFile = `${uuidv4()}-test`;
+        const file = await tPrisma.file.create({
+          data: {
+            name: keyFile,
+          },
+        });
 
         return Promise.all([
-          this.filesService.getSignedUrlForFileUpload({
-            key: keyFile,
-            folderName: candidate.id,
-            mimeType: mimeTypeFile,
-          }),
           tPrisma.test.create({
             data: {
               ...createData,
@@ -82,7 +101,17 @@ export class TestService {
                   id: id,
                 },
               },
+              file: {
+                connect: {
+                  id: file.id,
+                },
+              },
             },
+          }),
+          this.filesService.getSignedUrlForFileUpload({
+            key: keyFile,
+            folderName: candidate.id,
+            mimeType: mimeTypeFile,
           }),
         ]);
       },
@@ -98,6 +127,8 @@ export class TestService {
       },
       include: {
         testType: true,
+        file: true,
+        candidate: true,
       },
     });
 
@@ -111,7 +142,16 @@ export class TestService {
       );
     }
 
-    return plainToInstance(TestDto, test);
+    let urlDocs = null;
+
+    if (test.file) {
+      urlDocs = await this.filesService.getSignedUrlForFileRetrieval({
+        keyNameFile: test.file.name,
+        folderName: test.candidate.id,
+      });
+    }
+
+    return plainToInstance(TestDto, { ...test, urlDocs });
   }
 
   async findAll(id: string, pageDto: PageDto): Promise<PaginatedDto<TestDto>> {
