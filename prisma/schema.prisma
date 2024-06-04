@@ -465,7 +465,10 @@ model Test {
   deletedAt DateTime? @map("eliminado_en")
 
   testTypeId String   @unique
-  test       TestType @relation(fields: [testTypeId], references: [id])
+  testType   TestType @relation(fields: [testTypeId], references: [id])
+
+  fileId String?
+  file   File?   @relation(fields: [fileId], references: [id])
 
   candidateId String
   candidate   Candidate @relation(fields: [candidateId], references: [id])
@@ -483,6 +486,18 @@ model TestType {
   tests Test[]
 
   @@map("ctl_tipo_prueba")
+}
+
+model File {
+  id    String @id @default(uuid())
+  name  String @map("nombre_archivo")
+  tests Test[]
+
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  @@map("mnt_archivo")
 }
 
 model Recomendation {
