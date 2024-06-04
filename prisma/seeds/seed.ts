@@ -12,6 +12,7 @@ import {
 import { recognitionTypeSeed } from './recognition-type.seed';
 import { participationTypeSeed } from './participation-type.seed';
 import { typeSocialNetworkSeed } from './type-social-network.seed';
+import { typeTestSeed } from './type-test.seed';
 
 import * as bcrypt from 'bcrypt';
 
@@ -31,6 +32,7 @@ async function main() {
     recognitionTypes,
     participationTypes,
     typeSocialNetworks,
+    typeTests,
   ] = await Promise.all([
     prisma.role.findMany(),
     prisma.permission.findMany(),
@@ -42,6 +44,7 @@ async function main() {
     prisma.recognitionType.findMany(),
     prisma.participacionType.findMany(),
     prisma.typeSocialNetwork.findMany(),
+    prisma.testType.findMany(),
   ]);
 
   //Check if roles already exist, if not create them
@@ -214,6 +217,24 @@ async function main() {
       Logger.log(`Category ${newCategory.name} created`, 'Seeder');
     }
   }
+
+  for await (const typeTest of typeTestSeed) {
+    const existingTypeTest = typeTests.find((m) => m.name === typeTest.name);
+
+    if (existingTypeTest) {
+      continue;
+    }
+
+    const newTypeTest = await prisma.testType.create({
+      data: {
+        name: typeTest.name,
+      },
+    });
+
+    typeTests.push(newTypeTest);
+    Logger.log(`Type Test ${newTypeTest.name} created`, 'Seeder');
+  }
+
   for await (const technicalSkill of technicalSkillSeed) {
     const existingTechnicalSkill = technicalSkills.find(
       (t) => t.name === technicalSkill.name,
