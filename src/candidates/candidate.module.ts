@@ -23,8 +23,10 @@ import { PdfGenerateController } from './controller/pdf-generate.controller';
 import { PdfGenerateService } from './services/pdf-generate.service';
 import { CandidateController } from './controller/candidate.controller';
 import { CandidateService } from './services/candidate.service';
+import { FilesModule } from '../files/files.module';
 
 @Module({
+  imports: [FilesModule],
   controllers: [
     LaboralExperiencesController,
     AcademicKnowledgeController,

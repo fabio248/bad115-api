@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateTestDto } from '../dto/request/create-prueba.dto';
+import { CreateTestDto } from '../dto/request/create-test.dto';
 import { TestDto } from '../dto/response/test.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { I18nService } from 'nestjs-i18n';
 import { plainToInstance } from 'class-transformer';
+import { v4 as uuidv4 } from 'uuid';
 
 //Dto's
 import { PageDto } from 'src/common/dtos/request/page.dto';
@@ -13,20 +14,23 @@ import {
   getPaginationParams,
   getPaginationInfo,
 } from 'src/common/utils/pagination.utils';
+import { FilesService } from '../../files/services/files.service';
 
 @Injectable()
 export class TestService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
+    private readonly filesService: FilesService,
   ) {}
 
   async create(id: string, createTestDto: CreateTestDto): Promise<TestDto> {
-    const candidate = this.prismaService.candidate.findFirst({
+    const candidate = await this.prismaService.candidate.findFirst({
       where: {
         id: id,
       },
     });
+
     if (!candidate) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -37,21 +41,54 @@ export class TestService {
       );
     }
 
-    const { test } = createTestDto;
-    const testT = await this.prismaService.test.create({
-      data: {
-        ...createTestDto,
-        test: {
-          create: test,
-        },
-        candidate: {
-          connect: {
-            id: id,
-          },
-        },
+    const { testTypeId, mimeTypeFile, ...createData } = createTestDto;
+
+    const testType = await this.prismaService.testType.findUnique({
+      where: {
+        id: testTypeId,
       },
     });
-    return plainToInstance(TestDto, testT);
+
+    if (!testType) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.TEST_TYPE'),
+          },
+        }),
+      );
+    }
+
+    const [urlDocs, testT] = await this.prismaService.$transaction(
+      async (tPrisma) => {
+        const keyFile = `${uuidv4()}-test`;
+
+        return Promise.all([
+          this.filesService.getSignedUrlForFileUpload({
+            key: keyFile,
+            folderName: candidate.id,
+            mimeType: mimeTypeFile,
+          }),
+          tPrisma.test.create({
+            data: {
+              ...createData,
+              testType: {
+                connect: {
+                  id: testTypeId,
+                },
+              },
+              candidate: {
+                connect: {
+                  id: id,
+                },
+              },
+            },
+          }),
+        ]);
+      },
+    );
+
+    return plainToInstance(TestDto, { ...testT, urlDocs });
   }
 
   async findOne(id: string): Promise<TestDto> {
@@ -60,9 +97,10 @@ export class TestService {
         id: id,
       },
       include: {
-        test: true,
+        testType: true,
       },
     });
+
     if (!test) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -72,6 +110,7 @@ export class TestService {
         }),
       );
     }
+
     return plainToInstance(TestDto, test);
   }
 
@@ -101,7 +140,7 @@ export class TestService {
           deletedAt: null,
         },
         include: {
-          test: true,
+          testType: true,
         },
       }),
       this.prismaService.test.count({
@@ -121,38 +160,31 @@ export class TestService {
 
   async update(
     updateTestDto: UpdateTestDto,
-    canId: string,
-    pruId: string,
+    candidateI: string,
+    testId: string,
   ): Promise<TestDto> {
-    const prueba = this.findOne(pruId);
+    await this.findOne(testId);
 
-    if (!prueba) {
-      throw new NotFoundException(
-        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
-          args: {
-            entity: this.i18n.t('entities.TEST'),
-          },
-        }),
-      );
-    }
-    const { test } = updateTestDto;
+    const { testTypeId, ...updateData } = updateTestDto;
     const updateTest = await this.prismaService.test.update({
       where: {
-        id: pruId,
+        id: testId,
       },
       data: {
-        ...updateTestDto,
-        test: {
-          update: test,
+        ...updateData,
+        testType: {
+          connect: {
+            id: testTypeId,
+          },
         },
         candidate: {
           connect: {
-            id: canId,
+            id: candidateI,
           },
         },
       },
       include: {
-        test: true,
+        testType: true,
       },
     });
 

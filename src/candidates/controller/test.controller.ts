@@ -5,7 +5,7 @@ import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-respon
 
 //Dto's
 import { CandidateIdDto } from '../dto/request/candidate-id.dto';
-import { CreateTestDto } from '../dto/request/create-prueba.dto';
+import { CreateTestDto } from '../dto/request/create-test.dto';
 import { TestDto } from '../dto/response/test.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TestIdDto } from '../dto/request/test-id.dto';
@@ -28,12 +28,14 @@ export class PruebaController {
   ): Promise<TestDto> {
     return this.pruebaServices.create(candidateId, createTestDto);
   }
+
   @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   @Get('/:testId')
   @ApiOperation({ summary: 'Get a test by id' })
   findOne(@Param() { testId }: TestIdDto): Promise<TestDto> {
     return this.pruebaServices.findOne(testId);
   }
+
   @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   @Get('')
   @ApiPaginatedResponse(TestDto)
@@ -43,6 +45,7 @@ export class PruebaController {
   ): Promise<PaginatedDto<TestDto>> {
     return this.pruebaServices.findAll(candidateId, pageDto);
   }
+
   @Auth({ permissions: [permissions.UPDATE_CANDIDATE.codename] })
   @Put('/:testId')
   update(
@@ -52,6 +55,7 @@ export class PruebaController {
   ): Promise<TestDto> {
     return this.pruebaServices.update(updateTestDto, candidateId, testId);
   }
+
   @Auth({ permissions: [permissions.DELETE_CANDIDATE.codename] })
   @Delete('/:testId')
   remove(@Param() { testId }: TestIdDto) {

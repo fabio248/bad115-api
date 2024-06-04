@@ -7,7 +7,7 @@
   "DEPARTMENT": "Departamento",
   "MUNICIPALITY": "Municipio",
   "CERTIFICATION": "Certificación",
-  "ADACEMIC_KNOWLEDGE": "Conocimiento_academico",
+  "ADACEMIC_KNOWLEDGE": "Conocimiento academico",
   "LANGUAGE_SKILL": "Habilidad lenguaje",
   "RECOGNITION": "Reconocimiento",
   "TECHNICAL_SKILL_CANDIDATE": "Habilidad tecnica candidato",
@@ -23,5 +23,5 @@
   "UNLOCK_REQUEST": "Solicitud desbloqueo",
   "LANGUAGE": "Lenguaje",
   "CATEGORY": "Categoria",
-  "TEST_TYPE": "tipo de prueba"
+  "TEST_TYPE": "Tipo de prueba"
 }

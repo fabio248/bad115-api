@@ -2,14 +2,15 @@ import { GetObjectCommand, PutObjectCommand, S3 } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { IFileUpload } from '../interfaces';
 
 @Injectable()
 export class FilesService {
   private readonly s3Client: S3;
-  private readonly region = this.configService.get('aws.region');
-  private readonly accessKeyId = this.configService.get<string>('aws.key');
-  private readonly secretKey = this.configService.get('aws.secret');
-  private readonly bucketName = this.configService.get('aws.bucket');
+  private readonly region = this.configService.get('app.aws.region');
+  private readonly accessKeyId = this.configService.get<string>('app.aws.key');
+  private readonly secretKey = this.configService.get('app.aws.secret');
+  private readonly bucketName = this.configService.get('app.aws.bucket');
   private readonly EXPIRE_15MIN = 900;
 
   constructor(private readonly configService: ConfigService) {
@@ -22,15 +23,17 @@ export class FilesService {
     });
   }
 
-  async getSignedUrlForFileUpload(
-    key: string,
-    folderName?: string,
-  ): Promise<string> {
+  async getSignedUrlForFileUpload({
+    key,
+    folderName,
+    mimeType,
+  }: IFileUpload): Promise<string> {
     const path = folderName ? `${folderName}/${key}` : key;
 
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: path,
+      ContentType: mimeType,
     });
 
     return getSignedUrl(this.s3Client, command, {
