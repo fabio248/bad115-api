@@ -16,4 +16,10 @@ export interface IAppConfig {
       approveUnblock: string;
     };
   };
+  aws: {
+    region: string;
+    key: string;
+    secret: string;
+    bucket: string;
+  };
 }

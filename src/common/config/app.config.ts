@@ -24,5 +24,11 @@ export default registerAs(
           process.env.SENDFRID_APPROVED_REQUEST_UNBLOCK_USER_MAIL_TEMPLATE_ID,
       },
     },
+    aws: {
+      region: process.env.AWS_REGION,
+      key: process.env.AWS_ACCESS_KEY_ID,
+      secret: process.env.AWS_SECRET_ACCESS_KEY,
+      bucket: process.env.AWS_BUCKET,
+    },
   }),
 );
