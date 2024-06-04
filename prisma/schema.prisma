@@ -457,9 +457,9 @@ model ParticipacionType {
 }
 
 model Test {
-  id        String    @id @default(uuid())
-  result    Boolean   @map("resultado")
-  urlDocs   String    @map("url_archivo")
+  id     String @id @default(uuid())
+  result String @map("resultado")
+
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
