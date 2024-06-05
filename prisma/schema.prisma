@@ -532,13 +532,13 @@ model Recruiter {
 }
 
 model JobPosition {
-  id            String    @id @default(uuid())
-  salarialRange String    @map("rango_salarial")
-  modality      String    @map("modalidad") // Enum: presencial, semipresencial, remoto
-  description   String    @map("descripcion")
-  createdAt     DateTime  @default(now()) @map("creado_en")
-  updatedAt     DateTime  @updatedAt @map("modificado_en")
-  deletedAt     DateTime? @map("eliminado_en")
+  id          String    @id @default(uuid())
+  salaryRange String    @map("rango_salarial")
+  modality    String    @map("modalidad") // Enum: presencial, semipresencial, remoto
+  description String    @map("descripcion")
+  createdAt   DateTime  @default(now()) @map("creado_en")
+  updatedAt   DateTime  @updatedAt @map("modificado_en")
+  deletedAt   DateTime? @map("eliminado_en")
 
   addressId   String?
   address     Address?   @relation(fields: [addressId], references: [id])

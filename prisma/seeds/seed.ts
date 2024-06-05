@@ -13,6 +13,7 @@ import { recognitionTypeSeed } from './recognition-type.seed';
 import { participationTypeSeed } from './participation-type.seed';
 import { typeSocialNetworkSeed } from './type-social-network.seed';
 import { typeTestSeed } from './type-test.seed';
+import { languageSeed } from './language.seed';
 
 import * as bcrypt from 'bcrypt';
 
@@ -27,12 +28,13 @@ async function main() {
     storedCountries,
     storedDepartments,
     storedMunicipality,
-    categoriesTechnicalSkills,
-    technicalSkills,
-    recognitionTypes,
-    participationTypes,
-    typeSocialNetworks,
-    typeTests,
+    storedCategoriesTechnicalSkills,
+    storedTechnicalSkills,
+    storedRecognitionTypes,
+    storedParticipationTypes,
+    storedTypeSocialNetworks,
+    storedTypeTests,
+    storedLanguages,
   ] = await Promise.all([
     prisma.role.findMany(),
     prisma.permission.findMany(),
@@ -45,7 +47,25 @@ async function main() {
     prisma.participacionType.findMany(),
     prisma.typeSocialNetwork.findMany(),
     prisma.testType.findMany(),
+    prisma.language.findMany(),
   ]);
+
+  for await (const language of languageSeed) {
+    const existingLanguage = storedLanguages.find(
+      (l) => l.language === language.language,
+    );
+
+    if (!existingLanguage) {
+      const newLanguage = await prisma.language.create({
+        data: {
+          language: language.language,
+        },
+      });
+
+      storedLanguages.push(newLanguage);
+      Logger.log(`Language ${newLanguage.language} created`, 'Seeder');
+    }
+  }
 
   //Check if roles already exist, if not create them
   for await (const role of Object.values(roles)) {
@@ -61,7 +81,7 @@ async function main() {
   }
 
   for await (const typeSocialNetwork of typeSocialNetworkSeed) {
-    const existingTypeSocialNetwork = typeSocialNetworks.find(
+    const existingTypeSocialNetwork = storedTypeSocialNetworks.find(
       (m) => m.name === typeSocialNetwork.name,
     );
 
@@ -75,7 +95,7 @@ async function main() {
       },
     });
 
-    typeSocialNetworks.push(newTypeSocialNetwork);
+    storedTypeSocialNetworks.push(newTypeSocialNetwork);
     Logger.log(
       `Type Social Network ${newTypeSocialNetwork.name} created`,
       'Seeder',
@@ -202,7 +222,7 @@ async function main() {
   }
 
   for await (const category of categoryTechnicalSkillSeed) {
-    const existingCategory = categoriesTechnicalSkills.find(
+    const existingCategory = storedCategoriesTechnicalSkills.find(
       (c) => c.name === category.name,
     );
 
@@ -213,13 +233,15 @@ async function main() {
         },
       });
 
-      categoriesTechnicalSkills.push(newCategory);
+      storedCategoriesTechnicalSkills.push(newCategory);
       Logger.log(`Category ${newCategory.name} created`, 'Seeder');
     }
   }
 
   for await (const typeTest of typeTestSeed) {
-    const existingTypeTest = typeTests.find((m) => m.name === typeTest.name);
+    const existingTypeTest = storedTypeTests.find(
+      (m) => m.name === typeTest.name,
+    );
 
     if (existingTypeTest) {
       continue;
@@ -231,12 +253,12 @@ async function main() {
       },
     });
 
-    typeTests.push(newTypeTest);
+    storedTypeTests.push(newTypeTest);
     Logger.log(`Type Test ${newTypeTest.name} created`, 'Seeder');
   }
 
   for await (const technicalSkill of technicalSkillSeed) {
-    const existingTechnicalSkill = technicalSkills.find(
+    const existingTechnicalSkill = storedTechnicalSkills.find(
       (t) => t.name === technicalSkill.name,
     );
 
@@ -246,7 +268,7 @@ async function main() {
           name: technicalSkill.name,
           categoryTechnicalSkill: {
             connect: {
-              id: categoriesTechnicalSkills.find(
+              id: storedCategoriesTechnicalSkills.find(
                 (c) => c.name === technicalSkill.category,
               ).id,
             },
@@ -254,13 +276,13 @@ async function main() {
         },
       });
 
-      technicalSkills.push(newTechnicalSkill);
+      storedTechnicalSkills.push(newTechnicalSkill);
       Logger.log(`Technical Skill ${newTechnicalSkill.name} created`, 'Seeder');
     }
   }
 
   for await (const typeRecognition of recognitionTypeSeed) {
-    const existingTypeRecognition = recognitionTypes.find(
+    const existingTypeRecognition = storedRecognitionTypes.find(
       (m) => m.name === typeRecognition.name,
     );
 
@@ -274,12 +296,12 @@ async function main() {
       },
     });
 
-    recognitionTypes.push(newTypeRecognition);
+    storedRecognitionTypes.push(newTypeRecognition);
     Logger.log(`Type Recognition ${newTypeRecognition.name} created`, 'Seeder');
   }
 
   for await (const participationType of participationTypeSeed) {
-    const existingParticipationType = participationTypes.find(
+    const existingParticipationType = storedParticipationTypes.find(
       (m) => m.name === participationType.name,
     );
 
@@ -293,7 +315,7 @@ async function main() {
       },
     });
 
-    participationTypes.push(newParticipationType);
+    storedParticipationTypes.push(newParticipationType);
     Logger.log(
       `Participation Type ${newParticipationType.name} created`,
       'Seeder',
