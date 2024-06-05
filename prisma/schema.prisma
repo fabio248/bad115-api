@@ -133,13 +133,14 @@ model Address {
   deletedAt   DateTime? @map("eliminado_en")
 
   personId       String?       @unique
-  person         Person?       @relation(fields: [personId], references: [id])
+  person         Person?       @relation(fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   departmentId   String?
   department     Department?   @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   municipalityId String?
-  municipality   Municipality? @relation(fields: [municipalityId], references: [id])
+  municipality   Municipality? @relation(fields: [municipalityId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   countryId      String
   country        Country       @relation(fields: [countryId], references: [id])
+  jobPosition    JobPosition[]
 
   @@map("mnt_direccion")
 }
@@ -534,16 +535,17 @@ model JobPosition {
   id            String    @id @default(uuid())
   salarialRange String    @map("rango_salarial")
   modality      String    @map("modalidad") // Enum: presencial, semipresencial, remoto
-  location      String    @map("ubicacion")
   description   String    @map("descripcion")
   createdAt     DateTime  @default(now()) @map("creado_en")
   updatedAt     DateTime  @updatedAt @map("modificado_en")
   deletedAt     DateTime? @map("eliminado_en")
 
-  recruiterId String
-  recruiter   Recruiter @relation(fields: [recruiterId], references: [id])
+  addressId   String?
+  address     Address?   @relation(fields: [addressId], references: [id])
+  recruiterId String?
+  recruiter   Recruiter? @relation(fields: [recruiterId], references: [id])
   companyId   String
-  company     Company   @relation(fields: [companyId], references: [id])
+  company     Company    @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   requirement     Requirement[]
   jobApplications JobApplication[]
