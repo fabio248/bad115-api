@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateJobPositionDto } from '../dtos/request/create-job-position.dto';
 import { plainToInstance } from 'class-transformer';
@@ -10,6 +10,7 @@ import {
   getPaginationParams,
 } from '../../common/utils/pagination.utils';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class JobPositionService {
@@ -31,7 +32,10 @@ export class JobPositionService {
     company: true,
   };
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly i18n: I18nService,
+  ) {}
 
   async create(
     recruiterId: string,
@@ -114,5 +118,26 @@ export class JobPositionService {
     const pagination = getPaginationInfo(pageDto, totalItems);
 
     return { data: plainToInstance(JobPositionDto, jobPositions), pagination };
+  }
+
+  async findOne(id: string): Promise<JobPositionDto> {
+    const jobPosition = await this.prismaService.jobPosition.findUnique({
+      where: {
+        id,
+      },
+      include: this.include,
+    });
+
+    if (!jobPosition) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.JOB_POSITION'),
+          },
+        }),
+      );
+    }
+
+    return plainToInstance(JobPositionDto, jobPosition);
   }
 }

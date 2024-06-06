@@ -23,5 +23,6 @@
   "UNLOCK_REQUEST": "Unlock Request",
   "LANGUAGE": "Language",
   "CATEGORY": "Category",
-  "TEST_TYPE": "Test Type"
+  "TEST_TYPE": "Test Type",
+  "JOB_POSITION": "Job Position"
 }

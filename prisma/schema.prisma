@@ -359,7 +359,7 @@ model LanguageSkill {
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
 
-  languageId String   @unique
+  languageId String
   language   Language @relation(fields: [languageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   candidateId String?

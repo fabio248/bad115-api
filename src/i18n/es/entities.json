@@ -23,5 +23,6 @@
   "UNLOCK_REQUEST": "Solicitud desbloqueo",
   "LANGUAGE": "Lenguaje",
   "CATEGORY": "Categoria",
-  "TEST_TYPE": "Tipo de prueba"
+  "TEST_TYPE": "Tipo de prueba",
+  "JOB_POSITION": "Posicion de trabajo"
 }

@@ -66,6 +66,7 @@ export class JobPositionDto {
   readonly languageSkills: LanguageSkillDto[];
 
   @Expose()
+  @Type(() => RequirementDto)
   requirements: RequirementDto[];
 
   @Expose()

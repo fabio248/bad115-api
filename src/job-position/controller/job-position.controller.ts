@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { JobPositionService } from '../services/job-position.service';
 import { CreateJobPositionDto } from '../dtos/request/create-job-position.dto';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
@@ -7,7 +7,11 @@ import { Auth } from '../../auth/decorators/auth.decorator';
 import { IPayload } from '../../auth/interfaces';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
+import { IdDto } from '../../common/dtos/request/id.dto';
 
+@ApiTags('Job Positions Endpoints')
 @Controller('job-positions')
 export class JobPositionController {
   constructor(private readonly jobPositionService: JobPositionService) {}
@@ -24,10 +28,16 @@ export class JobPositionController {
     );
   }
 
+  @ApiPaginatedResponse(JobPositionDto)
   @Get('')
   async findAll(
     @Query() pageDto: PageDto,
   ): Promise<PaginatedDto<JobPositionDto>> {
     return this.jobPositionService.findAll(pageDto);
+  }
+
+  @Get(':id')
+  async findOne(@Param() { id }: IdDto): Promise<JobPositionDto> {
+    return this.jobPositionService.findOne(id);
   }
 }
