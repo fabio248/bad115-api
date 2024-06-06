@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCompanyDto } from '../dtos/request/create-company.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { plainToInstance } from 'class-transformer';
@@ -29,6 +34,16 @@ export class CompaniesService {
   async create(createCompanyDto: CreateCompanyDto) {
     this.logger.log('create');
     const { email, password, countryId, ...createData } = createCompanyDto;
+
+    const isEmailTaken = await this.usersServices.findOneByEmail(email);
+
+    if (isEmailTaken) {
+      throw new ConflictException(
+        this.i18n.t('exception.CONFLICT.EMAIL_ALREADY_TAKEN', {
+          args: { email },
+        }),
+      );
+    }
 
     const company = await this.prismaService.$transaction(async (tPrisma) => {
       const company = await tPrisma.company.create({

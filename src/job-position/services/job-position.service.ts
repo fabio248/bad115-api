@@ -57,8 +57,23 @@ export class JobPositionService {
       countryName,
       ...addressData
     } = address;
-
     countryName;
+    const recruiter = await this.prismaService.recruiter.findUnique({
+      where: {
+        id: recruiterId,
+        deletedAt: null,
+      },
+    });
+
+    if (!recruiter) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.RECRUITER'),
+          },
+        }),
+      );
+    }
 
     const jobPosition = await this.prismaService.jobPosition.create({
       data: {
@@ -137,6 +152,21 @@ export class JobPositionService {
         }),
       );
     }
+
+    return plainToInstance(JobPositionDto, jobPosition);
+  }
+
+  async update(
+    id: string,
+    updateJobPositionDto: Prisma.JobPositionUpdateInput,
+  ): Promise<JobPositionDto> {
+    await this.findOne(id);
+
+    const jobPosition = await this.prismaService.jobPosition.update({
+      where: { id },
+      data: updateJobPositionDto,
+      include: this.include,
+    });
 
     return plainToInstance(JobPositionDto, jobPosition);
   }
