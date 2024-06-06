@@ -359,10 +359,13 @@ model LanguageSkill {
   deletedAt DateTime? @map("eliminado_en")
 
   languageId String   @unique
-  language   Language @relation(fields: [languageId], references: [id])
+  language   Language @relation(fields: [languageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  candidateId String
-  candidate   Candidate @relation(fields: [candidateId], references: [id])
+  candidateId String?
+  candidate   Candidate? @relation(fields: [candidateId], references: [id])
+
+  JobPosition   JobPosition? @relation(fields: [jobPositionId], references: [id])
+  jobPositionId String?
 
   @@map("mnt_habilidad_lenguaje")
 }
@@ -375,7 +378,6 @@ model Language {
   deletedAt DateTime? @map("eliminado_en")
 
   languageSkills LanguageSkill[]
-  jobPosition    JobPosition[]
 
   @@map("ctl_idioma")
 }
@@ -549,8 +551,8 @@ model JobPosition {
 
   requirement     Requirement[]
   jobApplications JobApplication[]
-  language        Language[]
-  technicalSkill  TechnicalSkill[]
+  languageSkills  LanguageSkill[]
+  technicalSkills TechnicalSkill[]
 
   @@map("mnt_puesto_de_trabajo")
 }
