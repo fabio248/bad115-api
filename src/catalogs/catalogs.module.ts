@@ -7,8 +7,8 @@ import { SocialNetworkTypesService } from './services/social-network-types.servi
 import { SocialNetworkTypesController } from './controllers/social-network-types.controller';
 import { TechnicalSkillController } from './controllers/category-technical-skill.controller';
 import { TechnicalSkillService } from './services/category-technical-skill.service';
-import { LanguagetypeController } from './controllers/languagetype.controller';
-import { LanguagetypeService } from './services/languagetype.service';
+import { LanguageTypeController } from './controllers/language-type.controller';
+import { LanguageTypeService } from './services/language-type.service';
 import { TestTypeController } from './controllers/test-type.controller';
 import { TestTypeService } from './services/test-type.service';
 
@@ -18,7 +18,7 @@ import { TestTypeService } from './services/test-type.service';
     ParticipationTypesService,
     SocialNetworkTypesService,
     TechnicalSkillService,
-    LanguagetypeService,
+    LanguageTypeService,
     TestTypeService,
   ],
   controllers: [
@@ -26,7 +26,7 @@ import { TestTypeService } from './services/test-type.service';
     ParticipationTypesController,
     SocialNetworkTypesController,
     TechnicalSkillController,
-    LanguagetypeController,
+    LanguageTypeController,
     TestTypeController,
   ],
 })

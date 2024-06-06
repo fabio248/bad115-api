@@ -19,6 +19,7 @@ import { CatalogsModule } from './catalogs/catalogs.module';
 import { CompaniesModule } from './companies/companies.module';
 import { RecruitersModule } from './recruiters/recruiters.module';
 import { FilesModule } from './files/files.module';
+import { JobPositionModule } from './job-position/job-position.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { FilesModule } from './files/files.module';
     CompaniesModule,
     RecruitersModule,
     FilesModule,
+    JobPositionModule,
   ],
   controllers: [AppController],
   providers: [AuthModule, UsersModule],

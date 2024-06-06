@@ -105,7 +105,8 @@ model Person {
   recruiter     Recruiter?      @relation(fields: [recruiterId], references: [id])
   documents     Document[]
   socialNetwork SocialNetwork[]
-  address       Address?
+  addressId     String?
+  address       Address?        @relation(fields: [addressId], references: [id])
 
   @@map("mnt_persona")
 }
@@ -132,8 +133,7 @@ model Address {
   updatedAt   DateTime  @updatedAt @map("modificado_en")
   deletedAt   DateTime? @map("eliminado_en")
 
-  personId       String?       @unique
-  person         Person?       @relation(fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  person         Person[]
   departmentId   String?
   department     Department?   @relation(fields: [departmentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   municipalityId String?
@@ -315,7 +315,7 @@ model TechnicalSkillCandidate {
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
 
-  technicalSkillId String         @unique()
+  technicalSkillId String
   technicalSkill   TechnicalSkill @relation(fields: [technicalSkillId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   candidateId      String?
   candidate        Candidate?     @relation(fields: [candidateId], references: [id])
@@ -335,7 +335,6 @@ model TechnicalSkill {
   technicalSkillCandidates TechnicalSkillCandidate[]
   categoryTechnicalSkillId String
   categoryTechnicalSkill   CategoryTechnicalSkill?   @relation(fields: [categoryTechnicalSkillId], references: [id])
-  jobPosition              JobPosition[]
 
   @@map("ctl_habilidad_tecnica")
 }
@@ -537,17 +536,18 @@ model Recruiter {
 }
 
 model JobPosition {
-  id                String    @id @default(uuid())
-  salaryRange       String    @map("rango_salarial")
-  modality          String    @map("modalidad") // Enum: presencial, semipresencial, remoto
-  description       String    @map("descripcion")
-  experienciesLevel String    @map("nivel_experiencias")
-  contractType      String    @map("tipo_contrato") // Enum: indefinido, definido, por proyecto
-  status            String    @default("Activo") @map("estado") // Enum: Activo, Inactivo
-  closeTime         DateTime  @map("fecha_cierre")
-  createdAt         DateTime  @default(now()) @map("creado_en")
-  updatedAt         DateTime  @updatedAt @map("modificado_en")
-  deletedAt         DateTime? @map("eliminado_en")
+  id               String    @id @default(uuid())
+  salaryRange      String    @map("rango_salarial")
+  modality         String    @map("modalidad") // Enum: presencial, semipresencial, remoto
+  description      String    @map("descripcion")
+  experiencesLevel String    @map("nivel_experiencias")
+  contractType     String    @map("tipo_contrato") // Enum: indefinido, definido, por proyecto
+  status           String    @default("Activo") @map("estado") // Enum: Activo, Inactivo
+  workday          String?   @map("jornada") // Enum: tiempo completo, medio tiempo
+  closeTime        DateTime  @map("fecha_cierre")
+  createdAt        DateTime  @default(now()) @map("creado_en")
+  updatedAt        DateTime  @updatedAt @map("modificado_en")
+  deletedAt        DateTime? @map("eliminado_en")
 
   addressId   String?
   address     Address?   @relation(fields: [addressId], references: [id])
@@ -556,12 +556,10 @@ model JobPosition {
   companyId   String
   company     Company    @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  requirement      Requirement[]
-  jobApplications  JobApplication[]
-  languageSkills   LanguageSkill[]
-  technicalSkills  TechnicalSkillCandidate[]
-  TechnicalSkill   TechnicalSkill?           @relation(fields: [technicalSkillId], references: [id])
-  technicalSkillId String?
+  requirements    Requirement[]
+  jobApplications JobApplication[]
+  languageSkills  LanguageSkill[]
+  technicalSkills TechnicalSkillCandidate[]
 
   @@map("mnt_puesto_de_trabajo")
 }

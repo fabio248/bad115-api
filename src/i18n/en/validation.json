@@ -9,6 +9,7 @@
   "MIN": "{property} must be equal or bigger than {constraint}.",
   "MAX": "{property} must be equal or lesser than {constraint}.",
   "IS_DATE": "{property} must be a date in format 'yyyy-mm-ddThh:mm:ss.mmmZ' and a valid date.",
+  "IS_DATE_STRING": "{property} must be a date in format 'yyyy-mm-ddThh:mm:ss.mmmZ' and a valid date.",
   "IS_POSITIVE": "{property} must be a positive number.",
   "IS_URL": "{property} must be an URL address.",
   "IS_TIME": "{property} must be a valid time in format 'hh:mm:ss'",

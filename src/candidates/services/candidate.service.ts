@@ -7,7 +7,7 @@ import {
   getPaginationParams,
 } from '../../common/utils/pagination.utils';
 import { CandidateFilterDto } from '../dto/request/candidate-filter.dto';
-import { Prisma } from '@prisma/client';
+import { Candidate, Prisma } from '@prisma/client';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { plainToInstance } from 'class-transformer';
 import { I18nService } from 'nestjs-i18n';
@@ -179,7 +179,7 @@ export class CandidateService {
     ]);
 
     return {
-      data: plainToInstance(CandidateDto, candidates),
+      data: plainToInstance(CandidateDto, candidates as Array<Candidate>),
       pagination: getPaginationInfo(pageDto, totalItems),
     };
   }

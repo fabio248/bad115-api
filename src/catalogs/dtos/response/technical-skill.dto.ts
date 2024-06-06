@@ -1,4 +1,5 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
+import { CategoryTechnicalSkillDto } from './category-technical-skill.dto';
 
 @Exclude()
 export class TechnicalSkillDto {
@@ -10,4 +11,8 @@ export class TechnicalSkillDto {
 
   @Expose()
   readonly categoryTechnicalSkillId: string;
+
+  @Expose()
+  @Type(() => CategoryTechnicalSkillDto)
+  readonly categoryTechnicalSkill?: CategoryTechnicalSkillDto;
 }

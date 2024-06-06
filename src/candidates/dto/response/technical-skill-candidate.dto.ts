@@ -1,7 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { CreateTechnicalSkillDto } from '../request/create-technical-skill.dto';
+import { TechnicalSkillDto } from '../../../catalogs/dtos/response/technical-skill.dto';
 
 @Exclude()
 export class TechnicalSkillCandidateDto {
@@ -9,15 +9,11 @@ export class TechnicalSkillCandidateDto {
   readonly id: string;
 
   @Expose()
-  readonly candidateId: string;
+  readonly candidateId?: string;
 
   @Expose()
-  @Type(() => CreateTechnicalSkillDto)
-  readonly technicalSkill?: CreateTechnicalSkillDto;
-
-  // @Expose()
-  // @Type(() => CreateCategoryDto)
-  // readonly category?: CreateCategoryDto;
+  @Type(() => TechnicalSkillDto)
+  readonly technicalSkill?: TechnicalSkillDto;
 
   @ApiHideProperty()
   readonly createdAt: Date;
