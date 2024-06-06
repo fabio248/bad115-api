@@ -1,28 +1,29 @@
 import { Exclude, Expose } from 'class-transformer';
 import {
-  LanguagueLevelEnum,
-  LanguagueSkillsEnum,
+  LanguageLevelEnum,
+  LanguageSkillsEnum,
 } from 'src/candidates/enums/language-skills.enum';
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { CreateLanguageDto } from '../request/create-language.dto';
+import { LanguageTypesDto } from '../../../catalogs/dtos/response/language-type.dto';
+
 @Exclude()
 export class LanguageSkillDto {
   @Expose()
   readonly id: string;
 
   @Expose()
-  readonly skill: LanguagueSkillsEnum;
+  readonly skill: LanguageSkillsEnum;
 
   @Expose()
-  readonly level: LanguagueLevelEnum;
+  readonly level: LanguageLevelEnum;
 
   @Expose()
   readonly candidateId: string;
 
   @Expose()
-  @Type(() => CreateLanguageDto)
-  readonly language?: CreateLanguageDto;
+  @Type(() => LanguageTypesDto)
+  readonly language: LanguageTypesDto;
 
   @ApiHideProperty()
   readonly createdAt: Date;

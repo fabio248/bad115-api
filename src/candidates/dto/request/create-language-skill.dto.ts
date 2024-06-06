@@ -1,31 +1,24 @@
 import { i18nValidationMessage } from 'nestjs-i18n';
-import { IsNotEmpty, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsEnum, IsString } from 'class-validator';
 import {
-  LanguagueLevelEnum,
-  LanguagueSkillsEnum,
+  LanguageLevelEnum,
+  LanguageSkillsEnum,
 } from '../../enums/language-skills.enum';
-import { CreateLanguageDto } from './create-language.dto';
-import { Type } from 'class-transformer';
 
 export class CreateLanguageSkillDto {
-  /*Enum:
-     // Enum: Escucha, lectura, escritura y conversacion
-     */
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
-  @IsEnum(['Escucha', 'Lectura', 'Escritura'], {
+  @IsEnum(LanguageSkillsEnum, {
     message: i18nValidationMessage('validation.IS_ENUM'),
   })
-  readonly skill: LanguagueSkillsEnum;
-  /*Enum:
-   A1 = "A1", A2 = "A2", B1 = "B1", B2 = "B2", C1 = "C1", C2 = "C2"
-   */
-  @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
-  @IsEnum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'], {
-    message: i18nValidationMessage('validation.IS_ENUM'),
-  })
-  readonly level: LanguagueLevelEnum;
+  readonly skill: LanguageSkillsEnum;
 
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
-  @Type(() => CreateLanguageDto)
-  readonly language?: CreateLanguageDto;
+  @IsEnum(LanguageLevelEnum, {
+    message: i18nValidationMessage('validation.IS_ENUM'),
+  })
+  readonly level: LanguageLevelEnum;
+
+  @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
+  @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
+  readonly languageId: string;
 }

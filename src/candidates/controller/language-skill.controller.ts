@@ -11,6 +11,7 @@ import { LanguageSkillDto } from '../dto/response/language-skill.dto';
 import { UpdateLanguageSkillDto } from '../dto/request/update-language-skill.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 
 @Controller('candidates/:candidateId/language-skills')
 @ApiTags('Candidates Endpoints')
@@ -26,7 +27,7 @@ export class LanguageSkillController {
   create(
     @Body() createAcademicKnowledge: CreateLanguageSkillDto,
     @Param() { candidateId }: CandidateIdDto,
-  ): Promise<CreateLanguageSkillDto> {
+  ): Promise<LanguageSkillDto> {
     return this.languageSkillService.create(
       createAcademicKnowledge,
       candidateId,
@@ -40,7 +41,7 @@ export class LanguageSkillController {
   @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   findOne(
     @Param() { languageSkillId }: LanguageSkillIdDto,
-  ): Promise<CreateLanguageSkillDto> {
+  ): Promise<LanguageSkillDto> {
     return this.languageSkillService.findOne(languageSkillId);
   }
 
@@ -50,6 +51,7 @@ export class LanguageSkillController {
       'Use this endpoint to search all language skills asignered a one user',
   })
   @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
+  @ApiPaginatedResponse(LanguageSkillDto)
   findAll(
     @Param() { candidateId }: CandidateIdDto,
     @Query() pageDto: PageDto,
@@ -73,6 +75,7 @@ export class LanguageSkillController {
       candidateId,
     );
   }
+
   @Auth({ permissions: [permissions.DELETE_CANDIDATE.codename] })
   @Delete('/:languageSkillId')
   remove(@Param() { languageSkillId }: LanguageSkillIdDto) {

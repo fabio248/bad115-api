@@ -17,16 +17,18 @@ import {
   getPaginationParams,
   getPaginationInfo,
 } from 'src/common/utils/pagination.utils';
+
 @Injectable()
 export class LanguageSkillService {
   private readonly logger = new Logger(LanguageSkillService.name);
+
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
   ) {}
 
   async create(
-    createLanguajeSkill: CreateLanguageSkillDto,
+    createLanguageSkill: CreateLanguageSkillDto,
     id: string,
   ): Promise<LanguageSkillDto> {
     this.logger.log('Creating language skill');
@@ -44,12 +46,14 @@ export class LanguageSkillService {
         }),
       );
     }
-    const { language } = createLanguajeSkill;
+    const { languageId, ...createData } = createLanguageSkill;
     const languageSkill = this.prismaService.languageSkill.create({
       data: {
-        ...createLanguajeSkill,
+        ...createData,
         language: {
-          create: language,
+          connect: {
+            id: languageId,
+          },
         },
         candidate: {
           connect: {
@@ -60,6 +64,7 @@ export class LanguageSkillService {
     });
     return plainToInstance(LanguageSkillDto, languageSkill);
   }
+
   async findOne(id: string): Promise<LanguageSkillDto> {
     this.logger.log('Searching a language skill');
     const languageSkill = this.prismaService.languageSkill.findUnique({
@@ -71,6 +76,7 @@ export class LanguageSkillService {
         language: true,
       },
     });
+
     if (!languageSkill) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -80,6 +86,7 @@ export class LanguageSkillService {
         }),
       );
     }
+
     return plainToInstance(LanguageSkillDto, languageSkill);
   }
 
@@ -91,8 +98,10 @@ export class LanguageSkillService {
     const candidate = await this.prismaService.candidate.findUnique({
       where: {
         id: id,
+        deletedAt: null,
       },
     });
+
     if (!candidate) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -102,6 +111,7 @@ export class LanguageSkillService {
         }),
       );
     }
+
     const { skip, take } = getPaginationParams(pageDto);
     const [allLanguageSkill, totalItems] = await Promise.all([
       this.prismaService.languageSkill.findMany({
@@ -122,6 +132,7 @@ export class LanguageSkillService {
         },
       }),
     ]);
+
     const pagination = getPaginationInfo(pageDto, totalItems);
 
     return {
@@ -133,7 +144,7 @@ export class LanguageSkillService {
   async update(
     updateLanguageSkillDto: UpdateLanguageSkillDto,
     id: string,
-    candId: string,
+    candidateId: string,
   ) {
     this.logger.log('update informacion of language skill');
     const languageSkill = this.findOne(id);
@@ -147,19 +158,21 @@ export class LanguageSkillService {
       );
     }
 
-    const { language } = updateLanguageSkillDto;
+    const { languageId, ...updateData } = updateLanguageSkillDto;
     const updateLanguageSkill = await this.prismaService.languageSkill.update({
       where: {
         id,
       },
       data: {
-        ...updateLanguageSkillDto,
+        ...updateData,
         language: {
-          update: language,
+          connect: {
+            id: languageId,
+          },
         },
         candidate: {
           connect: {
-            id: candId,
+            id: candidateId,
           },
         },
       },

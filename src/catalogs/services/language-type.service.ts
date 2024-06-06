@@ -9,7 +9,7 @@ import { plainToInstance } from 'class-transformer';
 import { UpdateLanguageTypeDto } from '../dtos/request/update-language-type.dto';
 
 @Injectable()
-export class LanguagetypeService {
+export class LanguageTypeService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
@@ -25,6 +25,7 @@ export class LanguagetypeService {
     });
     return plainToInstance(LanguageTypesDto, languagetype);
   }
+
   async findOne(id: string): Promise<LanguageTypesDto> {
     const languageType = await this.prismaService.language.findUnique({
       where: {
@@ -44,7 +45,11 @@ export class LanguagetypeService {
   }
 
   async findAll(): Promise<LanguageTypesDto[]> {
-    const languageTypes = await this.prismaService.language.findMany();
+    const languageTypes = await this.prismaService.language.findMany({
+      orderBy: {
+        language: 'asc',
+      },
+    });
     return plainToInstance(LanguageTypesDto, languageTypes);
   }
 
