@@ -175,38 +175,71 @@ export class CompaniesService {
       );
     }
 
-    await this.prismaService.$transaction(async (tPrisma) => {
+    const companyRecruiter =
+      await this.prismaService.companyRecruiter.findFirst({
+        where: {
+          companyId,
+          recruiterId: user.person.recruiterId,
+          deletedAt: { not: null },
+        },
+        include: {
+          company: true,
+        },
+      });
+
+    if (companyRecruiter) {
       await Promise.all([
-        tPrisma.companyRecruiter.create({
+        this.prismaService.companyRecruiter.update({
+          where: {
+            id: companyRecruiter.id,
+          },
           data: {
-            company: {
-              connect: {
-                id: companyId,
-              },
-            },
-            recruiter: {
-              connect: {
-                id: user.person.recruiterId,
-              },
-            },
+            deletedAt: null,
           },
         }),
-        tPrisma.userRole.create({
+        this.prismaService.company.update({
+          where: {
+            id: companyId,
+          },
           data: {
-            user: {
-              connect: {
-                id: user.id,
-              },
-            },
-            role: {
-              connect: {
-                name: roles.RECRUITER,
-              },
-            },
+            assignedRecruiter: companyRecruiter.company.assignedRecruiter + 1,
           },
         }),
       ]);
-    });
+    } else {
+      await this.prismaService.$transaction(async (tPrisma) => {
+        await Promise.all([
+          tPrisma.companyRecruiter.create({
+            data: {
+              company: {
+                connect: {
+                  id: companyId,
+                },
+              },
+              recruiter: {
+                connect: {
+                  id: user.person.recruiterId,
+                },
+              },
+            },
+          }),
+          tPrisma.userRole.create({
+            data: {
+              user: {
+                connect: {
+                  id: user.id,
+                },
+              },
+              role: {
+                connect: {
+                  name: roles.RECRUITER,
+                },
+              },
+            },
+          }),
+        ]);
+      });
+    }
   }
 
   async findAllRecruiters(companyId: string, pageDto: PageDto) {
