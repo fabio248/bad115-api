@@ -61,23 +61,22 @@ export class TestService {
     const [testT, urlDocs] = await this.prismaService.$transaction(
       async (tPrisma) => {
         if (!mimeTypeFile) {
-          return [
-            tPrisma.test.create({
-              data: {
-                ...createData,
-                testType: {
-                  connect: {
-                    id: testTypeId,
-                  },
-                },
-                candidate: {
-                  connect: {
-                    id: id,
-                  },
+          const testFile = await tPrisma.test.create({
+            data: {
+              ...createData,
+              testType: {
+                connect: {
+                  id: testTypeId,
                 },
               },
-            }),
-          ];
+              candidate: {
+                connect: {
+                  id: id,
+                },
+              },
+            },
+          });
+          return [testFile, null];
         }
 
         const keyFile = `${uuidv4()}-test`;
