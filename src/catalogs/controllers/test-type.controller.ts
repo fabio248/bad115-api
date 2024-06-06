@@ -23,7 +23,7 @@ export class TestTypeController {
 
   @Post('')
   @ApiOperation({ summary: 'Create a new test type' })
-  // @Auth({ permissions: [permissions.CREATE_CATALOG.codename] })
+  @Auth({ permissions: [permissions.CREATE_CATALOG.codename] })
   create(@Body() createTestTypeDto: CreateTestTypeDto): Promise<TestTypeDto> {
     return this.testTypeService.create(createTestTypeDto);
   }

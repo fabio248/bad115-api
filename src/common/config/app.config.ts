@@ -22,6 +22,7 @@ export default registerAs(
           process.env.SENDGRID_REJECT_REQUEST_UNBLOCK_USER_MAIL_TEMPLATE_ID,
         approveUnblock:
           process.env.SENDFRID_APPROVED_REQUEST_UNBLOCK_USER_MAIL_TEMPLATE_ID,
+        confirmationMeet: process.env.SENDFRID_SEND_CONFIRMATION_MEETING,
       },
     },
     aws: {

@@ -14,6 +14,7 @@ export interface IAppConfig {
       unblock: string;
       rejectUnblock: string;
       approveUnblock: string;
+      confirmationMeet: string;
     };
   };
   aws: {

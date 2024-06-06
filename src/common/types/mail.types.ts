@@ -14,3 +14,12 @@ export type MailRejectUnblockUserTemplateData = {
     reason: string;
   };
 } & sendgrid.MailDataRequired;
+
+export type MailAlertMeetingTemplateData = {
+  dynamicTemplateData: {
+    userName: string;
+    date: Date;
+    positionName: string;
+    link: string;
+  };
+} & sendgrid.MailDataRequired;

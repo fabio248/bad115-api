@@ -28,7 +28,8 @@
     "ROLE_NAME_ALREADY_TAKEN": "The role name is already in use.",
     "NO_ADMINS": "There must be at least one admin user.",
     "NO_SUPPORTED": "Attributes must not be empty",
-    "REQUEST_ALREADY_EXISTS": "Request already sent, please wait for the response."
+    "REQUEST_ALREADY_EXISTS": "Request already sent, please wait for the response.",
+    "CONTRACTED": "It is not possible to schedule a meet for this status"
   },
   "UNPROCESSABLE": {
     "ACCOUNT_ALREADY_ACTIVE": "Account is already active."

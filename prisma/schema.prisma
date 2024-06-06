@@ -579,6 +579,8 @@ model Requirement {
 
 model JobApplication {
   id        String    @id @default(uuid())
+  status     String    @map("estado_aplicacion_puesto") // Enum: Aplicada, En proceso, Entrevista final, contratado, descartado
+  recomendation String? @map("recomendacion_aplicacion_puesto")
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
@@ -586,12 +588,30 @@ model JobApplication {
   jobPositionId String      @unique @map("id_puesto_trabajo")
   jobPosition   JobPosition @relation(fields: [jobPositionId], references: [id])
 
+  meeting Meeting[]
+
+  fileId String?
+  file   File?   @relation(fields: [fileId], references: [id])
+
   candidateId String?    @map("id_candidato")
   candidate   Candidate? @relation(fields: [candidateId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  File        File?      @relation(fields: [fileId], references: [id])
-  fileId      String?
 
   @@map("mnt_aplicacion_puesto_trabajo")
+}
+
+model Meeting {
+  id String @id @default(uuid())
+  executionDate DateTime? @map("fecha_de_ejecucion")
+  link String?  @map("enlace_reunion")
+
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  jobAplicationId String?
+  jobAplication   JobApplication? @relation(fields: [jobAplicationId], references: [id])
+
+  @@map("mnt_reunion")
 }
 
 model Company {
