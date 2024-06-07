@@ -37,6 +37,9 @@ export class PersonDto {
   readonly userId: string;
 
   @Expose()
+  readonly phone?: string;
+
+  @Expose()
   @Type(() => UserDto)
   readonly user?: UserDto;
 
