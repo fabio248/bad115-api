@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { JobPositionController } from './controller/job-position.controller';
 import { JobPositionService } from './services/job-position.service';
-import { FilesModule } from 'src/files/files.module';
+import { PersonsModule } from 'src/persons/persons.module';
 
 @Module({
-  imports: [FilesModule],
+  imports: [PersonsModule],
   controllers: [JobPositionController],
   providers: [JobPositionService],
   exports: [JobPositionService],
