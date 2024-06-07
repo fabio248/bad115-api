@@ -26,5 +26,6 @@
   "TEST_TYPE": "Tipo de prueba",
   "JOB_POSITION": "Posición de trabajo",
   "JOB_APPLICATION": "Aplicacion a puesto de trabajo",
-  "MEETING": "reunion"
+  "MEETING": "reunion",
+  "ADDRESS": "Dirección"
 }

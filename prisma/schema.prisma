@@ -365,7 +365,7 @@ model LanguageSkill {
   candidateId String?
   candidate   Candidate? @relation(fields: [candidateId], references: [id])
 
-  JobPosition   JobPosition? @relation(fields: [jobPositionId], references: [id])
+  jobPosition   JobPosition? @relation(fields: [jobPositionId], references: [id])
   jobPositionId String?
 
   @@map("mnt_habilidad_lenguaje")
@@ -578,12 +578,12 @@ model Requirement {
 }
 
 model JobApplication {
-  id        String    @id @default(uuid())
-  status     String    @map("estado_aplicacion_puesto") // Enum: Aplicada, En proceso, Entrevista final, contratado, descartado
-  recomendation String? @map("recomendacion_aplicacion_puesto")
-  createdAt DateTime  @default(now()) @map("creado_en")
-  updatedAt DateTime  @updatedAt @map("modificado_en")
-  deletedAt DateTime? @map("eliminado_en")
+  id            String    @id @default(uuid())
+  status        String    @map("estado_aplicacion_puesto") // Enum: Aplicada, En proceso, Entrevista final, contratado, descartado
+  recomendation String?   @map("recomendacion_aplicacion_puesto")
+  createdAt     DateTime  @default(now()) @map("creado_en")
+  updatedAt     DateTime  @updatedAt @map("modificado_en")
+  deletedAt     DateTime? @map("eliminado_en")
 
   jobPositionId String      @unique @map("id_puesto_trabajo")
   jobPosition   JobPosition @relation(fields: [jobPositionId], references: [id])
@@ -600,6 +600,7 @@ model JobApplication {
 }
 
 model Meeting {
+
   id String @id @default(uuid())
   executionDate DateTime @map("fecha_de_ejecucion")
   link String  @map("enlace_reunion")

@@ -1,6 +1,7 @@
 {
   "NOT_FOUND": {
-    "DEFAULT": "{entity} not found."
+    "DEFAULT": "{entity} not found.",
+    "MUNICIPALITY": "Municipality has to belong to a state."
   },
   "UNAUTHORIZED": {
     "DEFAULT": "You must be logged in to access here.",

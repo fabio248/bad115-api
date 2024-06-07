@@ -1,6 +1,7 @@
 {
   "NOT_FOUND": {
-    "DEFAULT": "{entity} no encontrado."
+    "DEFAULT": "{entity} no encontrado.",
+    "MUNICIPALITY": "Municipio debe pertencer al departamento."
   },
   "UNAUTHORIZED": {
     "DEFAULT": "Debe iniciar sesión para acceder aquí.",
