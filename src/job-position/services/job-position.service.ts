@@ -258,7 +258,7 @@ export class JobPositionService {
               data: {
                 ...updateData,
                 language: { connect: { id: languageId } },
-                JobPosition: { connect: { id } },
+                jobPosition: { connect: { id } },
               },
             }),
         ),

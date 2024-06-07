@@ -120,9 +120,12 @@ export class CandidateService {
                    person.userId,
                    person.candidateId,
                    person.recruiterId,
+                   usuario.correo          as "email",
+                   usuario.avatar          as "avatar",
                    (${searchQuery})        as score
             FROM mnt_cantidato candidate
-                     LEFT JOIN mnt_persona person ON candidate.id = person.candidateId
+                    LEFT JOIN mnt_persona person ON candidate.id = person.candidateId
+                    JOIN mnt_usuario usuario ON person.userId = usuario.id
             WHERE candidate.eliminado_en IS NULL
               AND ${searchQuery} > 0
             ORDER BY score DESC
