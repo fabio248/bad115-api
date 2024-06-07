@@ -36,9 +36,17 @@ export class CandidateService {
     tests: true,
     laboralExperiences: true,
     languageSkills: true,
-    participations: true,
+    participations: {
+      include: {
+        participationType: true,
+      },
+    },
     publications: true,
-    recognitions: true,
+    recognitions: {
+      include: {
+        recognitionType: true,
+      },
+    },
     recomendations: true,
   };
 
