@@ -601,8 +601,8 @@ model JobApplication {
 
 model Meeting {
   id String @id @default(uuid())
-  executionDate DateTime? @map("fecha_de_ejecucion")
-  link String?  @map("enlace_reunion")
+  executionDate DateTime @map("fecha_de_ejecucion")
+  link String  @map("enlace_reunion")
 
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")

@@ -1,8 +1,6 @@
-import { Type } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
-import { JobAplicationEnum } from 'src/candidates/enums/job-aplication.enum';
-import { CreateMeetingAplicationDto } from './create-meeting.dto';
+import { JobAplicationEnum } from 'src/job-aplication/enums/job-aplication.enum';
 
 export class CreateJobAplicationDto {
   /*Enum:
@@ -26,8 +24,4 @@ export class CreateJobAplicationDto {
   @IsOptional()
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
   mimeTypeFile?: string;
-
-  @IsOptional()
-  @Type(() => CreateMeetingAplicationDto)
-  readonly meeting?: CreateMeetingAplicationDto;
 }

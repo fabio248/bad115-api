@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { JobAplicationDto } from '../dto/response/job-aplication.dto';
+import { JobAplicationDto } from 'src/job-aplication/dto/response/job-aplication.dto';
 import { plainToInstance } from 'class-transformer';
-import { CreateJobAplicationDto } from '../dto/request/create-job-aplication.dto';
+import { CreateJobAplicationDto } from 'src/job-aplication/dto/request/create-job-aplication.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { I18nService } from 'nestjs-i18n';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,7 +9,7 @@ import { FilesService } from 'src/files/services/files.service';
 import { MailAlertMeetingTemplateData } from 'src/common/types/mail.types';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { SEND_EMAIL_EVENT } from '../../common/events/mail.event';
+import { SEND_EMAIL_EVENT } from 'src/common/events/mail.event';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -27,8 +27,7 @@ export class JobAplicationService {
     jobId: string,
     createJobAplicationDto: CreateJobAplicationDto,
   ): Promise<JobAplicationDto> {
-    const { meeting, mimeTypeFile, status, ...createData } =
-      createJobAplicationDto;
+    const { mimeTypeFile, status, ...createData } = createJobAplicationDto;
     this.logger.log('creating a new job aplication');
     const candidate = await this.prismaService.candidate.findUnique({
       where: {
@@ -67,23 +66,12 @@ export class JobAplicationService {
       status: '',
     };
 
-    if (status !== 'Contratado' && status !== 'Descartado') {
-      jobApplicationData['meeting'] = {
-        create: {
-          ...meeting,
-        },
-      };
-    }
-
     const [jobPosition, cv] = await this.prismaService.$transaction(
       async (tPrisma) => {
         if (!mimeTypeFile) {
           return [
             tPrisma.jobApplication.create({
               data: jobApplicationData,
-              include: {
-                meeting: true,
-              },
             }),
           ];
         }
@@ -99,6 +87,11 @@ export class JobAplicationService {
           connect: {
             id: file.id,
           },
+        };
+        // temporal eliminarlo
+        const meeting = {
+          executionDate: new Date(),
+          link: 'https://meet.google.com/xxx-xxx-xxx',
         };
 
         if (status !== 'Contratado' && status !== 'Descartado') {
@@ -123,9 +116,6 @@ export class JobAplicationService {
         return Promise.all([
           tPrisma.jobApplication.create({
             data: jobApplicationData,
-            include: {
-              meeting: true,
-            },
           }),
           this.filesService.getSignedUrlForFileUpload({
             key: keyFile,
