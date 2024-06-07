@@ -24,8 +24,6 @@ import { PdfGenerateService } from './services/pdf-generate.service';
 import { CandidateController } from './controller/candidate.controller';
 import { CandidateService } from './services/candidate.service';
 import { FilesModule } from '../files/files.module';
-import { JobAplicationService } from './services/job-aplication.service';
-import { JobAplicationController } from './controller/job-aplication.controller';
 
 @Module({
   imports: [FilesModule],
@@ -42,7 +40,6 @@ import { JobAplicationController } from './controller/job-aplication.controller'
     RecomendationController,
     PdfGenerateController,
     CandidateController,
-    JobAplicationController,
   ],
   providers: [
     LaboralExperiencesService,
@@ -57,7 +54,6 @@ import { JobAplicationController } from './controller/job-aplication.controller'
     RecomendationService,
     PdfGenerateService,
     CandidateService,
-    JobAplicationService,
   ],
 })
 export class CandidateModule {}

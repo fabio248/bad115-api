@@ -25,5 +25,6 @@
   "CATEGORY": "Category",
   "TEST_TYPE": "Test Type",
   "JOB_POSITION": "Job Position",
-  "ADDRESS": "Address"
+  "JOB_APPLICATION": "Job Aplication",
+  "MEETING": "meeting"
 }

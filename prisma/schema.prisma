@@ -600,9 +600,15 @@ model JobApplication {
 }
 
 model Meeting {
+<<<<<<< HEAD
   id            String    @id @default(uuid())
   executionDate DateTime? @map("fecha_de_ejecucion")
   link          String?   @map("enlace_reunion")
+=======
+  id String @id @default(uuid())
+  executionDate DateTime @map("fecha_de_ejecucion")
+  link String  @map("enlace_reunion")
+>>>>>>> 8f06678 (feat: change direccion of the endpoint job-aplication and crud meeting)
 
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
