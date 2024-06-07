@@ -11,6 +11,12 @@ import {
 } from '../../common/utils/pagination.utils';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { I18nService } from 'nestjs-i18n';
+import { UpdateJobPositionDto } from '../dtos/request/update-job-position.dto';
+import { UpdateRequirementDto } from '../dtos/request/update-requeriments.dto';
+import { UpdateTechnicalSkillsDto } from '../dtos/request/update-technical-skills.dto';
+import { UpdateLanguageSkillsDto } from '../dtos/request/update-language-skills.dto';
+import { UpdateAddressDto } from '../dtos/request/update-address.dto';
+import { AddressesService } from '../../persons/services/addresses.service';
 
 @Injectable()
 export class JobPositionService {
@@ -23,7 +29,11 @@ export class JobPositionService {
       },
     },
     requirements: true,
-    languageSkills: true,
+    languageSkills: {
+      include: {
+        language: true,
+      },
+    },
     technicalSkills: {
       include: {
         technicalSkill: true,
@@ -35,6 +45,7 @@ export class JobPositionService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
+    private readonly addressesService: AddressesService,
   ) {}
 
   async create(
@@ -158,7 +169,7 @@ export class JobPositionService {
 
   async update(
     id: string,
-    updateJobPositionDto: Prisma.JobPositionUpdateInput,
+    updateJobPositionDto: UpdateJobPositionDto,
   ): Promise<JobPositionDto> {
     await this.findOne(id);
 
@@ -169,5 +180,112 @@ export class JobPositionService {
     });
 
     return plainToInstance(JobPositionDto, jobPosition);
+  }
+
+  async updateRequirements(
+    id: string,
+    updateRequirementDto: UpdateRequirementDto,
+  ) {
+    await this.findOne(id);
+
+    await this.prismaService.$transaction(async (tPrisma) => {
+      await tPrisma.requirement.deleteMany({
+        where: {
+          jobPositionId: id,
+        },
+      });
+
+      await Promise.all(
+        updateRequirementDto.requirements.map((requirement) =>
+          tPrisma.requirement.create({
+            data: {
+              ...requirement,
+              jobPosition: { connect: { id } },
+            },
+          }),
+        ),
+      );
+    });
+  }
+
+  async updateTechnicalSkills(
+    id: string,
+    updateTechnicalSkillsDto: UpdateTechnicalSkillsDto,
+  ) {
+    await this.findOne(id);
+
+    await this.prismaService.$transaction(async (tPrisma) => {
+      await tPrisma.technicalSkillCandidate.deleteMany({
+        where: {
+          jobPositionId: id,
+        },
+      });
+
+      await Promise.all(
+        updateTechnicalSkillsDto.technicalSkills.map((technicalSkill) =>
+          tPrisma.technicalSkillCandidate.create({
+            data: {
+              jobPosition: { connect: { id } },
+              technicalSkill: {
+                connect: {
+                  id: technicalSkill.technicalSkillId,
+                },
+              },
+            },
+          }),
+        ),
+      );
+    });
+  }
+
+  async updateLanguageSkills(
+    id: string,
+    updateLanguageSkillsDto: UpdateLanguageSkillsDto,
+  ) {
+    await this.findOne(id);
+
+    await this.prismaService.$transaction(async (tPrisma) => {
+      await tPrisma.languageSkill.deleteMany({
+        where: {
+          jobPositionId: id,
+        },
+      });
+
+      await Promise.all(
+        updateLanguageSkillsDto.languageSkills.map(
+          ({ languageId, ...updateData }) =>
+            tPrisma.languageSkill.create({
+              data: {
+                ...updateData,
+                language: { connect: { id: languageId } },
+                jobPosition: { connect: { id } },
+              },
+            }),
+        ),
+      );
+    });
+  }
+
+  async updateAddress(
+    id: string,
+    addressId: string,
+    updateAddressDto: UpdateAddressDto,
+  ) {
+    await this.findOne(id);
+
+    await this.addressesService.update(addressId, updateAddressDto);
+  }
+
+  async remove(id: string) {
+    await this.findOne(id);
+
+    await this.prismaService.jobPosition.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
   }
 }

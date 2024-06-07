@@ -24,5 +24,6 @@
   "LANGUAGE": "Language",
   "CATEGORY": "Category",
   "TEST_TYPE": "Test Type",
-  "JOB_POSITION": "Job Position"
+  "JOB_POSITION": "Job Position",
+  "ADDRESS": "Address"
 }

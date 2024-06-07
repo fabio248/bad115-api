@@ -24,5 +24,6 @@
   "LANGUAGE": "Lenguaje",
   "CATEGORY": "Categoria",
   "TEST_TYPE": "Tipo de prueba",
-  "JOB_POSITION": "Posición de trabajo"
+  "JOB_POSITION": "Posición de trabajo",
+  "ADDRESS": "Dirección"
 }

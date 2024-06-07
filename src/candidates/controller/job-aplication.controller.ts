@@ -13,7 +13,9 @@ import { permissions } from 'prisma/seeds/permissions.seed';
 export class JobAplicationController {
   constructor(private readonly jobAplicationService: JobAplicationService) {}
 
-  @ApiOperation({ summary: 'Use this endpoint to create a new job aplication' })
+  @ApiOperation({
+    summary: 'Use this endpoint to create a new job application',
+  })
   @Auth({ permissions: [permissions.CREATE_JOB.codename] })
   @Post('/job-position/:jobPositionId')
   create(
@@ -27,7 +29,8 @@ export class JobAplicationController {
       createJobAplicationDto,
     );
   }
-  @ApiOperation({ summary: 'Use this endpoint to find a job aplication' })
+
+  @ApiOperation({ summary: 'Use this endpoint to find a job application' })
   @Auth({ permissions: [permissions.READ_JOB.codename] })
   @Get('/job-position/:jobPositionId')
   @ApiOperation({ summary: 'Get a job Aplication by id' })

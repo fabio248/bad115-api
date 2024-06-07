@@ -9,5 +9,6 @@ import { SocialNetworkService } from './services/socialnetwork.service';
 @Module({
   controllers: [PersonsController, AddressController, SocialNetworkController],
   providers: [PersonsService, AddressesService, SocialNetworkService],
+  exports: [AddressesService],
 })
 export class PersonsModule {}
