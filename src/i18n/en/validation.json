@@ -6,6 +6,7 @@
   "IS_BOOLEAN": "{property} must be a boolean.",
   "IS_UUID": "{property} must be a valid uuid.",
   "IS_INT": "{property} must be an integer number.",
+  "IS_ARRAY": "{property} must be an array.",
   "MIN": "{property} must be equal or bigger than {constraint}.",
   "MAX": "{property} must be equal or lesser than {constraint}.",
   "IS_DATE": "{property} must be a date in format 'yyyy-mm-ddThh:mm:ss.mmmZ' and a valid date.",

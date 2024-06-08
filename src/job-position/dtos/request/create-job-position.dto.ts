@@ -23,6 +23,10 @@ import { CreateTechnicalSkillPositionDto } from './create-technical-skill-positi
 export class CreateJobPositionDto {
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
+  readonly name: string;
+
+  @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
+  @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
   readonly salaryRange: string;
 
   @IsEnum(ModalityEnum, {
@@ -69,11 +73,11 @@ export class CreateJobPositionDto {
   readonly address?: CreateAddressDto;
 
   @IsArray({ message: i18nValidationMessage('validation.IS_ARRAY') })
-  readonly requirements: CreateRequirementDto[];
+  readonly requirements: CreateRequirementDto[] = [];
 
   @IsArray({ message: i18nValidationMessage('validation.IS_ARRAY') })
-  readonly languageSkills: CreateLanguageSkillDto[];
+  readonly languageSkills: CreateLanguageSkillDto[] = [];
 
   @IsArray({ message: i18nValidationMessage('validation.IS_ARRAY') })
-  readonly technicalSkills: CreateTechnicalSkillPositionDto[];
+  readonly technicalSkills: CreateTechnicalSkillPositionDto[] = [];
 }

@@ -17,6 +17,7 @@ import { UpdateTechnicalSkillsDto } from '../dtos/request/update-technical-skill
 import { UpdateLanguageSkillsDto } from '../dtos/request/update-language-skills.dto';
 import { UpdateAddressDto } from '../dtos/request/update-address.dto';
 import { AddressesService } from '../../persons/services/addresses.service';
+import { JobPositionFilterDto } from '../dtos/request/job-position-filter.dto';
 
 @Injectable()
 export class JobPositionService {
@@ -61,14 +62,6 @@ export class JobPositionService {
       ...createData
     } = createJobPositionDto;
 
-    const {
-      countryId,
-      departmentId,
-      municipalityId,
-      countryName,
-      ...addressData
-    } = address;
-    countryName;
     const recruiter = await this.prismaService.recruiter.findUnique({
       where: {
         id: recruiterId,
@@ -102,13 +95,14 @@ export class JobPositionService {
         address: address
           ? {
               create: {
-                ...addressData,
-                country: { connect: { id: countryId } },
-                department: departmentId
-                  ? { connect: { id: departmentId } }
+                numberHouse: address?.numberHouse,
+                street: address?.street,
+                country: { connect: { id: address?.countryId } },
+                department: address?.departmentId
+                  ? { connect: { id: address?.departmentId } }
                   : undefined,
-                municipality: municipalityId
-                  ? { connect: { id: municipalityId } }
+                municipality: address?.municipalityId
+                  ? { connect: { id: address?.municipalityId } }
                   : undefined,
               },
             }
@@ -123,21 +117,76 @@ export class JobPositionService {
     return plainToInstance(JobPositionDto, jobPosition);
   }
 
-  async findAll(pageDto: PageDto): Promise<PaginatedDto<JobPositionDto>> {
+  async findAll(
+    pageDto: PageDto,
+    {
+      countryId,
+      departmentId,
+      name,
+      experiencesLevel,
+      workday,
+      modality,
+      contractType,
+    }: JobPositionFilterDto = {},
+  ): Promise<PaginatedDto<JobPositionDto>> {
     const { skip, take } = getPaginationParams(pageDto);
+    const whereInput: Prisma.JobPositionWhereInput = {
+      deletedAt: null,
+    };
+
+    if (name) {
+      whereInput.name = {
+        contains: name,
+      };
+    }
+
+    if (countryId || departmentId) {
+      whereInput.AND = [
+        { address: { isNot: null } },
+        {
+          address: {
+            countryId: countryId,
+            departmentId: departmentId,
+          },
+        },
+      ];
+    }
+
+    if (experiencesLevel.length > 0) {
+      whereInput.experiencesLevel = {
+        in: Array.isArray(experiencesLevel)
+          ? experiencesLevel
+          : [experiencesLevel],
+      };
+    }
+
+    if (workday.length > 0) {
+      whereInput.workday = {
+        in: Array.isArray(workday) ? workday : [workday],
+      };
+    }
+
+    if (modality.length > 0) {
+      whereInput.modality = {
+        in: Array.isArray(modality) ? modality : [modality],
+      };
+    }
+
+    if (contractType.length > 0) {
+      whereInput.contractType = {
+        in: Array.isArray(contractType) ? contractType : [contractType],
+      };
+    }
+
     const [jobPositions, totalItems] = await Promise.all([
       this.prismaService.jobPosition.findMany({
-        where: {
-          deletedAt: null,
-        },
+        where: whereInput,
         skip,
         take,
         include: this.include,
       }),
       this.prismaService.jobPosition.count({
-        where: {
-          deletedAt: null,
-        },
+        where: whereInput,
       }),
     ]);
 

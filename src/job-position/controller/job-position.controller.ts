@@ -26,6 +26,7 @@ import { UpdateLanguageSkillsDto } from '../dtos/request/update-language-skills.
 import { UpdateAddressDto } from '../dtos/request/update-address.dto';
 import { AddressIdDto } from '../../common/dtos/request/address-id.dto';
 import { permissions } from '../../../prisma/seeds/permissions.seed';
+import { JobPositionFilterDto } from '../dtos/request/job-position-filter.dto';
 
 @ApiTags('Job Positions Endpoints')
 @Controller('job-positions')
@@ -49,8 +50,9 @@ export class JobPositionController {
   @Get('')
   async findAll(
     @Query() pageDto: PageDto,
+    @Query() jobPositionFilterDto: JobPositionFilterDto,
   ): Promise<PaginatedDto<JobPositionDto>> {
-    return this.jobPositionService.findAll(pageDto);
+    return this.jobPositionService.findAll(pageDto, jobPositionFilterDto);
   }
 
   @Auth({ permissions: [permissions.READ_JOB.codename] })
