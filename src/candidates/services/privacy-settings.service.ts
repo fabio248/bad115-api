@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePrivacySettingsDto } from '../dto/request/create-privacy-settings.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { I18nService } from 'nestjs-i18n';
+import { PrivacySettingsDto } from '../dto/response/privacy-settings.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class PrivacySettingsService {
@@ -83,5 +85,20 @@ export class PrivacySettingsService {
       },
       data: { ...updates },
     });
+  }
+  async findOne(id: string): Promise<PrivacySettingsDto> {
+    const privacySettings = await this.prismaService.privacySettings.findFirst({
+      where: { id: id, deletedAt: null },
+    });
+    if (!privacySettings) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.PRIVACY_SETTINGS'),
+          },
+        }),
+      );
+    }
+    return plainToInstance(PrivacySettingsDto, privacySettings);
   }
 }
