@@ -37,6 +37,9 @@ export class PersonDto {
   readonly userId: string;
 
   @Expose()
+  readonly privacySettingsId: string;
+
+  @Expose()
   readonly phone?: string;
 
   @Expose()
