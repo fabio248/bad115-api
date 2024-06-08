@@ -24,6 +24,8 @@ import { PdfGenerateService } from './services/pdf-generate.service';
 import { CandidateController } from './controller/candidate.controller';
 import { CandidateService } from './services/candidate.service';
 import { FilesModule } from '../files/files.module';
+import { PrivacySettingsController } from './controller/privacy-settings.controller';
+import { PrivacySettingsService } from './services/privacy-settings.service';
 
 @Module({
   imports: [FilesModule],
@@ -40,6 +42,7 @@ import { FilesModule } from '../files/files.module';
     RecomendationController,
     PdfGenerateController,
     CandidateController,
+    PrivacySettingsController,
   ],
   providers: [
     LaboralExperiencesService,
@@ -54,6 +57,7 @@ import { FilesModule } from '../files/files.module';
     RecomendationService,
     PdfGenerateService,
     CandidateService,
+    PrivacySettingsService,
   ],
 })
 export class CandidateModule {}

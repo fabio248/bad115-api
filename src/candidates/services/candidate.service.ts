@@ -7,54 +7,75 @@ import {
   getPaginationParams,
 } from '../../common/utils/pagination.utils';
 import { CandidateFilterDto } from '../dto/request/candidate-filter.dto';
-import { Candidate, Prisma } from '@prisma/client';
+import { Candidate, Prisma, PrivacySettings } from '@prisma/client';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { plainToInstance } from 'class-transformer';
 import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class CandidateService {
-  private readonly logger = new Logger(CandidateService.name);
-  private includeCandidate: Prisma.CandidateInclude = {
-    person: {
-      include: {
-        address: {
-          include: {
-            country: true,
-            municipality: true,
-            department: true,
-          },
-        },
-        user: true,
-        documents: true,
-        socialNetwork: true,
-      },
-    },
-    academicKnowledges: true,
-    certifications: true,
-    technicalSkills: true,
-    tests: true,
-    laboralExperiences: true,
-    languageSkills: true,
-    participations: {
-      include: {
-        participationType: true,
-      },
-    },
-    publications: true,
-    recognitions: {
-      include: {
-        recognitionType: true,
-      },
-    },
-    recomendations: true,
-  };
-
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
   ) {}
+  private readonly logger = new Logger(CandidateService.name);
+  private async generateIncludeCandidate(
+    privacySettings: PrivacySettings,
+  ): Promise<Prisma.CandidateInclude> {
+    const includeCandidate: Prisma.CandidateInclude = {
+      person: {
+        include: {
+          address:
+            privacySettings.address === false
+              ? {
+                  include: {
+                    country: privacySettings.address === false,
+                    municipality: privacySettings.address === false,
+                    department: privacySettings.address === false,
+                  },
+                }
+              : false,
+          socialNetwork:
+            privacySettings.socialNetwork === false
+              ? {
+                  include: {
+                    typeSocialNetwork: privacySettings.socialNetwork === false,
+                  },
+                }
+              : false,
+          user: privacySettings.laboralExperiences === false,
+          documents: privacySettings.documents === false,
+        },
+      },
 
+      academicKnowledges: privacySettings.academicKnowledges === false,
+      certifications: privacySettings.certifications === false,
+      technicalSkills: privacySettings.technicalSkills === false,
+      tests: privacySettings.tests === false,
+      laboralExperiences: privacySettings.laboralExperiences === false,
+      languageSkills: privacySettings.languageSkills === false,
+      participations:
+        privacySettings.participations === false
+          ? {
+              include: {
+                participationType: true,
+              },
+            }
+          : false,
+      publications: privacySettings.publications === false,
+      recognitions:
+        privacySettings.recognitions === false
+          ? {
+              include: {
+                recognitionType: true,
+              },
+            }
+          : false,
+      recomendations: privacySettings.recomendations === false,
+    };
+
+    return includeCandidate;
+  }
   async findOne(id: string): Promise<CandidateDto> {
     this.logger.log(`Finding candidate with id: ${id}`);
     const candidate = await this.prismaService.candidate.findFirst({
@@ -62,7 +83,9 @@ export class CandidateService {
         id: id,
         deletedAt: null,
       },
-      include: this.includeCandidate,
+      include: {
+        person: true,
+      },
     });
     if (!candidate) {
       throw new NotFoundException(
@@ -73,7 +96,36 @@ export class CandidateService {
         }),
       );
     }
-    return plainToInstance(CandidateDto, candidate);
+
+    const privacySettings = await this.prismaService.privacySettings.findFirst({
+      where: {
+        id: candidate.person.privacySettingsId,
+      },
+    });
+
+    if (!privacySettings) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.PRIVACY_SETTINGS'),
+          },
+        }),
+      );
+    }
+
+    const includeCandidate = await this.generateIncludeCandidate(
+      privacySettings,
+    );
+
+    const candidateWithInclude = await this.prismaService.candidate.findFirst({
+      where: {
+        id: id,
+        deletedAt: null,
+      },
+      include: includeCandidate,
+    });
+
+    return plainToInstance(CandidateDto, candidateWithInclude);
   }
 
   async findAll(

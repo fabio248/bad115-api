@@ -18,7 +18,7 @@ export class PrivacySettingsService {
         id: id,
       },
       include: {
-        ...createPrivacySettingsDto,
+        person: true,
       },
     });
 
@@ -31,8 +31,57 @@ export class PrivacySettingsService {
         }),
       );
     }
-    // switch (){
-
-    // }
+    const updates = {};
+    for (const [key, value] of Object.entries(createPrivacySettingsDto)) {
+      switch (key) {
+        case 'laboralExperiences':
+          updates['laboralExperiences'] = value;
+          break;
+        case 'academicKnowledges':
+          updates['academicKnowledges'] = value;
+          break;
+        case 'certifications':
+          updates['certifications'] = value;
+          break;
+        case 'technicalSkills':
+          updates['technicalSkills'] = value;
+          break;
+        case 'languageSkills':
+          updates['languageSkills'] = value;
+          break;
+        case 'recognitions':
+          updates['recognitions'] = value;
+          break;
+        case 'publications':
+          updates['publications'] = value;
+          break;
+        case 'participations':
+          updates['participations'] = value;
+          break;
+        case 'tests':
+          updates['tests'] = value;
+          break;
+        case 'recomendations':
+          updates['recomendations'] = value;
+          break;
+        case 'address':
+          updates['address'] = value;
+          break;
+        case 'documents':
+          updates['documents'] = value;
+          break;
+        case 'socialNetwork':
+          updates['socialNetwork'] = value;
+          break;
+        default:
+          break;
+      }
+    }
+    await this.prismaService.privacySettings.update({
+      where: {
+        id: candidate.person.privacySettingsId,
+      },
+      data: { ...updates },
+    });
   }
 }

@@ -34,6 +34,7 @@ export class PersonsService {
       data: {
         ...createPersonDto,
         user: { connect: { id: 'userId' } },
+        privacySettings: {},
       },
     });
     return plainToInstance(PersonDto, person);

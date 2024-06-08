@@ -108,6 +108,9 @@ model Person {
   addressId     String?
   address       Address?        @relation(fields: [addressId], references: [id])
 
+
+  privacySettingsId        String?   @unique
+  privacySettings   PrivacySettings?   @relation(fields: [privacySettingsId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   @@map("mnt_persona")
 }
 
@@ -328,6 +331,7 @@ model TechnicalSkillCandidate {
 model TechnicalSkill {
   id        String    @id @default(uuid())
   name      String    @map("nombre_habilidad_tecnica")
+
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
@@ -667,4 +671,29 @@ model UnlockRequest {
   deletedAt DateTime? @map("eliminado_en")
 
   @@map("mnt_solicitud_desbloqueo")
+}
+
+model PrivacySettings {
+  id     String  @id @default(uuid())
+
+  laboralExperiences  Boolean?  @default(false) @map("experiencia_laboral")
+  academicKnowledges  Boolean?  @default(false) @map("conocimiento_academico")
+  certifications      Boolean?  @default(false) @map("certificaciones")
+  technicalSkills     Boolean?  @default(false) @map("habilidad_tecnica")
+  languageSkills      Boolean?  @default(false) @map("habilidad_lenguaje")
+  recognitions        Boolean?  @default(false) @map("reconocimiento")
+  publications        Boolean?  @default(false) @map("publicacione")
+  participations      Boolean?  @default(false) @map("participacione")
+  tests               Boolean?  @default(false) @map("prueba")
+  recomendations      Boolean?  @default(false) @map("recomendacion")
+  address            Boolean?   @default(false) @map("direccion")
+  documents          Boolean?   @default(false) @map("documentos")
+  socialNetwork      Boolean?   @default(false) @map("red_social")
+
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+
+  person Person? @relation
+   @@map("mnt_configuracion_de_privacidad")
 }

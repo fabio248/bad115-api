@@ -50,4 +50,8 @@ export class PersonDto {
   @Expose()
   @Type(() => DocumentDto)
   readonly documents?: DocumentDto[];
+
+  @Expose()
+  @Type(() => DocumentDto)
+  readonly socialNetwork?: DocumentDto[];
 }

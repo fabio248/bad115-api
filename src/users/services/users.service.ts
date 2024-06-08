@@ -25,6 +25,7 @@ import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { UserFilterDto } from '../dtos/request/user-filter.dto';
 import { getSortObject } from '../../common/utils/sort.utils';
+import { defaultPrivacySettings } from '../interface/defaultPrivacySettings';
 
 @Injectable()
 export class UsersService {
@@ -54,20 +55,32 @@ export class UsersService {
 
     const [user, person] = await this.prismaService.$transaction(
       async (tPrisma) => {
-        const [user, candidate, recruiter] = await Promise.all([
-          tPrisma.user.create({
-            data: {
-              email: registerDto.email,
-              password: registerDto.password,
-            },
-          }),
-          tPrisma.candidate.create({ data: {} }),
-          tPrisma.recruiter.create({ data: {} }),
-        ]);
+        const [user, candidate, recruiter, privacySettings] = await Promise.all(
+          [
+            tPrisma.user.create({
+              data: {
+                email: registerDto.email,
+                password: registerDto.password,
+              },
+            }),
+            tPrisma.candidate.create({ data: {} }),
+            tPrisma.recruiter.create({ data: {} }),
+            tPrisma.privacySettings.create({
+              data: {
+                ...defaultPrivacySettings,
+              },
+            }),
+          ],
+        );
 
         const createPersonDto = instanceToPlain(registerDto);
         delete createPersonDto.email;
         delete createPersonDto.password;
+        createPersonDto.privacySettings = {
+          connect: {
+            id: privacySettings.id,
+          },
+        };
 
         const [person] = await Promise.all([
           tPrisma.person.create({
@@ -81,6 +94,11 @@ export class UsersService {
               candidate: {
                 connect: {
                   id: candidate.id,
+                },
+              },
+              privacySettings: {
+                connect: {
+                  id: privacySettings.id,
                 },
               },
               recruiter: {
