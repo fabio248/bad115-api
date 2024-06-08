@@ -43,7 +43,7 @@ export class CandidateService {
                   },
                 }
               : false,
-          user: privacySettings.laboralExperiences === false,
+          user: true,
           documents: privacySettings.documents === false,
         },
       },
