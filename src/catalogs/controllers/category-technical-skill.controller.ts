@@ -31,8 +31,7 @@ export class TechnicalSkillController {
 
   @Get('')
   @ApiOperation({
-    summary:
-      'Use this endpoint to return all technical skill whithout paginated ',
+    summary: 'Use this endpoint to return all categories whithout paginated ',
   })
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })
   findAll(): Promise<CategoryTechnicalSkillDto[]> {
@@ -64,7 +63,7 @@ export class TechnicalSkillController {
 
   @ApiPaginatedResponse(TechnicalSkillDto)
   @ApiOperation({
-    summary: 'Use this endpoint to return all categories paginated ',
+    summary: 'Use this endpoint to return all technical skill paginated ',
   })
   @Get('technical-skills/category/:categoryId/paginated')
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })

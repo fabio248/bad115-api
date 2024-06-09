@@ -22,6 +22,7 @@ export class CandidateController {
   }
 
   @Get('')
+  @Auth({ permissions: [permissions.READ_CANDIDATE.codename] })
   @ApiPaginatedResponse(CandidateDto)
   findAll(
     @Query() pageDto: PageDto,
