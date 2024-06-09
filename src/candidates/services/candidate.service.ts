@@ -18,10 +18,12 @@ export class CandidateService {
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
   ) {}
+
   private readonly logger = new Logger(CandidateService.name);
-  private async generateIncludeCandidate(
+
+  private generateIncludeCandidate(
     privacySettings: PrivacySettings,
-  ): Promise<Prisma.CandidateInclude> {
+  ): Prisma.CandidateInclude {
     const includeCandidate: Prisma.CandidateInclude = {
       person: {
         include: {
@@ -95,7 +97,6 @@ export class CandidateService {
               include: {
                 recognitionType: true,
               },
-              where: { deletedAt: null },
             }
           : false,
       recomendations:
@@ -115,6 +116,7 @@ export class CandidateService {
 
     return includeCandidate;
   }
+
   async findOne(id: string): Promise<CandidateDto> {
     this.logger.log(`Finding candidate with id: ${id}`);
     const candidate = await this.prismaService.candidate.findFirst({
@@ -152,9 +154,7 @@ export class CandidateService {
       );
     }
 
-    const includeCandidate = await this.generateIncludeCandidate(
-      privacySettings,
-    );
+    const includeCandidate = this.generateIncludeCandidate(privacySettings);
 
     const candidateWithInclude = await this.prismaService.candidate.findFirst({
       where: {

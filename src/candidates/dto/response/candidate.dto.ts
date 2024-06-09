@@ -1,4 +1,10 @@
-import { Exclude, Expose, Type } from 'class-transformer';
+import {
+  Exclude,
+  Expose,
+  plainToInstance,
+  Transform,
+  Type,
+} from 'class-transformer';
 import { PersonDto } from 'src/persons/dtos/response/person.dto';
 import { LaboralExperienceDto } from './laboral-experience.dto';
 import { AcademicKnowledgeDto } from './academic-knowledge.dto';
@@ -22,41 +28,46 @@ export class CandidateDto {
 
   @Expose()
   @Type(() => LaboralExperienceDto)
-  readonly laboralExperiences?: LaboralExperienceDto;
+  readonly laboralExperiences?: LaboralExperienceDto[];
 
   @Expose()
   @Type(() => AcademicKnowledgeDto)
-  readonly academicKnowledges?: AcademicKnowledgeDto;
+  readonly academicKnowledges?: AcademicKnowledgeDto[];
 
   @Expose()
   @Type(() => CertificationDto)
-  readonly certifications?: CertificationDto;
+  readonly certifications?: CertificationDto[];
 
   @Expose()
-  @Type(() => TechnicalSkillDto)
-  readonly technicalSkills?: TechnicalSkillDto;
+  @Transform(({ value }) => {
+    return plainToInstance(
+      TechnicalSkillDto,
+      value?.map((v) => v.technicalSkill),
+    );
+  })
+  readonly technicalSkills?: TechnicalSkillDto[];
 
   @Expose()
   @Type(() => LanguageSkillDto)
-  readonly languageSkills?: LanguageSkillDto;
+  readonly languageSkills?: LanguageSkillDto[];
 
   @Expose()
   @Type(() => RecognitionDto)
-  readonly recognitions?: RecognitionDto;
+  readonly recognitions?: RecognitionDto[];
 
   @Expose()
   @Type(() => PublicationDto)
-  readonly publications?: PublicationDto;
+  readonly publications?: PublicationDto[];
 
   @Expose()
   @Type(() => ParticipationDto)
-  readonly participations?: ParticipationDto;
+  readonly participations?: ParticipationDto[];
 
   @Expose()
   @Type(() => TestDto)
-  readonly tests?: TestDto;
+  readonly tests?: TestDto[];
 
   @Expose()
   @Type(() => RecomendationDto)
-  readonly recomendations?: RecomendationDto;
+  readonly recomendations?: RecomendationDto[];
 }
