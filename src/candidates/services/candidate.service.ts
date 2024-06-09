@@ -29,46 +29,73 @@ export class CandidateService {
             privacySettings.address === false
               ? {
                   include: {
-                    country: privacySettings.address === false,
-                    municipality: privacySettings.address === false,
-                    department: privacySettings.address === false,
+                    country: true,
+                    municipality: true,
+                    department: true,
                   },
+                  where: { deletedAt: null }, // Añadir el filtro aquí si es aplicable
                 }
               : false,
           socialNetwork:
             privacySettings.socialNetwork === false
               ? {
                   include: {
-                    typeSocialNetwork: privacySettings.socialNetwork === false,
+                    typeSocialNetwork: true,
                   },
+                  where: { deletedAt: null }, // Añadir el filtro aquí si es aplicable
                 }
               : false,
           user: true,
-          documents: privacySettings.documents === false,
+          documents:
+            privacySettings.documents === false
+              ? { where: { deletedAt: null } }
+              : false,
         },
       },
-
-      academicKnowledges: privacySettings.academicKnowledges === false,
-      certifications: privacySettings.certifications === false,
-      technicalSkills: privacySettings.technicalSkills === false,
-      tests: privacySettings.tests === false,
-      laboralExperiences: privacySettings.laboralExperiences === false,
-      languageSkills: privacySettings.languageSkills === false,
+      academicKnowledges:
+        privacySettings.academicKnowledges === false
+          ? { where: { deletedAt: null } }
+          : false,
+      certifications:
+        privacySettings.certifications === false
+          ? { where: { deletedAt: null } }
+          : false,
+      technicalSkills:
+        privacySettings.technicalSkills === false
+          ? { where: { deletedAt: null } }
+          : false,
+      tests:
+        privacySettings.tests === false
+          ? { where: { deletedAt: null } }
+          : false,
+      laboralExperiences:
+        privacySettings.laboralExperiences === false
+          ? { where: { deletedAt: null } }
+          : false,
+      languageSkills:
+        privacySettings.languageSkills === false
+          ? { where: { deletedAt: null } }
+          : false,
       participations:
         privacySettings.participations === false
           ? {
               include: {
                 participationType: true,
               },
+              where: { deletedAt: null },
             }
           : false,
-      publications: privacySettings.publications === false,
+      publications:
+        privacySettings.publications === false
+          ? { where: { deletedAt: null } }
+          : false,
       recognitions:
         privacySettings.recognitions === false
           ? {
               include: {
                 recognitionType: true,
               },
+              where: { deletedAt: null },
             }
           : false,
       recomendations:
@@ -81,6 +108,7 @@ export class CandidateService {
                   },
                 },
               },
+              where: { deletedAt: null },
             }
           : false,
     };
