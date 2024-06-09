@@ -71,7 +71,18 @@ export class CandidateService {
               },
             }
           : false,
-      recomendations: privacySettings.recomendations === false,
+      recomendations:
+        privacySettings.recomendations === false
+          ? {
+              include: {
+                users: {
+                  include: {
+                    person: true,
+                  },
+                },
+              },
+            }
+          : false,
     };
 
     return includeCandidate;
