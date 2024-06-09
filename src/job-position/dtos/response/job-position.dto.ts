@@ -50,6 +50,9 @@ export class JobPositionDto {
   readonly workday: WorkdayEnum;
 
   @Expose()
+  readonly jobApplicationCount?: number;
+
+  @Expose()
   @Type(() => CompanyDto)
   readonly company: CompanyDto;
 

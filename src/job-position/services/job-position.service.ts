@@ -18,6 +18,8 @@ import { UpdateLanguageSkillsDto } from '../dtos/request/update-language-skills.
 import { UpdateAddressDto } from '../dtos/request/update-address.dto';
 import { AddressesService } from '../../persons/services/addresses.service';
 import { JobPositionFilterDto } from '../dtos/request/job-position-filter.dto';
+import { JobPositionCountDto } from '../dtos/response/job-position-count.dto';
+import { StatusEnum } from '../enums';
 
 @Injectable()
 export class JobPositionService {
@@ -202,6 +204,12 @@ export class JobPositionService {
       },
       include: this.include,
     });
+    const jobApplicationCount = await this.prismaService.jobApplication.count({
+      where: {
+        jobPositionId: id,
+        deletedAt: null,
+      },
+    });
 
     if (!jobPosition) {
       throw new NotFoundException(
@@ -213,7 +221,10 @@ export class JobPositionService {
       );
     }
 
-    return plainToInstance(JobPositionDto, jobPosition);
+    return plainToInstance(JobPositionDto, {
+      ...jobPosition,
+      jobApplicationCount,
+    });
   }
 
   async update(
@@ -336,5 +347,27 @@ export class JobPositionService {
         deletedAt: new Date(),
       },
     });
+  }
+
+  async findAllJob(): Promise<JobPositionCountDto> {
+    const [countActive, countInactive] = await Promise.all([
+      this.prismaService.jobPosition.count({
+        where: {
+          status: StatusEnum.ACTIVE,
+        },
+      }),
+      this.prismaService.jobPosition.count({
+        where: {
+          status: StatusEnum.INACTIVE,
+        },
+      }),
+    ]);
+
+    const result = {
+      countActive,
+      countInactive,
+    };
+
+    return plainToInstance(JobPositionCountDto, result);
   }
 }

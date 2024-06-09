@@ -18,8 +18,25 @@ export type MailRejectUnblockUserTemplateData = {
 export type MailAlertMeetingTemplateData = {
   dynamicTemplateData: {
     userName: string;
-    date: Date;
+    date: string;
     positionName: string;
     link: string;
+  };
+} & sendgrid.MailDataRequired;
+
+export type MailAlertJobPositionRecruiterTemplateData = {
+  dynamicTemplateData: {
+    recruiterName: string;
+    positionName: string;
+    candidateName: string;
+    candidateEmail: string;
+  };
+} & sendgrid.MailDataRequired;
+
+export type MailAlertJobPositionCandidateTemplateData = {
+  dynamicTemplateData: {
+    userName: string;
+    positionName: string;
+    companyName: string;
   };
 } & sendgrid.MailDataRequired;

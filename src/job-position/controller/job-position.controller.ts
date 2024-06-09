@@ -27,6 +27,7 @@ import { UpdateAddressDto } from '../dtos/request/update-address.dto';
 import { AddressIdDto } from '../../common/dtos/request/address-id.dto';
 import { permissions } from '../../../prisma/seeds/permissions.seed';
 import { JobPositionFilterDto } from '../dtos/request/job-position-filter.dto';
+import { JobPositionCountDto } from '../dtos/response/job-position-count.dto';
 
 @ApiTags('Job Positions Endpoints')
 @Controller('job-positions')
@@ -53,6 +54,12 @@ export class JobPositionController {
     @Query() jobPositionFilterDto: JobPositionFilterDto,
   ): Promise<PaginatedDto<JobPositionDto>> {
     return this.jobPositionService.findAll(pageDto, jobPositionFilterDto);
+  }
+
+  @Auth({ permissions: [permissions.READ_JOB.codename] })
+  @Get('/count')
+  async findAllJob(): Promise<JobPositionCountDto> {
+    return this.jobPositionService.findAllJob();
   }
 
   @Auth({ permissions: [permissions.READ_JOB.codename] })

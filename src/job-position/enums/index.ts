@@ -8,8 +8,8 @@ export enum ContractTypeEnum {
 }
 
 export enum StatusEnum {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  ACTIVE = 'Activo',
+  INACTIVE = 'Inactivo',
 }
 
 export enum WorkdayEnum {

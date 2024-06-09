@@ -26,7 +26,8 @@
   "TEST_TYPE": "Test Type",
   "JOB_POSITION": "Job Position",
   "JOB_APPLICATION": "Job Aplication",
-  "MEETING": "meeting",
+  "MEETING": "Meeting",
   "ADDRESS": "Address",
-  "PRIVACY_SETTINGS": "Privacy Settings"
+  "PRIVACY_SETTINGS": "Privacy Settings",
+  "EMAILS": "Email"
 }

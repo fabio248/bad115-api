@@ -24,7 +24,7 @@ import { UpdateMeetingDto } from '../dtos/request/update-meeting.dto';
 export class MeetingController {
   constructor(private readonly meetingService: MeetingService) {}
   @Post('/jobAplication/:jobAplicationId')
-  //   @Auth({ permissions: [permissions.CREATE_.codename] })
+  // @Auth({ permissions: [permissions.CREATE_.codename] })
   create(
     @Param() { jobAplicationId }: JobAplicationIdDto,
     @Body() createMeetingAplicationDto: CreateMeetingAplicationDto,

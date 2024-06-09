@@ -15,6 +15,8 @@ export interface IAppConfig {
       rejectUnblock: string;
       approveUnblock: string;
       confirmationMeet: string;
+      notificationNewJobAplicationRecruiter: string;
+      notificationNewJobAplicationCandidate: string;
     };
   };
   aws: {

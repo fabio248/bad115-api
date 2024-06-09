@@ -534,7 +534,7 @@ model Recruiter {
   jobPosition JobPosition[]
   companies   CompanyRecruiter[]
 
-  persons Person?
+  person Person?
 
   @@map("mnt_reclutador")
 }
@@ -590,7 +590,7 @@ model JobApplication {
   updatedAt     DateTime  @updatedAt @map("modificado_en")
   deletedAt     DateTime? @map("eliminado_en")
 
-  jobPositionId String      @unique @map("id_puesto_trabajo")
+  jobPositionId String      @map("id_puesto_trabajo")
   jobPosition   JobPosition @relation(fields: [jobPositionId], references: [id])
 
   meeting Meeting[]

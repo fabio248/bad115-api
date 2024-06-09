@@ -21,8 +21,12 @@ export default registerAs(
         rejectUnblock:
           process.env.SENDGRID_REJECT_REQUEST_UNBLOCK_USER_MAIL_TEMPLATE_ID,
         approveUnblock:
-          process.env.SENDFRID_APPROVED_REQUEST_UNBLOCK_USER_MAIL_TEMPLATE_ID,
-        confirmationMeet: process.env.SENDFRID_SEND_CONFIRMATION_MEETING,
+          process.env.SENDGRID_APPROVED_REQUEST_UNBLOCK_USER_MAIL_TEMPLATE_ID,
+        confirmationMeet: process.env.SENDGRID_SEND_CONFIRMATION_MEETING,
+        notificationNewJobAplicationRecruiter:
+          process.env.SENDGRID_JOB_APPLICATION_CREATED_RECRUITER_TEMPLATE_ID,
+        notificationNewJobAplicationCandidate:
+          process.env.SENDGRID_JOB_APPLICATION_CREATED_CANDIDATE_TEMPLATE_ID,
       },
     },
     aws: {
