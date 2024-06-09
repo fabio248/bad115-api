@@ -119,6 +119,119 @@ export class JobPositionService {
     return plainToInstance(JobPositionDto, jobPosition);
   }
 
+  async calculatePercentageMatchCandidateJobPosition(
+    jobPositionId: string,
+    whereInput: Prisma.CandidateWhereInput = {},
+  ) {
+    const jobPosition = await this.prismaService.jobPosition.findUnique({
+      where: {
+        id: jobPositionId,
+      },
+      include: {
+        technicalSkills: {
+          include: {
+            technicalSkill: {
+              include: {
+                categoryTechnicalSkill: true,
+              },
+            },
+          },
+        },
+        languageSkills: {
+          include: {
+            language: true,
+          },
+        },
+      },
+    });
+
+    if (!jobPosition) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.JOB_POSITION'),
+          },
+        }),
+      );
+    }
+
+    const candidates = await this.prismaService.candidate.findMany({
+      where: {
+        ...whereInput,
+        deletedAt: null,
+      },
+      include: {
+        person: {
+          include: {
+            user: true,
+          },
+        },
+        technicalSkills: {
+          where: {
+            deletedAt: null,
+          },
+          include: {
+            technicalSkill: {
+              include: {
+                categoryTechnicalSkill: true,
+              },
+            },
+          },
+        },
+        languageSkills: {
+          where: {
+            deletedAt: null,
+          },
+          include: {
+            language: true,
+          },
+        },
+      },
+    });
+
+    const totalSkills =
+      jobPosition.technicalSkills.length + jobPosition.languageSkills.length;
+
+    const candidatesMatched = candidates.map((candidate) => {
+      const numberMatchedSkills =
+        candidate.technicalSkills.filter((candidateSkill) => {
+          return jobPosition.technicalSkills.some((jobPositionSkill) => {
+            return (
+              jobPositionSkill.technicalSkillId ===
+              candidateSkill.technicalSkillId
+            );
+          });
+        }).length +
+        candidate.languageSkills.filter((candidateSkill) => {
+          return jobPosition.languageSkills.some((jobPositionSkill) => {
+            return (
+              jobPositionSkill.languageId === candidateSkill.languageId &&
+              jobPositionSkill.skill === candidateSkill.skill &&
+              this.compareLanguageLevel(
+                candidateSkill.level,
+                jobPositionSkill.level,
+              )
+            );
+          });
+        }).length;
+
+      return {
+        percentage: +(numberMatchedSkills / totalSkills).toFixed(2),
+        candidate,
+      };
+    });
+
+    return candidatesMatched;
+  }
+
+  compareLanguageLevel(languageLevelA: string, languageLevelB: string) {
+    const languageLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+    return (
+      languageLevels.indexOf(languageLevelA) >=
+      languageLevels.indexOf(languageLevelB)
+    );
+  }
+
   async findAll(
     pageDto: PageDto,
     {

@@ -151,4 +151,15 @@ export class JobPositionController {
   async remove(@Param() { id }: IdDto) {
     return this.jobPositionService.remove(id);
   }
+
+  @ApiOperation({
+    summary: 'Use this endpoint to get candidates matched with job position',
+  })
+  @Auth({ permissions: [permissions.READ_JOB.codename] })
+  @Get(':id/candidates')
+  async matchedCandidates(@Param() { id }: IdDto) {
+    return this.jobPositionService.calculatePercentageMatchCandidateJobPosition(
+      id,
+    );
+  }
 }
