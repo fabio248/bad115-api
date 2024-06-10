@@ -17,7 +17,6 @@ import { MeetingIdDto } from '../dtos/request/create-meeting-id.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-response.decorator';
-import { UpdateMeetingDto } from '../dtos/request/update-meeting.dto';
 
 @Controller('recruiter/:recruiterId/meeting')
 @ApiTags('Recruiter Endpoints')
@@ -56,7 +55,7 @@ export class MeetingController {
   })
   // @Auth( { permissions: [permissions.UPDATE_.codename] })
   update(
-    @Body() updateMeetingDto: UpdateMeetingDto,
+    @Body() updateMeetingDto: CreateMeetingAplicationDto,
     @Param() { jobAplicationId }: JobAplicationIdDto,
     @Param() { meetingId }: MeetingIdDto,
   ): Promise<MeetingDto> {
@@ -67,7 +66,7 @@ export class MeetingController {
     );
   }
 
-  //   @Auth({ permissions: [permissions.DELETE_.codename] })
+  // @Auth({ permissions: [permissions.DELETE_.codename] })
   @ApiOperation({ summary: 'Use this endpoint to delete a meeting by id' })
   @Delete('/:meetingId')
   remove(@Param() { meetingId }: MeetingIdDto) {

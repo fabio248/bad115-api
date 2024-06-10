@@ -29,5 +29,6 @@
   "MEETING": "Reunion",
   "ADDRESS": "Dirección",
   "PRIVACY_SETTINGS": "Configuracion de privacidad",
-  "EMAILS": "Correo electrónico"
+  "EMAILS": "Correo electrónico",
+  "CRON_JOB": "La fecha de ejecución debe ser al menos un día después de ahora."
 }

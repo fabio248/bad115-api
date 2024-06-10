@@ -21,6 +21,7 @@ import { RecruitersModule } from './recruiters/recruiters.module';
 import { FilesModule } from './files/files.module';
 import { JobPositionModule } from './job-position/job-position.module';
 import { JobAplicationModule } from './job-aplication/job-aplication.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { JobAplicationModule } from './job-aplication/job-aplication.module';
       ignoreErrors: false,
       global: true,
     }),
+    ScheduleModule.forRoot(),
     CommonModule,
     AuthModule,
     UsersModule,
