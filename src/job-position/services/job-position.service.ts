@@ -20,6 +20,8 @@ import { AddressesService } from '../../persons/services/addresses.service';
 import { JobPositionFilterDto } from '../dtos/request/job-position-filter.dto';
 import { JobPositionCountDto } from '../dtos/response/job-position-count.dto';
 import { StatusEnum } from '../enums';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { RECOMMENDED_JOB_POSITION } from '../../common/events/recommended-job-position.event';
 
 @Injectable()
 export class JobPositionService {
@@ -51,6 +53,7 @@ export class JobPositionService {
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
     private readonly addressesService: AddressesService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async create(
@@ -117,6 +120,8 @@ export class JobPositionService {
       },
       include: this.include,
     });
+
+    this.eventEmitter.emit(RECOMMENDED_JOB_POSITION, jobPosition.id);
 
     return plainToInstance(JobPositionDto, jobPosition);
   }

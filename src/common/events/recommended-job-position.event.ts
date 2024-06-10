@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 export const RECOMMENDED_JOB_POSITION = Symbol('RECOMMENDED_JOB_POSITION');
 
 @Injectable()
-export class MailsEvent {
+export class RecommendedJobPositionEvent {
   constructor(
     private readonly mailsService: MailsService,
     private readonly jobPositionService: JobPositionService,
@@ -42,14 +42,14 @@ export class MailsEvent {
             templateId: this.configService.get(
               'app.sendgrid.templates.recommendedJobPosition',
             ),
-            from: this.configService.get('app.sendgrid.from'),
+            from: this.configService.get('app.sendgrid.email'),
             dynamicTemplateData: {
               userName: `${candidate.person.firstName} ${candidate.person.lastName}`,
               companyName: jobPosition.company.name,
               positionName: jobPosition.name,
               positionLink: `${this.configService.get(
                 'app.urls.front',
-              )}/login?redirect=/job-position/${jobPositionId}`,
+              )}?redirect=/job-position/${jobPositionId}`,
             },
           };
           return this.mailsService.sendMail(mailBody);
