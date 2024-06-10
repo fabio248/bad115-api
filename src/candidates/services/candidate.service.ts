@@ -64,7 +64,16 @@ export class CandidateService {
           : false,
       technicalSkills:
         privacySettings.technicalSkills === false
-          ? { where: { deletedAt: null } }
+          ? {
+              where: { deletedAt: null },
+              include: {
+                technicalSkill: {
+                  include: {
+                    categoryTechnicalSkill: true,
+                  },
+                },
+              },
+            }
           : false,
       tests:
         privacySettings.tests === false
@@ -223,8 +232,8 @@ export class CandidateService {
                    usuario.avatar          as "avatar",
                    (${searchQuery})        as score
             FROM mnt_cantidato candidate
-                    LEFT JOIN mnt_persona person ON candidate.id = person.candidateId
-                    JOIN mnt_usuario usuario ON person.userId = usuario.id
+                     LEFT JOIN mnt_persona person ON candidate.id = person.candidateId
+                     JOIN mnt_usuario usuario ON person.userId = usuario.id
             WHERE candidate.eliminado_en IS NULL
               AND ${searchQuery} > 0
             ORDER BY score DESC
