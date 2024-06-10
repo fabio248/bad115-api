@@ -1,5 +1,1 @@
-web: npm install
-web: npm run build
-web: npm run migrate:dev
-web: npm run prisma:seed
-web: npm run start
+web: npm install && npm run build && npm run migrate:dev && npm run prisma:seed && npm run start:prod
