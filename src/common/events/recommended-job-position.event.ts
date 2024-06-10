@@ -49,7 +49,7 @@ export class RecommendedJobPositionEvent {
               positionName: jobPosition.name,
               positionLink: `${this.configService.get(
                 'app.urls.front',
-              )}?redirect=/job-position/${jobPositionId}`,
+              )}?redirect=/dashboard/job-position/${jobPositionId}`,
             },
           };
           return this.mailsService.sendMail(mailBody);

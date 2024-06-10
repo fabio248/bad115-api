@@ -25,7 +25,7 @@ import { CreateCategoryDto } from 'src/candidates/dto/request/create-category.dt
 import { UpdateCategoryDto } from '../dtos/request/update-category.dto';
 
 @Controller('catalogs/technical-skills-candidate')
-@ApiTags('Technical Skill Candidate Endpoints')
+@ApiTags('Technical Skill Endpoints')
 export class TechnicalSkillController {
   constructor(private readonly technicalSkillService: TechnicalSkillService) {}
 
@@ -51,7 +51,8 @@ export class TechnicalSkillController {
 
   @ApiPaginatedResponse(CategoryTechnicalSkillDto)
   @ApiOperation({
-    summary: 'Use this endpoint to return all technical skill  paginated ',
+    summary:
+      'Use this endpoint to return all categories technical skill paginated ',
   })
   @Get('/paginated')
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })
@@ -131,6 +132,7 @@ export class TechnicalSkillController {
   ): Promise<CategoryTechnicalSkillDto> {
     return this.technicalSkillService.createCategory(createCategoryDto);
   }
+
   @Get('/category/:categoryId')
   @ApiOperation({ summary: 'Find a category - Only one category' })
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })
@@ -154,6 +156,7 @@ export class TechnicalSkillController {
       updateCategoryDto,
     );
   }
+
   @Delete('/category/:categoryId')
   @Auth({ permissions: [permissions.DELETE_CATALOG.codename] })
   @ApiOperation({
@@ -161,5 +164,17 @@ export class TechnicalSkillController {
   })
   removeCategory(@Param() { categoryId }: CategoryIdDto): Promise<void> {
     return this.technicalSkillService.removeCategory(categoryId);
+  }
+
+  @ApiPaginatedResponse(TechnicalSkillDto)
+  @ApiOperation({
+    summary: 'Use this endpoint to return all technical skill paginated',
+  })
+  @Get('technical-skills/paginated')
+  @Auth({ permissions: [permissions.READ_CATALOG.codename] })
+  findAllTechnicalSkillPaginated(
+    @Query() pageDto: PageDto,
+  ): Promise<PaginatedDto<TechnicalSkillDto>> {
+    return this.technicalSkillService.findAllTechnicalSkillPaginated(pageDto);
   }
 }

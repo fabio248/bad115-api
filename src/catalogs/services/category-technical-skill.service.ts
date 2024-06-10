@@ -35,6 +35,7 @@ export class TechnicalSkillService {
         id,
       },
     });
+
     if (!category) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -65,6 +66,7 @@ export class TechnicalSkillService {
         id,
       },
     });
+
     if (!technicalSkill) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -104,6 +106,9 @@ export class TechnicalSkillService {
         take,
         where: {
           deletedAt: null,
+        },
+        orderBy: {
+          name: 'asc',
         },
       }),
       this.prismaService.categoryTechnicalSkill.count({
@@ -187,9 +192,10 @@ export class TechnicalSkillService {
         ...createCategoryDto,
       },
     });
+
     if (!category) {
       throw new BadGatewayException(
-        this.i18n.t('exception.INTERNAL_SERVER.DEFAULT', {
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
           args: {
             entity: this.i18n.t('entities.CATEGORY'),
           },
@@ -205,6 +211,13 @@ export class TechnicalSkillService {
       {
         where: {
           id,
+        },
+        include: {
+          technicalSkill: {
+            where: {
+              deletedAt: null,
+            },
+          },
         },
       },
     );
@@ -236,7 +249,8 @@ export class TechnicalSkillService {
   }
 
   async removeCategory(id: string): Promise<void> {
-    this.findOneCategory(id);
+    await this.findOneCategory(id);
+
     await this.prismaService.categoryTechnicalSkill.update({
       where: {
         id,
@@ -246,5 +260,39 @@ export class TechnicalSkillService {
       },
     });
     return;
+  }
+
+  async findAllTechnicalSkillPaginated(
+    pageDto: PageDto,
+  ): Promise<PaginatedDto<TechnicalSkillDto>> {
+    const { skip, take } = getPaginationParams(pageDto);
+    const [allTechnicalSkill, totalItems] = await Promise.all([
+      this.prismaService.technicalSkill.findMany({
+        skip,
+        take,
+        where: {
+          deletedAt: null,
+        },
+        include: {
+          categoryTechnicalSkill: true,
+        },
+        orderBy: {
+          categoryTechnicalSkill: {
+            name: 'asc',
+          },
+        },
+      }),
+      this.prismaService.technicalSkill.count({
+        where: {
+          deletedAt: null,
+        },
+      }),
+    ]);
+    const pagination = getPaginationInfo(pageDto, totalItems);
+
+    return {
+      data: plainToInstance(TechnicalSkillDto, allTechnicalSkill),
+      pagination,
+    };
   }
 }
