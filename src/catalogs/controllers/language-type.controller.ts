@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { LanguageTypeService } from '../services/language-type.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -17,6 +18,9 @@ import { CreateLanguageTypesDto } from '../dtos/request/create-language-type.dto
 import { LanguageTypesDto } from '../dtos/response/language-type.dto';
 import { LanguageTypeIdDto } from '../dtos/request/create-language-types-id.dto';
 import { UpdateLanguageTypeDto } from '../dtos/request/update-language-type.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
+import { FilterLanguageDto } from '../dtos/request/filter-language.dto';
 
 @Controller('catalogs/language-type')
 @ApiTags('Language Types Endpoints')
@@ -29,6 +33,19 @@ export class LanguageTypeController {
     @Body() createLanguageTypesDto: CreateLanguageTypesDto,
   ): Promise<LanguageTypesDto> {
     return this.languageTypeService.create(createLanguageTypesDto);
+  }
+
+  @ApiPaginatedResponse(LanguageTypesDto)
+  @Auth({ permissions: [permissions.READ_CATALOG.codename] })
+  @Get('/paginated')
+  async findAllPaginated(
+    @Query() pageDto: PageDto,
+    @Query() filterLanguageDto: FilterLanguageDto,
+  ) {
+    return this.languageTypeService.findAllPaginated(
+      pageDto,
+      filterLanguageDto,
+    );
   }
 
   @Get('/:languageTypeId')

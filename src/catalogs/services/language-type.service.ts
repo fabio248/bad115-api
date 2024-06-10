@@ -7,6 +7,14 @@ import { CreateLanguageTypesDto } from '../dtos/request/create-language-type.dto
 import { LanguageTypesDto } from '../dtos/response/language-type.dto';
 import { plainToInstance } from 'class-transformer';
 import { UpdateLanguageTypeDto } from '../dtos/request/update-language-type.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import {
+  getPaginationInfo,
+  getPaginationParams,
+} from '../../common/utils/pagination.utils';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
+import { FilterLanguageDto } from '../dtos/request/filter-language.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class LanguageTypeService {
@@ -46,11 +54,49 @@ export class LanguageTypeService {
 
   async findAll(): Promise<LanguageTypesDto[]> {
     const languageTypes = await this.prismaService.language.findMany({
+      where: {
+        deletedAt: null,
+      },
       orderBy: {
         language: 'asc',
       },
     });
     return plainToInstance(LanguageTypesDto, languageTypes);
+  }
+
+  async findAllPaginated(
+    pageDto: PageDto,
+    { search }: FilterLanguageDto,
+  ): Promise<PaginatedDto<LanguageTypesDto>> {
+    const { skip, take } = getPaginationParams(pageDto);
+    const whereInput: Prisma.LanguageWhereInput = {
+      deletedAt: null,
+    };
+
+    if (search) {
+      whereInput.language = {
+        contains: search,
+      };
+    }
+
+    const [languageTypes, totalItems] = await Promise.all([
+      this.prismaService.language.findMany({
+        where: whereInput,
+        orderBy: {
+          language: 'asc',
+        },
+        skip,
+        take,
+      }),
+      this.prismaService.language.count({
+        where: whereInput,
+      }),
+    ]);
+
+    return {
+      data: plainToInstance(LanguageTypesDto, languageTypes),
+      pagination: getPaginationInfo(pageDto, totalItems),
+    };
   }
 
   async update(
