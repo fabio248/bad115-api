@@ -23,6 +23,7 @@ import { TechnicalSkillIdDto } from 'src/candidates/dto/request/technical-skill-
 import { UpdateTechnicalSkillTypeDto } from '../dtos/request/update-technical-skill.dto';
 import { CreateCategoryDto } from 'src/candidates/dto/request/create-category.dto';
 import { UpdateCategoryDto } from '../dtos/request/update-category.dto';
+import { FilterTechnicalSkillDto } from '../dtos/request/filter-technical-skill.dto';
 
 @Controller('catalogs/technical-skills-candidate')
 @ApiTags('Technical Skill Endpoints')
@@ -174,7 +175,11 @@ export class TechnicalSkillController {
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })
   findAllTechnicalSkillPaginated(
     @Query() pageDto: PageDto,
+    @Query() filterTechnicalSkillDto: FilterTechnicalSkillDto,
   ): Promise<PaginatedDto<TechnicalSkillDto>> {
-    return this.technicalSkillService.findAllTechnicalSkillPaginated(pageDto);
+    return this.technicalSkillService.findAllTechnicalSkillPaginated(
+      pageDto,
+      filterTechnicalSkillDto,
+    );
   }
 }

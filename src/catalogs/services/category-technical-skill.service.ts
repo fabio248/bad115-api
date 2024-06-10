@@ -18,6 +18,8 @@ import { CreateTechnicalSkillDto } from '../dtos/request/create-technical-skill.
 import { UpdateTechnicalSkillTypeDto } from '../dtos/request/update-technical-skill.dto';
 import { CreateCategoryDto } from 'src/candidates/dto/request/create-category.dto';
 import { UpdateCategoryDto } from '../dtos/request/update-category.dto';
+import { Prisma } from '@prisma/client';
+import { FilterTechnicalSkillDto } from '../dtos/request/filter-technical-skill.dto';
 
 @Injectable()
 export class TechnicalSkillService {
@@ -264,30 +266,46 @@ export class TechnicalSkillService {
 
   async findAllTechnicalSkillPaginated(
     pageDto: PageDto,
+    { search }: FilterTechnicalSkillDto,
   ): Promise<PaginatedDto<TechnicalSkillDto>> {
     const { skip, take } = getPaginationParams(pageDto);
+    const whereInput: Prisma.TechnicalSkillWhereInput = {
+      deletedAt: null,
+    };
+
+    if (search) {
+      whereInput.OR = [
+        { name: { contains: search } },
+        {
+          categoryTechnicalSkill: {
+            name: { contains: search },
+          },
+        },
+      ];
+    }
+
     const [allTechnicalSkill, totalItems] = await Promise.all([
       this.prismaService.technicalSkill.findMany({
         skip,
         take,
-        where: {
-          deletedAt: null,
-        },
+        where: whereInput,
         include: {
           categoryTechnicalSkill: true,
         },
-        orderBy: {
-          categoryTechnicalSkill: {
-            name: 'asc',
+        orderBy: [
+          {
+            categoryTechnicalSkill: {
+              name: 'asc',
+            },
           },
-        },
+          { name: 'asc' },
+        ],
       }),
       this.prismaService.technicalSkill.count({
-        where: {
-          deletedAt: null,
-        },
+        where: whereInput,
       }),
     ]);
+
     const pagination = getPaginationInfo(pageDto, totalItems);
 
     return {
