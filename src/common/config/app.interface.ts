@@ -17,6 +17,7 @@ export interface IAppConfig {
       confirmationMeet: string;
       notificationNewJobAplicationRecruiter: string;
       notificationNewJobAplicationCandidate: string;
+      recommendedJobPosition: string;
     };
   };
   aws: {

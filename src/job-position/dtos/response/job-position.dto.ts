@@ -26,6 +26,9 @@ export class JobPositionDto {
   readonly id: string;
 
   @Expose()
+  readonly name: string;
+
+  @Expose()
   readonly salaryRange: string;
 
   @Expose()

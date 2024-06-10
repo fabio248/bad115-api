@@ -46,7 +46,6 @@ export type RecommendedJobPositionTemplateData = {
     userName: string;
     positionName: string;
     companyName: string;
-    addressPosition: string;
     positionLink: string;
   };
 } & sendgrid.MailDataRequired;

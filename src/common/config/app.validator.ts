@@ -14,6 +14,7 @@ export const appValidator = Joi.object({
   SENDGRID_WELCOME_MAIL_TEMPLATE_ID: Joi.string().required(),
   SENDGRID_UNBLOCK_USER_MAIL_TEMPLATE_ID: Joi.string().required(),
   SENDGRID_SEND_CONFIRMATION_MEETING: Joi.string().required(),
+  SENDGRID_RECOMMENDED_JOB_POSITION_MAIL_TEMPLATE_ID: Joi.string().required(),
   // aws
   AWS_REGION: Joi.string().required(),
   AWS_ACCESS_KEY_ID: Joi.string().required(),

@@ -27,6 +27,8 @@ export default registerAs(
           process.env.SENDGRID_JOB_APPLICATION_CREATED_RECRUITER_TEMPLATE_ID,
         notificationNewJobAplicationCandidate:
           process.env.SENDGRID_JOB_APPLICATION_CREATED_CANDIDATE_TEMPLATE_ID,
+        recommendedJobPosition:
+          process.env.SENDGRID_RECOMMENDED_JOB_POSITION_MAIL_TEMPLATE_ID,
       },
     },
     aws: {

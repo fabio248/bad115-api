@@ -33,11 +33,13 @@ export class JobPositionService {
     },
     requirements: true,
     languageSkills: {
+      where: { deletedAt: null },
       include: {
         language: true,
       },
     },
     technicalSkills: {
+      where: { deletedAt: null },
       include: {
         technicalSkill: true,
       },
