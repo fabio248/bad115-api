@@ -249,6 +249,7 @@ export class JobPositionService {
       workday,
       modality,
       contractType,
+      companyId,
     }: JobPositionFilterDto = {},
   ): Promise<PaginatedDto<JobPositionDto>> {
     const { skip, take } = getPaginationParams(pageDto);
@@ -260,6 +261,10 @@ export class JobPositionService {
       whereInput.name = {
         contains: name,
       };
+    }
+
+    if (companyId) {
+      whereInput.companyId = companyId;
     }
 
     if (countryId || departmentId) {

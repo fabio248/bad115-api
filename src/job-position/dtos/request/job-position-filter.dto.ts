@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
 import {
   ContractTypeEnum,
@@ -31,4 +31,8 @@ export class JobPositionFilterDto {
 
   @IsOptional()
   readonly workday?: WorkdayEnum[] = [];
+
+  @IsOptional()
+  @IsUUID('4', { message: i18nValidationMessage('validation.IS_UUID') })
+  readonly companyId?: string;
 }
