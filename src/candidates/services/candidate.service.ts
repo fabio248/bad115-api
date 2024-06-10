@@ -77,7 +77,13 @@ export class CandidateService {
           : false,
       tests:
         privacySettings.tests === false
-          ? { where: { deletedAt: null } }
+          ? {
+              include: {
+                testType: true,
+                file: true,
+              },
+              where: { deletedAt: null },
+            }
           : false,
       laboralExperiences:
         privacySettings.laboralExperiences === false
@@ -85,7 +91,12 @@ export class CandidateService {
           : false,
       languageSkills:
         privacySettings.languageSkills === false
-          ? { where: { deletedAt: null } }
+          ? {
+              include: {
+                language: true,
+              },
+              where: { deletedAt: null },
+            }
           : false,
       participations:
         privacySettings.participations === false
