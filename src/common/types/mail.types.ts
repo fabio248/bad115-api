@@ -40,3 +40,13 @@ export type MailAlertJobPositionCandidateTemplateData = {
     companyName: string;
   };
 } & sendgrid.MailDataRequired;
+
+export type RecommendedJobPositionTemplateData = {
+  dynamicTemplateData: {
+    userName: string;
+    positionName: string;
+    companyName: string;
+    addressPosition: string;
+    positionLink: string;
+  };
+} & sendgrid.MailDataRequired;

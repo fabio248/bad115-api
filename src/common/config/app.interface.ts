@@ -25,4 +25,7 @@ export interface IAppConfig {
     secret: string;
     bucket: string;
   };
+  urls: {
+    front: string;
+  };
 }
