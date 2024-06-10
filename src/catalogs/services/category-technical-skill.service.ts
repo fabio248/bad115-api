@@ -83,7 +83,9 @@ export class TechnicalSkillService {
 
   async findAll(): Promise<CategoryTechnicalSkillDto[]> {
     const categoryTechnicalSkill =
-      await this.prismaService.categoryTechnicalSkill.findMany();
+      await this.prismaService.categoryTechnicalSkill.findMany({
+        where: { deletedAt: null },
+      });
 
     return plainToInstance(CategoryTechnicalSkillDto, categoryTechnicalSkill);
   }
@@ -92,6 +94,7 @@ export class TechnicalSkillService {
     const technicalSkill = await this.prismaService.technicalSkill.findMany({
       where: {
         categoryTechnicalSkillId: id,
+        deletedAt: null,
       },
     });
 
@@ -163,18 +166,30 @@ export class TechnicalSkillService {
     updateTechnicalSkillTypeDto: UpdateTechnicalSkillTypeDto,
   ): Promise<TechnicalSkillDto> {
     await this.findOne(id);
+
+    const { categoryTechnicalSkillId, ...updateData } =
+      updateTechnicalSkillTypeDto;
+
     const technicalSkill = await this.prismaService.technicalSkill.update({
       where: {
         id,
       },
-      data: updateTechnicalSkillTypeDto,
+      data: {
+        ...updateData,
+        categoryTechnicalSkill: {
+          connect: {
+            id: categoryTechnicalSkillId,
+          },
+        },
+      },
     });
 
     return plainToInstance(TechnicalSkillDto, technicalSkill);
   }
 
   async remove(id: string): Promise<void> {
-    this.findOne(id);
+    await this.findOne(id);
+
     await this.prismaService.technicalSkill.update({
       where: {
         id,
