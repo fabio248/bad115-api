@@ -34,7 +34,7 @@ export class TechnicalSkillController {
     summary:
       'use this endpoint to return all technical skills without paginated and filters',
   })
-  @Get('/technical-skill-candidate/technical-skill')
+  @Get('/technical-skill')
   @Auth({ permissions: [permissions.READ_CATALOG.codename] })
   findAllOnlyCategory(): Promise<CategoryTechnicalSkillDto[]> {
     return this.technicalSkillService.findAllOnlyCategory();
