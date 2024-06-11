@@ -61,19 +61,19 @@ export class JobPositionDto {
 
   @Expose()
   @Type(() => AddressDto)
-  readonly address: AddressDto;
+  readonly address?: AddressDto;
 
   @Expose()
   @Type(() => TechnicalSkillCandidateDto)
-  readonly technicalSkills: TechnicalSkillCandidateDto[];
+  readonly technicalSkills?: TechnicalSkillCandidateDto[];
 
   @Expose()
   @Type(() => LanguageSkillDto)
-  readonly languageSkills: LanguageSkillDto[];
+  readonly languageSkills?: LanguageSkillDto[];
 
   @Expose()
   @Type(() => RequirementDto)
-  requirements: RequirementDto[];
+  requirements?: RequirementDto[];
 
   @Expose()
   createdAt: Date;

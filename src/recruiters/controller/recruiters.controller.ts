@@ -3,6 +3,8 @@ import { RecruitersService } from '../services/recruiters.service';
 import { ApiTags } from '@nestjs/swagger';
 import { RecruiterIdDto } from '../dtos/request/recruiter-id.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
+import { JobPositionDto } from '../../job-position/dtos/response/job-position.dto';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 
 @ApiTags('Recruiters Endpoints')
 @Controller('recruiters')
@@ -14,6 +16,7 @@ export class RecruitersController {
     return this.recruitersServices.getRecruitersCompany(recruiterId);
   }
 
+  @ApiPaginatedResponse(JobPositionDto)
   @Get('/:recruiterId/job-positions')
   async findAllJobPositions(
     @Param() { recruiterId }: RecruiterIdDto,
