@@ -19,9 +19,10 @@ import { PageDto } from 'src/common/dtos/request/page.dto';
 import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-response.decorator';
 
 @Controller('recruiter/:recruiterId/meeting')
-@ApiTags('Recruiter Endpoints')
+@ApiTags('Recruiters Endpoints')
 export class MeetingController {
   constructor(private readonly meetingService: MeetingService) {}
+
   @Post('/jobAplication/:jobAplicationId')
   // @Auth({ permissions: [permissions.CREATE_.codename] })
   create(
@@ -33,12 +34,14 @@ export class MeetingController {
       createMeetingAplicationDto,
     );
   }
+
   // @Auth({ permissions: [permissions.READ_.codename] })
   @Get('/:meetingId')
   @ApiOperation({ summary: 'Get a meeting by id' })
   findOne(@Param() { meetingId }: MeetingIdDto): Promise<MeetingDto> {
     return this.meetingService.findOne(meetingId);
   }
+
   @Get('/jobAplication/:jobAplicationId')
   // @Auth({ permissions: [permissions.READ_.codename] })
   @ApiPaginatedResponse(MeetingDto)
