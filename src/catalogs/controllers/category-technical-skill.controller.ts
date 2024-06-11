@@ -30,6 +30,16 @@ import { FilterTechnicalSkillDto } from '../dtos/request/filter-technical-skill.
 export class TechnicalSkillController {
   constructor(private readonly technicalSkillService: TechnicalSkillService) {}
 
+  @ApiOperation({
+    summary:
+      'use this endpoint to return all technical skills without paginated and filters',
+  })
+  @Get('/technical-skill-candidate/technical-skill')
+  @Auth({ permissions: [permissions.READ_CATALOG.codename] })
+  findAllOnlyCategory(): Promise<CategoryTechnicalSkillDto[]> {
+    return this.technicalSkillService.findAllOnlyCategory();
+  }
+
   @Get('')
   @ApiOperation({
     summary: 'Use this endpoint to return all categories whithout paginated ',

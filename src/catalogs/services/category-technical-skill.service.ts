@@ -90,6 +90,15 @@ export class TechnicalSkillService {
     return plainToInstance(CategoryTechnicalSkillDto, categoryTechnicalSkill);
   }
 
+  async findAllOnlyCategory(): Promise<CategoryTechnicalSkillDto[]> {
+    const categoryTechnicalSkill =
+      await this.prismaService.technicalSkill.findMany({
+        where: { deletedAt: null },
+      });
+
+    return plainToInstance(CategoryTechnicalSkillDto, categoryTechnicalSkill);
+  }
+
   async findAllById(id: string): Promise<TechnicalSkillDto[]> {
     const technicalSkill = await this.prismaService.technicalSkill.findMany({
       where: {
