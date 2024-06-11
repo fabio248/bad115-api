@@ -80,6 +80,13 @@ export class RecruitersService {
         },
         include: {
           company: true,
+          address: {
+            include: {
+              country: true,
+              department: true,
+              municipality: true,
+            },
+          },
         },
         skip,
         take,
