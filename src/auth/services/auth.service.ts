@@ -70,7 +70,7 @@ export class AuthService {
 
     if (!isValidPassword) {
       const loginAttemps = user.loginAttemps + 1;
-      await this.usersServices.update(user.id, {
+      await this.usersServices.updateUser(user.id, {
         loginAttemps,
         isActive: loginAttemps < 3,
       });
@@ -85,7 +85,7 @@ export class AuthService {
       this.usersServices.findPermissions(
         user.roles.map((userRole) => userRole.roleId),
       ),
-      this.usersServices.update(user.id, {
+      this.usersServices.updateUser(user.id, {
         loginAttemps: 0,
       }),
     ]);

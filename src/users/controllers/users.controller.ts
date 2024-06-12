@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from '../services/users.service';
 import { Auth } from '../../auth/decorators/auth.decorator';
@@ -8,6 +8,7 @@ import { UserDto } from '../dtos/response/user.dto';
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { UserFilterDto } from '../dtos/request/user-filter.dto';
+import { UpdateUserDto } from '../dtos/request/update-user.dto';
 
 @ApiTags('Users Endpoints')
 @Controller('users')
@@ -31,5 +32,16 @@ export class UsersController {
     @Query() userFilterDto: UserFilterDto,
   ): Promise<PaginatedDto<UserDto>> {
     return this.usersService.findAll(pageDto, userFilterDto);
+  }
+
+  @Auth({
+    permissions: [permissions.MANAGE_USER.codename],
+  })
+  @Put('/:userId')
+  async update(
+    @Param() { userId }: UserIdDto,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.updateUser(userId, updateUserDto);
   }
 }

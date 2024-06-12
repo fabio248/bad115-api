@@ -210,14 +210,17 @@ export class UsersService {
     });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
     this.logger.log('update');
-    return this.prismaService.user.update({
+
+    const user = this.prismaService.user.update({
       where: {
         id,
       },
       data: updateUserDto,
     });
+
+    return plainToInstance(UserDto, user);
   }
 
   async findByRole(roles: string[]) {
@@ -339,6 +342,9 @@ export class UsersService {
   transformUsers(users): Array<User> {
     return users.map(({ roles, ...user }) => ({
       ...user,
+      person: {
+        ...user.person,
+      },
       roles: roles.map(({ role }) => ({
         ...role,
         permissions: role.permissions.map(
