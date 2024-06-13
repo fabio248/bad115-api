@@ -233,19 +233,25 @@ export const permissions = {
     name: 'Read job',
     codename: 'read:job',
     description: 'Permiso para leer oferta de empleos',
-    roles: [roles.ADMIN, roles.COMPANY, roles.RECRUITER, roles.CANDIDATE],
+    roles: [
+      roles.ADMIN,
+      roles.COMPANY,
+      roles.RECRUITER,
+      roles.CANDIDATE,
+      roles.USER,
+    ],
   },
   MANAGE_JOB: {
     name: 'Manage job',
     codename: 'manage:job',
     description: 'Permiso para gestionar oferta de empleos',
-    roles: [roles.ADMIN],
+    roles: [roles.ADMIN, roles.RECRUITER],
   },
   CREATE_APPLICATION: {
     name: 'Create application',
     codename: 'create:application',
     description: 'Permiso para aplicar a ofertas de empleo',
-    roles: [roles.ADMIN, roles.CANDIDATE],
+    roles: [roles.ADMIN, roles.CANDIDATE, roles.USER],
   },
   UPDATE_APPLICATION: {
     name: 'Update application',
@@ -263,7 +269,7 @@ export const permissions = {
     name: 'Read application',
     codename: 'read:application',
     description: 'Permiso para leer aplicaciones',
-    roles: [roles.ADMIN, roles.CANDIDATE, roles.RECRUITER],
+    roles: [roles.ADMIN, roles.CANDIDATE, roles.RECRUITER, roles.USER],
   },
   MANAGE_APPLICATION: {
     name: 'Manage application',

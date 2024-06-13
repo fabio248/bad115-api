@@ -128,33 +128,33 @@ async function main() {
     }
 
     if (existingPermission) {
-      await Promise.all([
-        prisma.permission.update({
+      await prisma.permission.update({
+        where: {
+          id: existingPermission?.id,
+        },
+        data: {
+          name: permission.name,
+          codename: permission.codename,
+          description: permission.description,
+        },
+      });
+
+      for await (const role of permission.roles) {
+        await prisma.rolPermission.upsert({
           where: {
-            id: existingPermission?.id,
-          },
-          data: {
-            name: permission.name,
-            codename: permission.codename,
-            description: permission.description,
-          },
-        }),
-        permission.roles.map((role) =>
-          prisma.rolPermission.upsert({
-            where: {
-              roleId_permissionId: {
-                roleId: storedRoles.find((r) => r.name === role).id,
-                permissionId: existingPermission.id,
-              },
-            },
-            create: {
+            roleId_permissionId: {
               roleId: storedRoles.find((r) => r.name === role).id,
               permissionId: existingPermission.id,
             },
-            update: {},
-          }),
-        ),
-      ]);
+          },
+          create: {
+            roleId: storedRoles.find((r) => r.name === role).id,
+            permissionId: existingPermission.id,
+          },
+          update: {},
+        });
+      }
+
       Logger.log(`Permission ${existingPermission.name} updated`, 'Seeder');
     }
   }
