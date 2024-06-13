@@ -29,6 +29,7 @@ export class TechnicalSkillCandidateService {
         id: candidateId,
       },
     });
+
     if (!candidate) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -44,6 +45,7 @@ export class TechnicalSkillCandidateService {
         categoryTechnicalSkillId: categoryId,
       },
     });
+
     if (!technicalSkill) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
@@ -53,6 +55,22 @@ export class TechnicalSkillCandidateService {
         }),
       );
     }
+
+    const existTechnicalSkillCandidate =
+      await this.prismaService.technicalSkillCandidate.findFirst({
+        where: {
+          candidateId,
+          technicalSkillId,
+          deletedAt: null,
+        },
+      });
+
+    if (existTechnicalSkillCandidate) {
+      throw new NotFoundException(
+        this.i18n.t('exception.CONFLICT.TECHNICAL_SKILL_ALREADY_EXISTS'),
+      );
+    }
+
     const technicalSkillCandidate =
       await this.prismaService.technicalSkillCandidate.create({
         data: {
@@ -88,6 +106,7 @@ export class TechnicalSkillCandidateService {
         }),
       );
     }
+
     const { skip, take } = getPaginationParams(pageDto);
     const [allTechnicalSkillCandidate, totalItems] = await Promise.all([
       this.prismaService.technicalSkillCandidate.findMany({
@@ -121,5 +140,56 @@ export class TechnicalSkillCandidateService {
       ),
       pagination,
     };
+  }
+
+  async findOne(candidateId: string, technicalSkillId: string) {
+    const technicalSkillCandidate =
+      await this.prismaService.technicalSkillCandidate.findFirst({
+        where: {
+          candidateId,
+          technicalSkillId,
+        },
+      });
+
+    if (!technicalSkillCandidate) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.TECHNICAL_SKILL_CANDIDATE'),
+          },
+        }),
+      );
+    }
+
+    return plainToInstance(TechnicalSkillCandidateDto, technicalSkillCandidate);
+  }
+
+  async remove(candidateId: string, technicalSkillId: string) {
+    const technicalSkillCandidate =
+      await this.prismaService.technicalSkillCandidate.findFirst({
+        where: {
+          candidateId,
+          technicalSkillId,
+        },
+      });
+
+    if (!technicalSkillCandidate) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.TECHNICAL_SKILL_CANDIDATE'),
+          },
+        }),
+      );
+    }
+
+    await this.prismaService.technicalSkillCandidate.update({
+      where: {
+        id: technicalSkillCandidate.id,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
   }
 }

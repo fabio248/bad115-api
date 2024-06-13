@@ -31,7 +31,8 @@
     "NO_SUPPORTED": "Attributes must not be empty",
     "REQUEST_ALREADY_EXISTS": "Request already sent, please wait for the response.",
     "CONTRACTED": "It is not possible to schedule a meet for this status",
-    "EMAILS_EQUALS": "It is not allowed to schedule a meeting with yourself :("
+    "EMAILS_EQUALS": "It is not allowed to schedule a meeting with yourself :(",
+    "TECHNICAL_SKILL_ALREADY_EXISTS": "Technical skill already exists."
   },
   "UNPROCESSABLE": {
     "ACCOUNT_ALREADY_ACTIVE": "Account is already active.",

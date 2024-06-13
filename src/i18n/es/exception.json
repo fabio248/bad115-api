@@ -30,7 +30,8 @@
     "NO_ADMINS": "Debe haber al menos un administrador en el sistema.",
     "NO_SUPPORTED": "Los atributos no deben estar vacíos.",
     "REQUEST_ALREADY_EXISTS": "Ya haz enviado una solicitud de desbloqueo, por favor espera a recibir respuesta.",
-    "EMAILS_EQUALS": "No es permitido agendar una reunión con usted mismo :("
+    "EMAILS_EQUALS": "No es permitido agendar una reunión con usted mismo :(",
+    "TECHNICAL_SKILL_ALREADY_EXISTS": "Ya tienes registrada esa habilidad técnica."
   },
   "UNPROCESSABLE": {
     "ACCOUNT_ALREADY_ACTIVE": "La cuenta ya está activa.",
