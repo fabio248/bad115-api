@@ -391,6 +391,10 @@ export class CompaniesService {
       where: {
         deletedAt: null,
       },
+      select: {
+        id: true,
+        name: true,
+      },
     });
     return plainToInstance(CompanyDto, companies);
   }

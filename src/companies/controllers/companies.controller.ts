@@ -28,7 +28,7 @@ import { RecruiterIdDto } from '../../recruiters/dtos/request/recruiter-id.dto';
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
-  @Auth({ permissions: [permissions.READ_COMPANY.codename] })
+  // @Auth({ permissions: [permissions.READ_COMPANY.codename] })
   @Get('/without-paginated')
   async findAllWithoutPaginated(): Promise<CompanyDto[]> {
     return this.companiesService.findAllWithoutPaginated();
