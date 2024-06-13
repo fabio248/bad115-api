@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { JobAplicationService } from 'src/job-aplication/services/job-aplication/job-aplication.service';
 import { CandidateIdDto } from 'src/candidates/dto/request/candidate-id.dto';
 import { CreateJobAplicationDto } from 'src/job-aplication/dto/request/create-job-aplication.dto';
@@ -8,6 +16,7 @@ import { JobPositionId } from 'src/candidates/dto/request/create-job-position-id
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 import { JobAplicationIdDto } from 'src/job-aplication/dto/request/create-job-aplication-id.dto';
+import { JobAplicationUpdateDto } from 'src/job-aplication/dto/request/job-apication-update.dto';
 
 @Controller('job-aplication')
 @ApiTags('Job Aplication Endpoints')
@@ -36,5 +45,24 @@ export class JobAplicationController {
     @Param() { jobAplicationId }: JobAplicationIdDto,
   ): Promise<JobAplicationDto> {
     return this.jobAplicationService.findOne(jobAplicationId);
+  }
+
+  @ApiOperation({ summary: 'Use this endpoint to update job aplications' })
+  @Auth({ permissions: [permissions.UPDATE_JOB.codename] })
+  @Put('/:jobAplicationId')
+  update(
+    @Param() { jobAplicationId }: JobAplicationIdDto,
+    @Body() updateJobAplication: JobAplicationUpdateDto,
+  ) {
+    return this.jobAplicationService.update(
+      jobAplicationId,
+      updateJobAplication,
+    );
+  }
+
+  @Delete('/:jobAplicationId')
+  @Auth({ permissions: [permissions.DELETE_JOB.codename] })
+  async remove(@Param() { jobAplicationId }: JobAplicationIdDto) {
+    return this.jobAplicationService.remove(jobAplicationId);
   }
 }

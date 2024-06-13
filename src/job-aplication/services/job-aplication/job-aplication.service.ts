@@ -19,6 +19,7 @@ import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SEND_EMAIL_EVENT } from 'src/common/events/mail.event';
 import { Prisma } from '@prisma/client';
+import { JobAplicationUpdateDto } from 'src/job-aplication/dto/request/job-apication-update.dto';
 
 @Injectable()
 export class JobAplicationService {
@@ -188,6 +189,7 @@ export class JobAplicationService {
     const jobAplication = await this.prismaService.jobApplication.findFirst({
       where: {
         id: id,
+        deletedAt: null,
       },
       include: {
         meeting: true,
@@ -200,7 +202,7 @@ export class JobAplicationService {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
           args: {
-            entity: this.i18n.t('entities.TEST'),
+            entity: this.i18n.t('entities.JOB_APPLICATION'),
           },
         }),
       );
@@ -216,5 +218,44 @@ export class JobAplicationService {
     }
 
     return plainToInstance(JobAplicationDto, { ...jobAplication, cv });
+  }
+
+  async update(
+    id: string,
+    updateJobAplication: JobAplicationUpdateDto,
+  ): Promise<JobAplicationDto> {
+    const findJobAplication = await this.findOne(id);
+
+    if (!findJobAplication) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.JOB_APPLICATION'),
+          },
+        }),
+      );
+    }
+    const jobAplication = await this.prismaService.jobApplication.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...updateJobAplication,
+      },
+    });
+
+    return plainToInstance(JobAplicationDto, { ...jobAplication });
+  }
+
+  async remove(id: string): Promise<void> {
+    await this.findOne(id);
+    await this.prismaService.jobApplication.update({
+      where: {
+        id: id,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
   }
 }
