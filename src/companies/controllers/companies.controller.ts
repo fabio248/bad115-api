@@ -29,6 +29,12 @@ export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
   @Auth({ permissions: [permissions.READ_COMPANY.codename] })
+  @Get('/without-paginated')
+  async findAllWithoutPaginated(): Promise<CompanyDto[]> {
+    return this.companiesService.findAllWithoutPaginated();
+  }
+
+  @Auth({ permissions: [permissions.READ_COMPANY.codename] })
   @ApiPaginatedResponse(CompanyDto)
   @Get('')
   async findAll(@Query() pageDto: PageDto) {

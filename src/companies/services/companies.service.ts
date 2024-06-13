@@ -386,4 +386,12 @@ export class CompaniesService {
       },
     });
   }
+  async findAllWithoutPaginated(): Promise<CompanyDto[]> {
+    const companies = await this.prismaService.company.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
+    return plainToInstance(CompanyDto, companies);
+  }
 }
