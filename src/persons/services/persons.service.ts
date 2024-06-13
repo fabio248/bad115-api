@@ -21,11 +21,14 @@ import { EL_SALVADOR } from '../../common/utils/constants';
 import { Prisma } from '@prisma/client';
 import { UpsertDocumentDto } from '../dtos/request/upsert-document.dto';
 import { DocumentDto } from '../dtos/response/document.dto';
+import { UpdateAddressDto } from '../../job-position/dtos/request/update-address.dto';
+import { AddressesService } from './addresses.service';
 
 @Injectable()
 export class PersonsService {
   constructor(
     private readonly prismaService: PrismaService,
+    private readonly addressesService: AddressesService,
     private readonly i18n: I18nService,
   ) {}
 
@@ -196,7 +199,9 @@ export class PersonsService {
     }
 
     if (person.address) {
-      throw new UnprocessableEntityException('Person already has an address');
+      throw new UnprocessableEntityException(
+        this.i18n.t('exception.UNPROCESSABLE.PERSON_ALREADY_HAS_ADDRESS'),
+      );
     }
 
     if (country.name === EL_SALVADOR) {
@@ -243,5 +248,14 @@ export class PersonsService {
     });
 
     return plainToInstance(DocumentDto, document);
+  }
+
+  async updateAddress(
+    personId: string,
+    updateAddressDto: UpdateAddressDto,
+  ): Promise<void> {
+    const person = await this.findOne(personId, { address: true });
+
+    await this.addressesService.update(person.address.id, updateAddressDto);
   }
 }

@@ -33,6 +33,7 @@
     "EMAILS_EQUALS": "No es permitido agendar una reunión con usted mismo :("
   },
   "UNPROCESSABLE": {
-    "ACCOUNT_ALREADY_ACTIVE": "La cuenta ya está activa."
+    "ACCOUNT_ALREADY_ACTIVE": "La cuenta ya está activa.",
+    "PERSON_ALREADY_HAS_ADDRESS": "La persona ya tiene una dirección."
   }
 }

@@ -24,6 +24,7 @@ import { CreateAddressDto } from '../dtos/request/create-address.dto';
 import { PersonIncludeDto } from '../dtos/request/person-include.dto';
 import { UpsertDocumentDto } from '../dtos/request/upsert-document.dto';
 import { DocumentDto } from '../dtos/response/document.dto';
+import { UpdateAddressDto } from '../../job-position/dtos/request/update-address.dto';
 
 @Controller('persons')
 @ApiTags('Persons Endpoints')
@@ -119,5 +120,14 @@ export class PersonsController {
     @Body() upsertDocumentDto: UpsertDocumentDto,
   ): Promise<DocumentDto> {
     return this.personsService.upsertDocument(personId, upsertDocumentDto);
+  }
+
+  @Auth({ permissions: [permissions.UPDATE_PERSON.codename] })
+  @Put(':personId/addresses')
+  async updateAddress(
+    @Param() { personId }: PersonIdDto,
+    @Body() updateAddressDto: UpdateAddressDto,
+  ) {
+    return this.personsService.updateAddress(personId, updateAddressDto);
   }
 }

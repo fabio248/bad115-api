@@ -34,6 +34,7 @@
     "EMAILS_EQUALS": "It is not allowed to schedule a meeting with yourself :("
   },
   "UNPROCESSABLE": {
-    "ACCOUNT_ALREADY_ACTIVE": "Account is already active."
+    "ACCOUNT_ALREADY_ACTIVE": "Account is already active.",
+    "PERSON_ALREADY_HAS_ADDRESS": "Person already has an address."
   }
 }
