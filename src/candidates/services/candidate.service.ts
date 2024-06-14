@@ -87,7 +87,10 @@ export class CandidateService {
           : false,
       laboralExperiences:
         privacySettings.laboralExperiences === false
-          ? { where: { deletedAt: null } }
+          ? {
+              where: { deletedAt: null },
+              orderBy: [{ finishDate: 'desc' }, { initDate: 'desc' }],
+            }
           : false,
       languageSkills:
         privacySettings.languageSkills === false
