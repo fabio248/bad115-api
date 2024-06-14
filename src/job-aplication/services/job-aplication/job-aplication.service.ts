@@ -20,10 +20,16 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SEND_EMAIL_EVENT } from 'src/common/events/mail.event';
 import { Prisma } from '@prisma/client';
 import { JobAplicationUpdateDto } from 'src/job-aplication/dto/request/job-apication-update.dto';
+import { PageDto } from '../../../common/dtos/request/page.dto';
+import {
+  getPaginationInfo,
+  getPaginationParams,
+} from '../../../common/utils/pagination.utils';
 
 @Injectable()
 export class JobAplicationService {
   private readonly logger = new Logger(JobAplicationService.name);
+
   constructor(
     private readonly prismaService: PrismaService,
     private readonly i18n: I18nService,
@@ -31,6 +37,7 @@ export class JobAplicationService {
     private readonly configService: ConfigService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
+
   async create(
     id: string,
     jobId: string,
@@ -183,6 +190,49 @@ export class JobAplicationService {
     );
 
     return plainToInstance(JobAplicationDto, { ...jobPosition, cv });
+  }
+
+  async findAllByJobPosition(jobPositionId: string, pageDto: PageDto) {
+    const { skip, take } = getPaginationParams(pageDto);
+    const [jobApplications, totalItems] = await Promise.all([
+      this.prismaService.jobApplication.findMany({
+        where: {
+          jobPositionId: jobPositionId,
+          deletedAt: null,
+        },
+        skip,
+        take,
+        include: {
+          meeting: {
+            where: { deletedAt: null },
+          },
+          file: true,
+          candidate: true,
+        },
+      }),
+      this.prismaService.jobApplication.count({
+        where: {
+          jobPositionId: jobPositionId,
+          deletedAt: null,
+        },
+      }),
+    ]);
+
+    return {
+      data: jobApplications.map((jobAplication) => {
+        let cv = null;
+
+        if (jobAplication.file) {
+          cv = this.filesService.getSignedUrlForFileRetrieval({
+            keyNameFile: jobAplication.file.name,
+            folderName: jobAplication.candidate.id,
+          });
+        }
+
+        return plainToInstance(JobAplicationDto, { ...jobAplication, cv });
+      }),
+      pagination: getPaginationInfo(pageDto, totalItems),
+    };
   }
 
   async findOne(id: string): Promise<JobAplicationDto> {

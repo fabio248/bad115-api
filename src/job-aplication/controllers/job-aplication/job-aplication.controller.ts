@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { JobAplicationService } from 'src/job-aplication/services/job-aplication/job-aplication.service';
 import { CandidateIdDto } from 'src/candidates/dto/request/candidate-id.dto';
@@ -17,6 +18,8 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 import { JobAplicationIdDto } from 'src/job-aplication/dto/request/create-job-aplication-id.dto';
 import { JobAplicationUpdateDto } from 'src/job-aplication/dto/request/job-apication-update.dto';
+import { PageDto } from '../../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../../common/dtos/response/paginated.dto';
 
 @Controller('job-aplication')
 @ApiTags('Job Aplication Endpoints')
@@ -37,6 +40,23 @@ export class JobAplicationController {
       createJobAplicationDto,
     );
   }
+
+  @ApiOperation({
+    summary:
+      'Use this endpoint to find all job applications by job position id',
+  })
+  @Auth({ permissions: [permissions.READ_JOB.codename] })
+  @Get('/job-position/:jobPositionId')
+  findAllByJobPosition(
+    @Param() { jobPositionId }: JobPositionId,
+    @Query() pageDto: PageDto,
+  ): Promise<PaginatedDto<JobAplicationDto>> {
+    return this.jobAplicationService.findAllByJobPosition(
+      jobPositionId,
+      pageDto,
+    );
+  }
+
   @ApiOperation({ summary: 'Use this endpoint to find a job aplication' })
   @Auth({ permissions: [permissions.READ_JOB.codename] })
   @Get('/:jobAplicationId')
