@@ -34,3 +34,23 @@ BEGIN
                 END;
         END;
 END;
+
+CREATE OR ALTER TRIGGER trg_block_user
+    ON mnt_usuario
+    AFTER UPDATE
+                              AS
+BEGIN
+    DECLARE @id_usuario VARCHAR(1000);
+    DECLARE @intentos_login INT;
+
+    -- Si es una actualización
+    IF EXISTS (SELECT 1 FROM inserted)
+        BEGIN
+            SELECT @id_usuario = id FROM inserted;
+            SELECT @intentos_login = intentos_login FROM inserted;
+            IF @intentos_login >= 3
+            BEGIN
+            UPDATE mnt_usuario SET mnt_usuario.esta_activo = 0 WHERE id = @id_usuario;
+        END;
+    END;
+END;

@@ -60,7 +60,7 @@ export class AuthService {
       );
     }
 
-    if (user.loginAttemps >= 3) {
+    if (!user.isActive) {
       throw new UnprocessableEntityException(
         this.i18n.t('exception.UNAUTHORIZED.MAX_LOGIN_ATTEMPTS'),
       );
@@ -72,7 +72,6 @@ export class AuthService {
       const loginAttemps = user.loginAttemps + 1;
       await this.usersServices.updateUser(user.id, {
         loginAttemps,
-        isActive: loginAttemps < 3,
       });
 
       throw new UnauthorizedException(
