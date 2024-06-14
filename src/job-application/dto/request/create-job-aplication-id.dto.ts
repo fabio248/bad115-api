@@ -4,5 +4,5 @@ import { IsNotEmpty, IsUUID } from 'class-validator';
 export class JobAplicationIdDto {
   @IsUUID(4, { message: i18nValidationMessage('validation.IS_UUID') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
-  readonly jobAplicationId: string;
+  readonly jobApplicationId: string;
 }

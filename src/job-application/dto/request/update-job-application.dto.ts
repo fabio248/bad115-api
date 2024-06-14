@@ -1,8 +1,8 @@
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { i18nValidationMessage } from 'nestjs-i18n';
-import { JobAplicationEnum } from 'src/job-aplication/enums/job-aplication.enum';
+import { JobAplicationEnum } from 'src/job-application/enums/job-aplication.enum';
 
-export class JobAplicationUpdateDto {
+export class UpdateJobApplicationDto {
   /*Enum:
      // Enum: Escucha, lectura, escritura y conversacion
      */

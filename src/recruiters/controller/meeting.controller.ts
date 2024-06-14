@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { MeetingService } from '../services/meeting.service';
-import { JobAplicationIdDto } from 'src/job-aplication/dto/request/create-job-aplication-id.dto';
+import { JobAplicationIdDto } from 'src/job-application/dto/request/create-job-aplication-id.dto';
 import { CreateMeetingAplicationDto } from '../dtos/request/create-meeting.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MeetingDto } from '../dtos/response/meeting.dto';
@@ -26,11 +26,11 @@ export class MeetingController {
   @Post('/jobAplication/:jobAplicationId')
   // @Auth({ permissions: [permissions.CREATE_.codename] })
   create(
-    @Param() { jobAplicationId }: JobAplicationIdDto,
+    @Param() { jobApplicationId }: JobAplicationIdDto,
     @Body() createMeetingAplicationDto: CreateMeetingAplicationDto,
   ): Promise<MeetingDto> {
     return this.meetingService.create(
-      jobAplicationId,
+      jobApplicationId,
       createMeetingAplicationDto,
     );
   }
@@ -46,10 +46,10 @@ export class MeetingController {
   // @Auth({ permissions: [permissions.READ_.codename] })
   @ApiPaginatedResponse(MeetingDto)
   findAll(
-    @Param() { jobAplicationId }: JobAplicationIdDto,
+    @Param() { jobApplicationId }: JobAplicationIdDto,
     @Query() pageDto: PageDto,
   ): Promise<PaginatedDto<MeetingDto>> {
-    return this.meetingService.findAll(jobAplicationId, pageDto);
+    return this.meetingService.findAll(jobApplicationId, pageDto);
   }
 
   @Put('/:meetingId/jobAplication/:jobAplicationId')
@@ -59,12 +59,12 @@ export class MeetingController {
   // @Auth( { permissions: [permissions.UPDATE_.codename] })
   update(
     @Body() updateMeetingDto: CreateMeetingAplicationDto,
-    @Param() { jobAplicationId }: JobAplicationIdDto,
+    @Param() { jobApplicationId }: JobAplicationIdDto,
     @Param() { meetingId }: MeetingIdDto,
   ): Promise<MeetingDto> {
     return this.meetingService.update(
       updateMeetingDto,
-      jobAplicationId,
+      jobApplicationId,
       meetingId,
     );
   }

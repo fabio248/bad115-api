@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
-import { JobAplicationEnum } from 'src/job-aplication/enums/job-aplication.enum';
+import { JobAplicationEnum } from 'src/job-application/enums/job-aplication.enum';
 
 @Exclude()
 export class JobAplicationDto {

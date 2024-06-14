@@ -20,7 +20,7 @@ import { CompaniesModule } from './companies/companies.module';
 import { RecruitersModule } from './recruiters/recruiters.module';
 import { FilesModule } from './files/files.module';
 import { JobPositionModule } from './job-position/job-position.module';
-import { JobAplicationModule } from './job-aplication/job-aplication.module';
+import { JobApplicationModule } from './job-application/job-application.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -67,7 +67,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     RecruitersModule,
     FilesModule,
     JobPositionModule,
-    JobAplicationModule,
+    JobApplicationModule,
   ],
   controllers: [AppController],
   providers: [AuthModule, UsersModule],

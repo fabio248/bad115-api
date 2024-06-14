@@ -28,11 +28,17 @@ import { AddressIdDto } from '../../common/dtos/request/address-id.dto';
 import { permissions } from '../../../prisma/seeds/permissions.seed';
 import { JobPositionFilterDto } from '../dtos/request/job-position-filter.dto';
 import { JobPositionCountDto } from '../dtos/response/job-position-count.dto';
+import { JobApplicationService } from '../../job-application/services/job-aplication/job-application.service';
+import { JobPositionId } from '../../candidates/dto/request/create-job-position-id.dto';
+import { JobAplicationDto } from '../../job-application/dto/response/job-aplication.dto';
 
 @ApiTags('Job Positions Endpoints')
 @Controller('job-positions')
 export class JobPositionController {
-  constructor(private readonly jobPositionService: JobPositionService) {}
+  constructor(
+    private readonly jobPositionService: JobPositionService,
+    private readonly jobApplicationService: JobApplicationService,
+  ) {}
 
   @Post('')
   @Auth({ permissions: [permissions.CREATE_JOB.codename] })
@@ -160,6 +166,22 @@ export class JobPositionController {
   async matchedCandidates(@Param() { id }: IdDto) {
     return this.jobPositionService.calculatePercentageMatchCandidateJobPosition(
       id,
+    );
+  }
+
+  @ApiOperation({
+    summary:
+      'Use this endpoint to find all job applications by job position id',
+  })
+  @Auth({ permissions: [permissions.READ_APPLICATION.codename] })
+  @Get('/:jobPositionId/job-applications')
+  findAllByJobPosition(
+    @Param() { jobPositionId }: JobPositionId,
+    @Query() pageDto: PageDto,
+  ): Promise<PaginatedDto<JobAplicationDto>> {
+    return this.jobApplicationService.findAllByJobPosition(
+      jobPositionId,
+      pageDto,
     );
   }
 }
