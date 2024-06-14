@@ -45,25 +45,49 @@ export class MeetingService {
     const dateNow = new Date();
     const date = new Date(createMeetingAplicationDto.executionDate);
 
-    if (dateNow.toLocaleString()[0] != date.toLocaleString()) [0];
-    {
-      const meeting = await this.prismaService.$transaction(async (prisma) => {
-        const createdMeeting = await prisma.meeting.create({
-          data: {
-            ...createMeetingAplicationDto,
-            jobAplication: {
-              connect: {
-                id: id,
-              },
+    const formattedDateNow = format(dateNow, 'yyyy-MM-dd');
+    const formattedDate = format(date, 'yyyy-MM-dd');
+
+    if (formattedDateNow === formattedDate) {
+      throw new BadRequestException(
+        this.i18n.t('exception.CONFLICT.MEETING_VALIDATE', {
+          args: {
+            entity: this.i18n.t('entities.MEETING'),
+          },
+        }),
+      );
+    }
+    const meetingHour = date.getHours();
+    const minAllowedHour = 6;
+    const maxAllowedHour = 18;
+
+    if (meetingHour < minAllowedHour || meetingHour > maxAllowedHour) {
+      throw new BadRequestException(
+        this.i18n.t('exception.CONFLICT.MEETING_VALIDATE_HOURS', {
+          args: {
+            entity: this.i18n.t('entities.MEETING'),
+          },
+        }),
+      );
+    }
+
+    const meeting = await this.prismaService.$transaction(async (prisma) => {
+      const createdMeeting = await prisma.meeting.create({
+        data: {
+          ...createMeetingAplicationDto,
+          jobAplication: {
+            connect: {
+              id: id,
             },
           },
-        });
-        await this.SendScheduledEmail(id, createMeetingAplicationDto);
-        return createdMeeting;
+        },
       });
-      this.addCronJob(`cronjob${id}${id}`, id, createMeetingAplicationDto);
-      return plainToInstance(MeetingDto, meeting);
-    }
+      await this.SendScheduledEmail(id, createMeetingAplicationDto);
+      return createdMeeting;
+    });
+
+    this.addCronJob(`cronjob${id}${id}`, id, createMeetingAplicationDto);
+    return plainToInstance(MeetingDto, meeting);
   }
 
   async findOne(id: string): Promise<MeetingDto> {
@@ -206,9 +230,8 @@ export class MeetingService {
 
     const newformat = formattedDate.split('/');
 
-    const dateCronJob = `0 ${newformat[2].split(' ')[1].split(':')[1]} ${
-      newformat[2].split(' ')[1].split(':')[0]
-    } ${newformat[0]} ${newformat[1]} *`;
+    const dateCronJob = `0 0 13
+     ${newformat[0]} ${newformat[1]} *`;
     const job = new CronJob(`${dateCronJob}`, async () => {
       this.logger.warn(
         `time ${createMeetingAplicationDto.executionDate} for job ${name} to run!`,
