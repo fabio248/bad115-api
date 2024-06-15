@@ -30,5 +30,6 @@
   "ADDRESS": "Address",
   "PRIVACY_SETTINGS": "Privacy Settings",
   "EMAILS": "Email",
-  "CRON_JOB": "The execution date must be at least one day from now."
+  "CRON_JOB": "The execution date must be at least one day from now.",
+  "CRON": "CronJob"
 }

@@ -613,6 +613,8 @@ model Meeting {
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
 
+  alerts Alerts[]
+
   jobAplicationId String?
   jobAplication   JobApplication? @relation(fields: [jobAplicationId], references: [id])
 
@@ -697,4 +699,17 @@ model PrivacySettings {
   person Person? @relation
 
   @@map("mnt_configuracion_de_privacidad")
+}
+model Alerts {
+  id String @id @default(uuid())
+  name String  @map("nombre_tarea_programada")
+  dateCronJob DateTime @map("fecha_de_tarea_programadas")
+
+  meetingId String  @map("id_reunion")
+  meeting   Meeting    @relation(fields: [meetingId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("creado_en")
+  updatedAt DateTime  @updatedAt @map("modificado_en")
+  deletedAt DateTime? @map("eliminado_en")
+  @@map("mnt_tarea_programada")
 }

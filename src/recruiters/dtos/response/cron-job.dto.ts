@@ -2,21 +2,15 @@ import { Exclude, Expose } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
 
 @Exclude()
-export class MeetingDto {
+export class CronJobDto {
   @Expose()
   readonly id: string;
 
   @Expose()
-  readonly executionDate: Date;
+  readonly name: string;
 
   @Expose()
-  readonly link: string;
-
-  @Expose()
-  readonly jobAplication: string;
-
-  @Expose()
-  readonly alerts: string;
+  readonly dateCronJob: string;
 
   @ApiHideProperty()
   readonly createdAt: Date;

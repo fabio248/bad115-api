@@ -19,11 +19,13 @@ import { MailAlertMeetingTemplateData } from 'src/common/types/mail.types';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SEND_EMAIL_EVENT } from 'src/common/events/mail.event';
+import { FormattedDate } from '../utils/formatted-date.utils';
 
-import { format, subDays } from 'date-fns';
+import { format } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
+import { CronJobDto } from '../dtos/response/cron-job.dto';
 
 @Injectable()
 export class MeetingService {
@@ -59,7 +61,7 @@ export class MeetingService {
     }
     const meetingHour = date.getHours();
     const minAllowedHour = 6;
-    const maxAllowedHour = 18;
+    const maxAllowedHour = 24;
 
     if (meetingHour < minAllowedHour || meetingHour > maxAllowedHour) {
       throw new BadRequestException(
@@ -85,8 +87,36 @@ export class MeetingService {
       await this.SendScheduledEmail(id, createMeetingAplicationDto);
       return createdMeeting;
     });
+    const idMeeting = await this.prismaService.jobApplication.findUnique({
+      where: {
+        id: id,
+        deletedAt: null,
+      },
+      select: {
+        meeting: {
+          where: {
+            executionDate: createMeetingAplicationDto.executionDate,
+          },
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
 
-    this.addCronJob(`cronjob${id}${id}`, id, createMeetingAplicationDto);
+    await this.prismaService.alerts.create({
+      data: {
+        name: `cronjob${id}${id}`,
+        dateCronJob: createMeetingAplicationDto.executionDate,
+        meeting: {
+          connect: {
+            id: idMeeting.meeting[0].id,
+          },
+        },
+      },
+    });
+
+    this.addCronJob(`cronjob${id}${id}`, id, meeting);
     return plainToInstance(MeetingDto, meeting);
   }
 
@@ -113,6 +143,7 @@ export class MeetingService {
             },
           },
         },
+        alerts: true,
       },
     });
 
@@ -156,6 +187,13 @@ export class MeetingService {
           jobAplicationId: id,
           deletedAt: null,
         },
+        include: {
+          alerts: {
+            where: {
+              deletedAt: null,
+            },
+          },
+        },
       }),
       this.prismaService.meeting.count({
         where: {
@@ -187,9 +225,7 @@ export class MeetingService {
         }),
       );
     }
-    if (meeting.executionDate !== createJobAplicationDto.executionDate) {
-      this.addCronJob(`cronjob${meeting.id}${id}`, id, createJobAplicationDto);
-    }
+
     const updateMeeting = await this.prismaService.meeting.update({
       where: {
         id: meetId,
@@ -217,22 +253,16 @@ export class MeetingService {
     });
   }
 
-  addCronJob(
+  async addCronJob(
     name: string,
     id: string,
     createMeetingAplicationDto: CreateMeetingAplicationDto,
   ) {
-    const newDay = subDays(createMeetingAplicationDto.executionDate, 1);
-    const formattedDate = `${format(new Date(newDay), 'dd/MM/yyyy')} ${format(
-      new Date(createMeetingAplicationDto.executionDate),
-      'hh:mm',
-    )}`;
+    const resultFormattedDate = FormattedDate(
+      createMeetingAplicationDto.executionDate,
+    );
 
-    const newformat = formattedDate.split('/');
-
-    const dateCronJob = `0 0 13
-     ${newformat[0]} ${newformat[1]} *`;
-    const job = new CronJob(`${dateCronJob}`, async () => {
+    const job = new CronJob(`${resultFormattedDate}`, async () => {
       this.logger.warn(
         `time ${createMeetingAplicationDto.executionDate} for job ${name} to run!`,
       );
@@ -366,5 +396,24 @@ export class MeetingService {
         }),
       );
     }
+  }
+
+  async findOneCronJob(id: string): Promise<CronJobDto> {
+    const cronjob = await this.prismaService.alerts.findFirst({
+      where: {
+        id: id,
+        deletedAt: null,
+      },
+    });
+    if (!cronjob) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.CRON'),
+          },
+        }),
+      );
+    }
+    return plainToInstance(CronJobDto, cronjob);
   }
 }

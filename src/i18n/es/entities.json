@@ -30,5 +30,6 @@
   "ADDRESS": "Dirección",
   "PRIVACY_SETTINGS": "Configuración de privacidad",
   "EMAILS": "Correo electrónico",
-  "CRON_JOB": "La fecha de ejecución debe ser al menos un día después de ahora."
+  "CRON_JOB": "La fecha de ejecución debe ser al menos un día después de ahora.",
+  "CRON": "Tarea Progrmada"
 }

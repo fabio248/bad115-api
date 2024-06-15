@@ -5,9 +5,9 @@ export class CreateMeetingAplicationDto {
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
   @IsUrl({}, { message: i18nValidationMessage('validation.IS_URL') })
-  link: string;
+  readonly link: string;
 
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
-  executionDate: Date;
+  readonly executionDate: Date;
 }

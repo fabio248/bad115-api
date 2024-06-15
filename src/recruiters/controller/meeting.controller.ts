@@ -17,13 +17,15 @@ import { MeetingIdDto } from '../dtos/request/create-meeting-id.dto';
 import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
 import { PageDto } from 'src/common/dtos/request/page.dto';
 import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-response.decorator';
+import { CronJobIdDto } from '../dtos/request/create-cron-job-id.dto';
+import { CronJobDto } from '../dtos/response/cron-job.dto';
 
-@Controller('recruiter/:recruiterId/meeting')
+@Controller('recruiter/meeting')
 @ApiTags('Recruiters Endpoints')
 export class MeetingController {
   constructor(private readonly meetingService: MeetingService) {}
 
-  @Post('/jobAplication/:jobAplicationId')
+  @Post('/jobAplication/:jobApplicationId')
   // @Auth({ permissions: [permissions.CREATE_.codename] })
   create(
     @Param() { jobApplicationId }: JobAplicationIdDto,
@@ -42,7 +44,7 @@ export class MeetingController {
     return this.meetingService.findOne(meetingId);
   }
 
-  @Get('/jobAplication/:jobAplicationId')
+  @Get('/jobAplication/:jobApplicationId')
   // @Auth({ permissions: [permissions.READ_.codename] })
   @ApiPaginatedResponse(MeetingDto)
   findAll(
@@ -52,7 +54,7 @@ export class MeetingController {
     return this.meetingService.findAll(jobApplicationId, pageDto);
   }
 
-  @Put('/:meetingId/jobAplication/:jobAplicationId')
+  @Put('/:meetingId/jobAplication/:jobApplicationId')
   @ApiOperation({
     summary: 'Use this endpoint to Update a meeting by id and JobAplicationId',
   })
@@ -74,5 +76,12 @@ export class MeetingController {
   @Delete('/:meetingId')
   remove(@Param() { meetingId }: MeetingIdDto) {
     return this.meetingService.remove(meetingId);
+  }
+
+  // @Auth({ permissions: [permissions.READ_.codename] })
+  @Get('/cron-job/:cronJobId')
+  @ApiOperation({ summary: 'Get a cron job by id' })
+  findOneCronJob(@Param() { cronJobId }: CronJobIdDto): Promise<CronJobDto> {
+    return this.meetingService.findOneCronJob(cronJobId);
   }
 }
