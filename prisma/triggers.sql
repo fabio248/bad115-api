@@ -54,3 +54,24 @@ BEGIN
         END;
     END;
 END;
+
+
+-- validate date in update information meeting
+CREATE TRIGGER trg_update_fecha
+ON mnt_reunion
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @nuevaFecha DATE;
+	DECLARE @idReunion NVARCHAR(36);
+
+    SELECT @nuevaFecha = i.fecha_de_ejecucion,
+           @idReunion = i.id
+    FROM inserted i;
+
+    UPDATE mnt_tarea_programada
+    SET mnt_tarea_programada.fecha_de_tarea_programadas = @nuevaFecha
+    WHERE id_Reunion = @idReunion;
+END;
