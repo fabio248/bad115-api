@@ -12,7 +12,7 @@ export class CreateJobAplicationDto {
   })
   readonly status: JobAplicationEnum;
 
-  @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })
+  @IsOptional()
   @IsString({ message: i18nValidationMessage('validation.IS_STRING') })
   recomendation?: string;
 
