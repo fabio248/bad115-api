@@ -41,7 +41,7 @@ export class JobApplicationController {
   }
 
   @ApiOperation({ summary: 'Use this endpoint to find a job aplication' })
-  @Auth({ permissions: [permissions.READ_JOB.codename] })
+  @Auth({ permissions: [permissions.READ_APPLICATION.codename] })
   @Get('/:jobApplicationId')
   @ApiOperation({ summary: 'Get a job Aplication by id' })
   findOne(

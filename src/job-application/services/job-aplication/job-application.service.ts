@@ -46,31 +46,13 @@ export class JobApplicationService {
     const { mimeTypeFile, ...createData } = createJobAplicationDto;
     this.logger.log('creating a new job aplication');
 
-    const { candidate, jobApplicationData } =
+    const { candidate, jobApplicationData, jobPositionInfo } =
       await this.prismaService.$transaction(async (prisma) => {
         const candidate = await prisma.candidate.findUnique({
           where: {
             id: id,
           },
           include: {
-            jobApplications: {
-              include: {
-                jobPosition: {
-                  include: {
-                    company: true,
-                    recruiter: {
-                      include: {
-                        person: {
-                          include: {
-                            user: true,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
             person: {
               include: {
                 user: true,
@@ -83,6 +65,33 @@ export class JobApplicationService {
             this.i18n.t('exception.NOT_FOUND.DEFAULT', {
               args: {
                 entity: this.i18n.t('entities.CANDIDATE'),
+              },
+            }),
+          );
+        }
+        const jobPositionInfo = await prisma.jobPosition.findUnique({
+          where: {
+            id: jobId,
+            deletedAt: null,
+          },
+          include: {
+            recruiter: {
+              include: {
+                person: {
+                  include: {
+                    user: true,
+                  },
+                },
+              },
+            },
+            company: true,
+          },
+        });
+        if (!jobPositionInfo) {
+          throw new NotFoundException(
+            this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+              args: {
+                entity: this.i18n.t('entities.JOB_POSITION'),
               },
             }),
           );
@@ -102,17 +111,16 @@ export class JobApplicationService {
           },
           status: createJobAplicationDto.status,
         };
-        return { candidate, jobApplicationData };
+        return { candidate, jobApplicationData, jobPositionInfo };
       });
 
     const [jobPosition, cv] = await this.prismaService.$transaction(
       async (tPrisma) => {
         if (!mimeTypeFile) {
-          return [
-            tPrisma.jobApplication.create({
-              data: jobApplicationData,
-            }),
-          ];
+          const jobApplication = await tPrisma.jobApplication.create({
+            data: jobApplicationData,
+          });
+          return [jobApplication, ''];
         }
 
         const keyFile = `${uuidv4()}-jobAplication`;
@@ -129,12 +137,12 @@ export class JobApplicationService {
         };
         if (
           candidate.person.user.email !=
-          candidate.jobApplications[0].jobPosition.recruiter.person.user.email
+          jobPositionInfo.recruiter.person.user.email
         ) {
           const mailBodyRecruiter: MailAlertJobPositionRecruiterTemplateData = {
             dynamicTemplateData: {
-              recruiterName: `${candidate.jobApplications[0].jobPosition.recruiter.person.firstName} ${candidate.jobApplications[0].jobPosition.recruiter.person.lastName} `,
-              positionName: candidate.jobApplications[0].jobPosition.name,
+              recruiterName: `${jobPositionInfo.recruiter.person.firstName} ${jobPositionInfo.recruiter.person.lastName} `,
+              positionName: jobPositionInfo.name,
               candidateName: `${candidate.person.firstName} ${candidate.person.lastName}`,
               candidateEmail: candidate.person.user.email,
             },
@@ -142,15 +150,13 @@ export class JobApplicationService {
             templateId: this.configService.get(
               'app.sendgrid.templates.notificationNewJobAplicationRecruiter',
             ),
-            to: candidate.jobApplications[0].jobPosition.recruiter.person.user
-              .email,
+            to: jobPositionInfo.recruiter.person.user.email,
           };
           const mailBodyCandidate: MailAlertJobPositionCandidateTemplateData = {
             dynamicTemplateData: {
               userName: `${candidate.person.firstName} ${candidate.person.lastName}`,
-              positionName: candidate.jobApplications[0].jobPosition.name,
-              companyName:
-                candidate.jobApplications[0].jobPosition.company.name,
+              positionName: jobPositionInfo.name,
+              companyName: jobPositionInfo.company.name,
             },
             from: this.configService.get('app.sendgrid.email'),
             templateId: this.configService.get(
@@ -189,7 +195,10 @@ export class JobApplicationService {
       },
     );
 
-    return plainToInstance(JobAplicationDto, { ...jobPosition, cv });
+    return plainToInstance(JobAplicationDto, {
+      ...jobPosition,
+      cv,
+    });
   }
 
   async findAllByJobPosition(jobPositionId: string, pageDto: PageDto) {
