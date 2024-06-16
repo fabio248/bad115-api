@@ -135,45 +135,11 @@ export class JobApplicationService {
             id: file.id,
           },
         };
+
         if (
-          candidate.person.user.email !=
+          candidate.person.user.email ===
           jobPositionInfo.recruiter.person.user.email
         ) {
-          const mailBodyRecruiter: MailAlertJobPositionRecruiterTemplateData = {
-            dynamicTemplateData: {
-              recruiterName: `${jobPositionInfo.recruiter.person.firstName} ${jobPositionInfo.recruiter.person.lastName} `,
-              positionName: jobPositionInfo.name,
-              candidateName: `${candidate.person.firstName} ${candidate.person.lastName}`,
-              candidateEmail: candidate.person.user.email,
-            },
-            from: this.configService.get('app.sendgrid.email'),
-            templateId: this.configService.get(
-              'app.sendgrid.templates.notificationNewJobAplicationRecruiter',
-            ),
-            to: jobPositionInfo.recruiter.person.user.email,
-          };
-          const mailBodyCandidate: MailAlertJobPositionCandidateTemplateData = {
-            dynamicTemplateData: {
-              userName: `${candidate.person.firstName} ${candidate.person.lastName}`,
-              positionName: jobPositionInfo.name,
-              companyName: jobPositionInfo.company.name,
-            },
-            from: this.configService.get('app.sendgrid.email'),
-            templateId: this.configService.get(
-              'app.sendgrid.templates.notificationNewJobAplicationCandidate',
-            ),
-            to: candidate.person.user.email,
-          };
-
-          await this.eventEmitter.emitAsync(
-            SEND_EMAIL_EVENT,
-            mailBodyCandidate,
-          );
-          await this.eventEmitter.emitAsync(
-            SEND_EMAIL_EVENT,
-            mailBodyRecruiter,
-          );
-        } else {
           throw new BadRequestException(
             this.i18n.t('exception.CONFLICT.EMAILS_EQUALS', {
               args: {
@@ -182,6 +148,35 @@ export class JobApplicationService {
             }),
           );
         }
+        const mailBodyRecruiter: MailAlertJobPositionRecruiterTemplateData = {
+          dynamicTemplateData: {
+            recruiterName: `${jobPositionInfo.recruiter.person.firstName} ${jobPositionInfo.recruiter.person.lastName} `,
+            positionName: jobPositionInfo.name,
+            candidateName: `${candidate.person.firstName} ${candidate.person.lastName}`,
+            candidateEmail: candidate.person.user.email,
+          },
+          from: this.configService.get('app.sendgrid.email'),
+          templateId: this.configService.get(
+            'app.sendgrid.templates.notificationNewJobAplicationRecruiter',
+          ),
+          to: jobPositionInfo.recruiter.person.user.email,
+        };
+        const mailBodyCandidate: MailAlertJobPositionCandidateTemplateData = {
+          dynamicTemplateData: {
+            userName: `${candidate.person.firstName} ${candidate.person.lastName}`,
+            positionName: jobPositionInfo.name,
+            companyName: jobPositionInfo.company.name,
+          },
+          from: this.configService.get('app.sendgrid.email'),
+          templateId: this.configService.get(
+            'app.sendgrid.templates.notificationNewJobAplicationCandidate',
+          ),
+          to: candidate.person.user.email,
+        };
+
+        await this.eventEmitter.emitAsync(SEND_EMAIL_EVENT, mailBodyCandidate);
+        await this.eventEmitter.emitAsync(SEND_EMAIL_EVENT, mailBodyRecruiter);
+
         return Promise.all([
           tPrisma.jobApplication.create({
             data: jobApplicationData,

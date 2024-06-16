@@ -26,7 +26,7 @@ export class JobApplicationController {
   @ApiOperation({
     summary: 'Use this endpoint to create a new job application',
   })
-  @Auth({ permissions: [permissions.CREATE_JOB.codename] })
+  @Auth({ permissions: [permissions.CREATE_APPLICATION.codename] })
   @Post('/candidate/:candidateId/job-position/:jobPositionId')
   create(
     @Param() { candidateId }: CandidateIdDto,
