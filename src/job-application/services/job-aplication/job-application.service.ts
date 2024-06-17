@@ -367,7 +367,7 @@ export class JobApplicationService {
     }
 
     return {
-      data: jobApplicationsWithCv,
+      data: jobApplicationsWithCv.sort((a, b) => b.percentage - a.percentage),
       pagination: getPaginationInfo(pageDto, totalItems),
     };
   }
