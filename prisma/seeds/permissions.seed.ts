@@ -245,7 +245,7 @@ export const permissions = {
     name: 'Manage job',
     codename: 'manage:job',
     description: 'Permiso para gestionar oferta de empleos',
-    roles: [roles.ADMIN, roles.RECRUITER],
+    roles: [roles.ADMIN, roles.RECRUITER, roles.COMPANY],
   },
   CREATE_APPLICATION: {
     name: 'Create application',

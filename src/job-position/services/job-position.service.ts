@@ -250,6 +250,7 @@ export class JobPositionService {
       modality,
       contractType,
       companyId,
+      available,
     }: JobPositionFilterDto = {},
   ): Promise<PaginatedDto<JobPositionDto>> {
     const { skip, take } = getPaginationParams(pageDto);
@@ -302,6 +303,12 @@ export class JobPositionService {
     if (contractType.length > 0) {
       whereInput.contractType = {
         in: Array.isArray(contractType) ? contractType : [contractType],
+      };
+    }
+
+    if (available === 'true') {
+      whereInput.closeTime = {
+        gte: new Date(),
       };
     }
 

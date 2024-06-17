@@ -32,6 +32,12 @@ export class JobPositionFilterDto {
   @IsOptional()
   readonly workday?: WorkdayEnum[] = [];
 
+  /**
+   * Si se proporciona el valor true, se retornarán las posiciones de trabajo que estén disponibles, que tengan el 'closeTime' mayor o igual a la fecha actual.
+   */
+  @IsOptional()
+  readonly available?: string = 'true';
+
   @IsOptional()
   @IsUUID('4', { message: i18nValidationMessage('validation.IS_UUID') })
   readonly companyId?: string;
