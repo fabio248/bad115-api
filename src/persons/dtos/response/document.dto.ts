@@ -1,7 +1,7 @@
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { DocumentTypeEnum } from '../../enums/document-type.enum';
 
-@Expose()
+@Exclude()
 export class DocumentDto {
   @Expose()
   readonly id: string;

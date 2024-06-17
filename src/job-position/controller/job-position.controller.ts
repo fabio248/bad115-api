@@ -31,6 +31,7 @@ import { JobPositionCountDto } from '../dtos/response/job-position-count.dto';
 import { JobApplicationService } from '../../job-application/services/job-aplication/job-application.service';
 import { JobPositionId } from '../../candidates/dto/request/create-job-position-id.dto';
 import { JobAplicationDto } from '../../job-application/dto/response/job-aplication.dto';
+import { JobApplicationFilterDto } from '../../job-application/dto/request/job-application-filter.dto';
 
 @ApiTags('Job Positions Endpoints')
 @Controller('job-positions')
@@ -173,15 +174,18 @@ export class JobPositionController {
     summary:
       'Use this endpoint to find all job applications by job position id',
   })
-  @Auth({ permissions: [permissions.READ_APPLICATION.codename] })
+  @ApiPaginatedResponse(JobAplicationDto)
+  // @Auth({ permissions: [permissions.READ_APPLICATION.codename] })
   @Get('/:jobPositionId/job-applications')
   findAllByJobPosition(
     @Param() { jobPositionId }: JobPositionId,
     @Query() pageDto: PageDto,
+    @Query() jobApplicationFilterDto: JobApplicationFilterDto,
   ): Promise<PaginatedDto<JobAplicationDto>> {
     return this.jobApplicationService.findAllByJobPosition(
       jobPositionId,
       pageDto,
+      jobApplicationFilterDto,
     );
   }
 }

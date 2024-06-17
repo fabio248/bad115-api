@@ -25,6 +25,8 @@ import {
   getPaginationInfo,
   getPaginationParams,
 } from '../../../common/utils/pagination.utils';
+import { JobApplicationFilterDto } from '../../dto/request/job-application-filter.dto';
+import { DocumentTypeEnum } from '../../../persons/enums/document-type.enum';
 
 @Injectable()
 export class JobApplicationService {
@@ -196,14 +198,110 @@ export class JobApplicationService {
     });
   }
 
-  async findAllByJobPosition(jobPositionId: string, pageDto: PageDto) {
+  async findAllByJobPosition(
+    jobPositionId: string,
+    pageDto: PageDto,
+    { name, dui, passport }: JobApplicationFilterDto,
+  ) {
     const { skip, take } = getPaginationParams(pageDto);
+    const whereInput: Prisma.JobApplicationWhereInput = {
+      jobPositionId: jobPositionId,
+      deletedAt: null,
+    };
+
+    if (name || dui || passport) {
+      whereInput.AND = [];
+
+      if (name) {
+        const names = name.split(' ');
+
+        names.forEach((name) => {
+          whereInput.AND = [
+            {
+              OR: [
+                {
+                  candidate: {
+                    person: {
+                      firstName: {
+                        contains: name,
+                      },
+                    },
+                  },
+                },
+                {
+                  candidate: {
+                    person: {
+                      secondLastName: {
+                        contains: name,
+                      },
+                    },
+                  },
+                },
+                {
+                  candidate: {
+                    person: {
+                      middleName: {
+                        contains: name,
+                      },
+                    },
+                  },
+                },
+                {
+                  candidate: {
+                    person: {
+                      lastName: {
+                        contains: name,
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          ];
+        });
+      }
+
+      (whereInput.AND as Prisma.JobApplicationWhereInput[]).push(
+        dui || passport
+          ? {
+              candidate: {
+                person: {
+                  AND: [
+                    dui
+                      ? {
+                          documents: {
+                            some: {
+                              type: DocumentTypeEnum.DUI,
+                              number: {
+                                contains: dui,
+                              },
+                            },
+                          },
+                        }
+                      : {},
+                    passport
+                      ? {
+                          documents: {
+                            some: {
+                              type: DocumentTypeEnum.PASSPORT,
+                              number: {
+                                contains: passport,
+                              },
+                            },
+                          },
+                        }
+                      : {},
+                  ],
+                },
+              },
+            }
+          : {},
+      );
+    }
+
     const [jobApplications, totalItems] = await Promise.all([
       this.prismaService.jobApplication.findMany({
-        where: {
-          jobPositionId: jobPositionId,
-          deletedAt: null,
-        },
+        where: whereInput,
         skip,
         take,
         include: {
@@ -211,7 +309,15 @@ export class JobApplicationService {
             where: { deletedAt: null },
           },
           file: true,
-          candidate: true,
+          candidate: {
+            include: {
+              person: {
+                include: {
+                  documents: true,
+                },
+              },
+            },
+          },
         },
       }),
       this.prismaService.jobApplication.count({
@@ -222,19 +328,28 @@ export class JobApplicationService {
       }),
     ]);
 
+    const jobApplicationsWithCv = [];
+
+    for await (const jobApplication of jobApplications) {
+      let cv = null;
+
+      if (jobApplication.file) {
+        cv = await this.filesService.getSignedUrlForFileRetrieval({
+          keyNameFile: jobApplication.file.name,
+          folderName: jobApplication.candidate.id,
+        });
+      }
+
+      jobApplicationsWithCv.push(
+        plainToInstance(JobAplicationDto, {
+          ...jobApplication,
+          cv,
+        }),
+      );
+    }
+
     return {
-      data: jobApplications.map((jobAplication) => {
-        let cv = null;
-
-        if (jobAplication.file) {
-          cv = this.filesService.getSignedUrlForFileRetrieval({
-            keyNameFile: jobAplication.file.name,
-            folderName: jobAplication.candidate.id,
-          });
-        }
-
-        return plainToInstance(JobAplicationDto, { ...jobAplication, cv });
-      }),
+      data: jobApplicationsWithCv,
       pagination: getPaginationInfo(pageDto, totalItems),
     };
   }

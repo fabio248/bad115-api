@@ -1,6 +1,7 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Type } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
 import { JobAplicationEnum } from 'src/job-application/enums/job-aplication.enum';
+import { CandidateDto } from '../../../candidates/dto/response/candidate.dto';
 
 @Exclude()
 export class JobAplicationDto {
@@ -22,6 +23,10 @@ export class JobAplicationDto {
 
   @Expose()
   readonly jobPositionId: string;
+
+  @Expose()
+  @Type(() => CandidateDto)
+  readonly candidate?: CandidateDto;
 
   @Expose()
   readonly candidateId: string;

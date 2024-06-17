@@ -124,9 +124,9 @@ export class TechnicalSkillCandidateService {
           },
         },
       }),
-      this.prismaService.recognition.count({
+      this.prismaService.technicalSkillCandidate.count({
         where: {
-          id: id,
+          candidateId: id,
           deletedAt: null,
         },
       }),
