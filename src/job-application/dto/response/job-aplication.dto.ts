@@ -4,6 +4,21 @@ import { JobAplicationEnum } from 'src/job-application/enums/job-aplication.enum
 import { CandidateDto } from '../../../candidates/dto/response/candidate.dto';
 
 @Exclude()
+export class MeetingsDto {
+  @Expose()
+  readonly id: string;
+
+  @Expose()
+  readonly executionDate: Date;
+
+  @Expose()
+  readonly link: string;
+
+  @Expose()
+  readonly jobAplicationId: string;
+}
+
+@Exclude()
 export class JobAplicationDto {
   @Expose()
   readonly id: string;
@@ -27,6 +42,10 @@ export class JobAplicationDto {
   @Expose()
   @Type(() => CandidateDto)
   readonly candidate?: CandidateDto;
+
+  @Expose()
+  @Type(() => MeetingsDto)
+  readonly meeting?: MeetingsDto[];
 
   @Expose()
   readonly percentage?: string;

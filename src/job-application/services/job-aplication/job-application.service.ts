@@ -395,6 +395,19 @@ export class JobApplicationService {
       );
     }
 
+    const [candidatePercentage] =
+      await this.jobPosition.calculatePercentageMatchCandidateJobPosition(
+        jobAplication.jobPositionId,
+        {
+          jobApplications: {
+            some: {
+              jobPositionId: jobAplication.jobPositionId,
+              candidateId: jobAplication.candidateId,
+            },
+          },
+        },
+      );
+
     let cv = null;
 
     if (jobAplication.file) {
@@ -404,7 +417,11 @@ export class JobApplicationService {
       });
     }
 
-    return plainToInstance(JobAplicationDto, { ...jobAplication, cv });
+    return plainToInstance(JobAplicationDto, {
+      ...jobAplication,
+      cv,
+      percentage: candidatePercentage.percentage,
+    });
   }
 
   async update(
