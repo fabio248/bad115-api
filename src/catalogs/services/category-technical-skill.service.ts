@@ -85,6 +85,7 @@ export class TechnicalSkillService {
     const categoryTechnicalSkill =
       await this.prismaService.categoryTechnicalSkill.findMany({
         where: { deletedAt: null },
+        orderBy: { name: 'asc' },
       });
 
     return plainToInstance(CategoryTechnicalSkillDto, categoryTechnicalSkill);
@@ -94,6 +95,7 @@ export class TechnicalSkillService {
     const categoryTechnicalSkill =
       await this.prismaService.technicalSkill.findMany({
         where: { deletedAt: null },
+        orderBy: { name: 'asc' },
       });
 
     return plainToInstance(CategoryTechnicalSkillDto, categoryTechnicalSkill);
@@ -105,6 +107,7 @@ export class TechnicalSkillService {
         categoryTechnicalSkillId: id,
         deletedAt: null,
       },
+      orderBy: { name: 'asc' },
     });
 
     return plainToInstance(TechnicalSkillDto, technicalSkill);
@@ -243,6 +246,7 @@ export class TechnicalSkillService {
             where: {
               deletedAt: null,
             },
+            orderBy: { name: 'asc' },
           },
         },
       },
