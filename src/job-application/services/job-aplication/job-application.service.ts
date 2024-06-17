@@ -30,6 +30,7 @@ import {
 import { JobApplicationFilterDto } from '../../dto/request/job-application-filter.dto';
 import { DocumentTypeEnum } from '../../../persons/enums/document-type.enum';
 import { JobPositionService } from '../../../job-position/services/job-position.service';
+import { PaginatedDto } from '../../../common/dtos/response/paginated.dto';
 
 @Injectable()
 export class JobApplicationService {
@@ -379,9 +380,19 @@ export class JobApplicationService {
         deletedAt: null,
       },
       include: {
-        meeting: true,
+        meeting: {
+          where: { deletedAt: null },
+        },
         file: true,
-        candidate: true,
+        candidate: {
+          include: {
+            person: {
+              include: {
+                documents: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -461,5 +472,70 @@ export class JobApplicationService {
         deletedAt: new Date(),
       },
     });
+  }
+
+  async findJobApplicationsByCandidate(
+    candidateId: string,
+    pageDto: PageDto,
+  ): Promise<PaginatedDto<JobAplicationDto>> {
+    const { skip, take } = getPaginationParams(pageDto);
+
+    const [jobApplications, totalItems] = await Promise.all([
+      this.prismaService.jobApplication.findMany({
+        skip,
+        take,
+        where: {
+          candidateId,
+          deletedAt: null,
+        },
+        include: {
+          jobPosition: true,
+          meeting: {
+            where: { deletedAt: null },
+          },
+          file: true,
+          candidate: {
+            include: {
+              person: {
+                include: {
+                  documents: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+      this.prismaService.jobApplication.count({
+        where: {
+          candidateId,
+          deletedAt: null,
+        },
+      }),
+    ]);
+
+    const jobApplicationsWithCv: JobAplicationDto[] = [];
+
+    for await (const jobApplication of jobApplications) {
+      let cv = null;
+
+      if (jobApplication.file) {
+        cv = await this.filesService.getSignedUrlForFileRetrieval({
+          keyNameFile: jobApplication.file.name,
+          folderName: jobApplication.candidate.id,
+        });
+      }
+
+      jobApplicationsWithCv.push(
+        plainToInstance(JobAplicationDto, {
+          ...jobApplication,
+          cv,
+        }),
+      );
+    }
+
+    return {
+      data: jobApplicationsWithCv,
+      pagination: getPaginationInfo(pageDto, totalItems),
+    };
   }
 }

@@ -5,11 +5,7 @@ import { FilesModule } from 'src/files/files.module';
 import { JobPositionModule } from '../job-position/job-position.module';
 
 @Module({
-  imports: [
-    FilesModule,
-    forwardRef(() => JobPositionModule),
-    // JobPositionModule,
-  ],
+  imports: [FilesModule, forwardRef(() => JobPositionModule)],
   controllers: [JobApplicationController],
   providers: [JobApplicationService],
   exports: [JobApplicationService],

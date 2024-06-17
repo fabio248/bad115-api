@@ -26,9 +26,10 @@ import { CandidateService } from './services/candidate.service';
 import { FilesModule } from '../files/files.module';
 import { PrivacySettingsController } from './controller/privacy-settings.controller';
 import { PrivacySettingsService } from './services/privacy-settings.service';
+import { JobApplicationModule } from '../job-application/job-application.module';
 
 @Module({
-  imports: [FilesModule],
+  imports: [FilesModule, JobApplicationModule],
   controllers: [
     LaboralExperiencesController,
     AcademicKnowledgeController,

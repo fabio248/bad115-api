@@ -2,6 +2,7 @@ import { Exclude, Expose, Type } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
 import { JobAplicationEnum } from 'src/job-application/enums/job-aplication.enum';
 import { CandidateDto } from '../../../candidates/dto/response/candidate.dto';
+import { JobPositionDto } from '../../../job-position/dtos/response/job-position.dto';
 
 @Exclude()
 export class MeetingsDto {
@@ -46,6 +47,10 @@ export class JobAplicationDto {
   @Expose()
   @Type(() => MeetingsDto)
   readonly meeting?: MeetingsDto[];
+
+  @Expose()
+  @Type(() => JobPositionDto)
+  readonly jobPosition?: JobPositionDto;
 
   @Expose()
   readonly percentage?: string;
