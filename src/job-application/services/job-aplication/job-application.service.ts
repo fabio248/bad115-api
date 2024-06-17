@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   Logger,
   NotFoundException,
@@ -27,6 +29,7 @@ import {
 } from '../../../common/utils/pagination.utils';
 import { JobApplicationFilterDto } from '../../dto/request/job-application-filter.dto';
 import { DocumentTypeEnum } from '../../../persons/enums/document-type.enum';
+import { JobPositionService } from '../../../job-position/services/job-position.service';
 
 @Injectable()
 export class JobApplicationService {
@@ -38,6 +41,8 @@ export class JobApplicationService {
     private readonly filesService: FilesService,
     private readonly configService: ConfigService,
     private readonly eventEmitter: EventEmitter2,
+    @Inject(forwardRef(() => JobPositionService))
+    private readonly jobPosition: JobPositionService,
   ) {}
 
   async create(
@@ -299,7 +304,7 @@ export class JobApplicationService {
       );
     }
 
-    const [jobApplications, totalItems] = await Promise.all([
+    const [jobApplications, percentage, totalItems] = await Promise.all([
       this.prismaService.jobApplication.findMany({
         where: whereInput,
         skip,
@@ -320,6 +325,16 @@ export class JobApplicationService {
           },
         },
       }),
+      this.jobPosition.calculatePercentageMatchCandidateJobPosition(
+        jobPositionId,
+        {
+          jobApplications: {
+            some: {
+              jobPositionId,
+            },
+          },
+        },
+      ),
       this.prismaService.jobApplication.count({
         where: {
           jobPositionId: jobPositionId,
@@ -343,6 +358,9 @@ export class JobApplicationService {
       jobApplicationsWithCv.push(
         plainToInstance(JobAplicationDto, {
           ...jobApplication,
+          percentage: percentage?.find(
+            (cand) => cand?.candidate.id === jobApplication.candidateId,
+          )?.percentage,
           cv,
         }),
       );

@@ -29,6 +29,9 @@ export class JobAplicationDto {
   readonly candidate?: CandidateDto;
 
   @Expose()
+  readonly percentage?: string;
+
+  @Expose()
   readonly candidateId: string;
 
   @ApiHideProperty()

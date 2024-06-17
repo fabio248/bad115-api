@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Delete,
+  forwardRef,
   Get,
+  Inject,
   Param,
   Post,
   Put,
@@ -38,6 +40,7 @@ import { JobApplicationFilterDto } from '../../job-application/dto/request/job-a
 export class JobPositionController {
   constructor(
     private readonly jobPositionService: JobPositionService,
+    @Inject(forwardRef(() => JobApplicationService))
     private readonly jobApplicationService: JobApplicationService,
   ) {}
 
