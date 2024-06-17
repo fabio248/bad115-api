@@ -91,15 +91,19 @@ export class MeetingService {
       where: {
         id: id,
         deletedAt: null,
+        meeting: {
+          some: {
+            createdAt: {
+              gte: new Date(Date.now() - 60 * 60 * 1000),
+            },
+          },
+        },
       },
       select: {
         meeting: {
-          where: {
-            executionDate: createMeetingAplicationDto.executionDate,
-          },
-          select: {
-            id: true,
-          },
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+          select: { id: true },
         },
       },
     });
@@ -115,7 +119,6 @@ export class MeetingService {
         },
       },
     });
-
     this.addCronJob(`cronjob${idMeeting.meeting[0].id}`, id, meeting);
     return plainToInstance(MeetingDto, meeting);
   }
