@@ -106,7 +106,7 @@ export class MeetingService {
 
     await this.prismaService.alerts.create({
       data: {
-        name: `cronjob${id}${id}`,
+        name: `cronjob${idMeeting.meeting[0].id}`,
         dateCronJob: createMeetingAplicationDto.executionDate,
         meeting: {
           connect: {
@@ -116,7 +116,7 @@ export class MeetingService {
       },
     });
 
-    this.addCronJob(`cronjob${id}${id}`, id, meeting);
+    this.addCronJob(`cronjob${idMeeting.meeting[0].id}`, id, meeting);
     return plainToInstance(MeetingDto, meeting);
   }
 
