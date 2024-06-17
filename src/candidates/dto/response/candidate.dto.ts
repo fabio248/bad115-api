@@ -16,6 +16,7 @@ import { ParticipationDto } from './participation.dto';
 import { TestDto } from './test.dto';
 import { RecomendationDto } from './recomendation.dto';
 import { CertificationDto } from './certification.dto';
+import { SocialNetworkDto } from 'src/persons/dtos/response/social-network.dto';
 
 @Exclude()
 export class CandidateDto {
@@ -31,8 +32,12 @@ export class CandidateDto {
   readonly laboralExperiences?: LaboralExperienceDto[];
 
   @Expose()
+  @Type(() => SocialNetworkDto)
+  readonly socialNetwork?: SocialNetworkDto[];
+
+  @Expose()
   @Type(() => AcademicKnowledgeDto)
-  readonly academicKnowledges?: AcademicKnowledgeDto[];
+  readonly?: AcademicKnowledgeDto[];
 
   @Expose()
   @Type(() => CertificationDto)

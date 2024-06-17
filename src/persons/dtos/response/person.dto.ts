@@ -3,6 +3,7 @@ import { UserDto } from '../../../users/dtos/response/user.dto';
 import { AddressDto } from './address.dto';
 import { GenderEnum } from '../../enums/gender.enum';
 import { DocumentDto } from './document.dto';
+import { SocialNetworkDto } from './social-network.dto';
 
 @Exclude()
 export class PersonDto {
@@ -55,6 +56,6 @@ export class PersonDto {
   readonly documents?: DocumentDto[];
 
   @Expose()
-  @Type(() => DocumentDto)
-  readonly socialNetwork?: DocumentDto[];
+  @Type(() => SocialNetworkDto)
+  readonly socialNetwork?: SocialNetworkDto[];
 }

@@ -35,16 +35,16 @@ export class CandidateService {
                     municipality: true,
                     department: true,
                   },
-                  where: { deletedAt: null }, // Añadir el filtro aquí si es aplicable
+                  where: { deletedAt: null },
                 }
               : false,
           socialNetwork:
             privacySettings.socialNetwork === false
               ? {
+                  where: { deletedAt: null },
                   include: {
                     typeSocialNetwork: true,
                   },
-                  where: { deletedAt: null }, // Añadir el filtro aquí si es aplicable
                 }
               : false,
           user: true,

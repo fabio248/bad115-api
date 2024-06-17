@@ -133,7 +133,7 @@ export class PdfGenerateService {
         candidateInfo.person?.secondLastName ?? ''
       }`.trim(),
       email: candidateInfo.person?.user?.email ?? 'Email no disponible',
-      phone: candidateInfo.person?.user?.phone ?? 'Teléfono no disponible',
+      phone: candidateInfo.person?.phone ?? 'No posee telefono registrado',
       address:
         this.formatAddress(candidateInfo.person?.address) ||
         'No posee dirección registrada',
