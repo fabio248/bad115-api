@@ -54,6 +54,23 @@ export class JobApplicationService {
     const { mimeTypeFile, ...createData } = createJobAplicationDto;
     this.logger.log('creating a new job aplication');
 
+    const jobApplication = await this.prismaService.jobApplication.findFirst({
+      where: {
+        candidateId: id,
+        jobPositionId: jobId,
+      },
+    });
+
+    if (jobApplication) {
+      throw new BadRequestException(
+        this.i18n.t('exception.CONFLICT.JOB_APPLICATION_EXISTS', {
+          args: {
+            entity: this.i18n.t('entities.JOB_APPLICATION'),
+          },
+        }),
+      );
+    }
+
     const { candidate, jobApplicationData, jobPositionInfo } =
       await this.prismaService.$transaction(async (prisma) => {
         const candidate = await prisma.candidate.findUnique({

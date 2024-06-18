@@ -34,7 +34,8 @@
     "EMAILS_EQUALS": "It is not allowed to schedule a meeting with yourself :(",
     "TECHNICAL_SKILL_ALREADY_EXISTS": "Technical skill already exists.",
     "MEETING_VALIDATE": "Meetings must be scheduled one day after their current date.",
-    "MEETING_VALIDATE_HOURS": "Meetings cannot be scheduled after 6:00 pm"
+    "MEETING_VALIDATE_HOURS": "Meetings cannot be scheduled after 6:00 pm",
+    "JOB_APPLICATION_EXISTS": "You have already applied for this job."
   },
   "UNPROCESSABLE": {
     "ACCOUNT_ALREADY_ACTIVE": "Account is already active.",

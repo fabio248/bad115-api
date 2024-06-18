@@ -33,7 +33,8 @@
     "EMAILS_EQUALS": "No es permitido agendar una reunión con usted mismo :(",
     "TECHNICAL_SKILL_ALREADY_EXISTS": "Ya tienes registrada esa habilidad técnica.",
     "MEETING_VALIDATE": "Las reuniones deben programarse un día después de su fecha actual.",
-    "MEETING_VALIDATE_HOURS": "Las reuniones no pueden agendarse despues de las 6:00 pm"
+    "MEETING_VALIDATE_HOURS": "Las reuniones no pueden agendarse despues de las 6:00 pm",
+    "JOB_APPLICATION_EXISTS": "Ya has aplicado a esta oferta de trabajo."
   },
   "UNPROCESSABLE": {
     "ACCOUNT_ALREADY_ACTIVE": "La cuenta ya está activa.",
