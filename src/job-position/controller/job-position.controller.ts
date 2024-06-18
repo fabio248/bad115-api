@@ -143,7 +143,7 @@ export class JobPositionController {
       'Si ocurre algún error durante las validaciones o la actualización, se lanza una excepción y se detiene la ejecución.',
   })
   @Auth({ permissions: [permissions.UPDATE_JOB.codename] })
-  @Put(':id/address/:addressId')
+  @Put(':id/addresses/:addressId')
   async updateAddress(
     @Param() { id }: IdDto,
     @Param() { addressId }: AddressIdDto,
