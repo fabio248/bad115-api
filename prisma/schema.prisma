@@ -544,7 +544,7 @@ model JobPosition {
   name             String?   @map("nombre")
   salaryRange      String    @map("rango_salarial")
   modality         String    @map("modalidad") // Enum: presencial, semipresencial, remoto
-  description      String    @map("descripcion")
+  description      String    @map("descripcion") @db.NText()
   experiencesLevel String    @map("nivel_experiencias")
   contractType     String    @map("tipo_contrato") // Enum: indefinido, definido, por proyecto
   status           String    @default("Activo") @map("estado") // Enum: Activo, Inactivo
