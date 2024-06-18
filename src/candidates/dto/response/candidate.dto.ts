@@ -37,7 +37,7 @@ export class CandidateDto {
 
   @Expose()
   @Type(() => AcademicKnowledgeDto)
-  readonly?: AcademicKnowledgeDto[];
+  readonly academicKnowledges?: AcademicKnowledgeDto[];
 
   @Expose()
   @Type(() => CertificationDto)
