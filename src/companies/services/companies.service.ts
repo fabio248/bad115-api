@@ -190,8 +190,8 @@ export class CompaniesService {
       );
     }
 
-    const companyRecruiter =
-      await this.prismaService.companyRecruiter.findFirst({
+    const [companyRecruiter, recruiterRole] = await Promise.all([
+      this.prismaService.companyRecruiter.findFirst({
         where: {
           companyId,
           recruiterId: user.person.recruiterId,
@@ -200,7 +200,13 @@ export class CompaniesService {
         include: {
           company: true,
         },
-      });
+      }),
+      this.prismaService.role.findUnique({
+        where: {
+          name: roles.RECRUITER,
+        },
+      }),
+    ]);
 
     if (companyRecruiter) {
       await Promise.all([
@@ -238,8 +244,14 @@ export class CompaniesService {
               },
             },
           }),
-          tPrisma.userRole.create({
-            data: {
+          tPrisma.userRole.upsert({
+            where: {
+              roleId_userId: {
+                roleId: recruiterRole.id,
+                userId: user.id,
+              },
+            },
+            create: {
               user: {
                 connect: {
                   id: user.id,
@@ -251,6 +263,7 @@ export class CompaniesService {
                 },
               },
             },
+            update: {},
           }),
         ]);
       });
@@ -386,6 +399,7 @@ export class CompaniesService {
       },
     });
   }
+
   async findAllWithoutPaginated(): Promise<CompanyDto[]> {
     const companies = await this.prismaService.company.findMany({
       where: {
