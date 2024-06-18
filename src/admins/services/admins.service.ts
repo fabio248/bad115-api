@@ -145,6 +145,9 @@ export class AdminsService {
       case 'APPROVED':
         await Promise.all([
           this.eventEmitter.emit(SEND_EMAIL_EVENT, {
+            dynamicTemplateData: {
+              userName: `${unlockRequest.user.person.firstName} ${unlockRequest.user.person.lastName}`,
+            },
             to: unlockRequest.user.email,
             from: this.configService.get('app.sendgrid.email'),
             templateId: this.configService.get(
