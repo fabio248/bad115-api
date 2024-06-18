@@ -25,9 +25,8 @@ model User {
   person  Person?
   company Company?
 
-  recomendationId String?
-  recomendation   Recomendation?  @relation(fields: [recomendationId], references: [id])
-  UnlockRequest   UnlockRequest[]
+  recomendation Recomendation[]
+  UnlockRequest UnlockRequest[]
 
   @@map("mnt_usuario")
 }
@@ -520,7 +519,8 @@ model Recomendation {
   candidateId String
   candidate   Candidate @relation(fields: [candidateId], references: [id])
 
-  users User[]
+  userId String?
+  users  User?   @relation(fields: [userId], references: [id])
 
   @@map("mnt_recomendacion")
 }
@@ -700,16 +700,18 @@ model PrivacySettings {
 
   @@map("mnt_configuracion_de_privacidad")
 }
+
 model Alerts {
-  id String @id @default(uuid())
-  name String  @map("nombre_tarea_programada")
+  id          String   @id @default(uuid())
+  name        String   @map("nombre_tarea_programada")
   dateCronJob DateTime @map("fecha_de_tarea_programadas")
 
   meetingId String  @map("id_reunion")
-  meeting   Meeting    @relation(fields: [meetingId], references: [id])
+  meeting   Meeting @relation(fields: [meetingId], references: [id])
 
   createdAt DateTime  @default(now()) @map("creado_en")
   updatedAt DateTime  @updatedAt @map("modificado_en")
   deletedAt DateTime? @map("eliminado_en")
+
   @@map("mnt_tarea_programada")
 }
