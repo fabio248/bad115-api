@@ -162,10 +162,20 @@ export class PersonsService {
     const [country, person, department, municipality] = await Promise.all([
       this.prismaService.country.findUnique({ where: { id: countryId } }),
       await this.findOne(personId, { address: { include: { country: true } } }),
-      this.prismaService.department.findUnique({ where: { id: departmentId } }),
-      this.prismaService.municipality.findFirst({
-        where: { id: municipalityId, departmentId },
-      }),
+      ...(departmentId
+        ? [
+            this.prismaService.department.findUnique({
+              where: { id: departmentId },
+            }),
+          ]
+        : [null]),
+      ...(municipalityId
+        ? [
+            this.prismaService.municipality.findFirst({
+              where: { id: municipalityId, departmentId },
+            }),
+          ]
+        : [null]),
     ]);
 
     if (!country) {
