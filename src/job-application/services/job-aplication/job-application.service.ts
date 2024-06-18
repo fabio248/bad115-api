@@ -405,7 +405,11 @@ export class JobApplicationService {
           include: {
             person: {
               include: {
-                documents: true,
+                documents: {
+                  orderBy: {
+                    createdAt: 'desc',
+                  },
+                },
               },
             },
           },
@@ -505,8 +509,12 @@ export class JobApplicationService {
           candidateId,
           deletedAt: null,
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
         include: {
           jobPosition: true,
+
           meeting: {
             where: { deletedAt: null },
           },
@@ -515,7 +523,11 @@ export class JobApplicationService {
             include: {
               person: {
                 include: {
-                  documents: true,
+                  documents: {
+                    orderBy: {
+                      createdAt: 'desc',
+                    },
+                  },
                 },
               },
             },

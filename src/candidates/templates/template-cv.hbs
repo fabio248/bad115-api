@@ -3,39 +3,38 @@
     <meta charset='UTF-8' />
     <title>Curriculum Vitae</title>
     <style>
-      body { font-family: 'Arial', sans-serif; color: #333; margin: 20px;
-      padding: 0; background: #f4f4f4; } .container { width: 95%; max-width:
-      1200px; margin: 0 auto; background: #fff; padding: 20px; box-shadow: 0 0
-      10px rgba(0, 0, 0, 0.1); } .header { text-align: center; padding-bottom:
-      20px; border-bottom: 2px solid #333; position: relative; } .avatar {
+      @import
+      url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+      body { font-family: 'Roboto', sans-serif; color: #333; margin: 20px;
+      padding: 0; background: #eaeaea; } .container { width: 95%; max-width:
+      1000px; margin: 0 auto; background: #ffffff; padding: 20px; box-shadow: 0
+      0 10px rgba(0, 0, 0, 0.1); } .header { text-align: center; padding-bottom:
+      20px; border-bottom: 2px solid #555555; position: relative; } .avatar {
       position: absolute; top: 20px; left: 20px; width: 60px; height: 60px;
-      border-radius: 50%; border: 2px solid #fff; background: #333; overflow:
-      hidden; } .avatar img { width: 100%; height: 100%; object-fit: cover; }
-      .header h1 { margin: 10px 0 5px; font-size: 24px; color: #333; } .header
-      h2 { margin: 0; font-size: 18px; color: #777; } .section { margin: 20px 0;
-      } .section h2 { margin-bottom: 10px; font-size: 20px; color: #333;
-      border-bottom: 2px solid #333; padding-bottom: 5px; } .section ul {
-      list-style-type: none; padding: 0; } .section ul li { margin-bottom: 5px;
-      padding: 5px; background: #f9f9f9; border: 1px solid #ddd; border-radius:
-      5px; } .contact-info, .skills, .experience, .education, .projects,
-      .certifications, .recognitions, .languages, .participations,
-      .recommendations { margin-bottom: 20px; } .contact-info ul li { display:
+      border-radius: 50%; border: 2px solid #ffffff; background: #555555;
+      overflow: hidden; } .avatar img { width: 100%; height: 100%; object-fit:
+      cover; } .header h1 { margin: 10px 0 5px; font-size: 28px; color: #555555;
+      } .header h2 { margin: 0; font-size: 18px; color: #777777; } .section {
+      margin: 20px 0; } .section h2 { margin-bottom: 10px; font-size: 22px;
+      color: #555555; border-bottom: 2px solid #555555; padding-bottom: 5px; }
+      .section ul { list-style-type: none; padding: 0; } .section ul li {
+      margin-bottom: 10px; padding: 10px; background: #f0f0f0; border: 1px solid
+      #cccccc; border-radius: 5px; } .contact-info ul li { display:
       inline-block; margin-right: 20px; } .contact-info ul li::before { content:
-      '•'; margin-right: 5px; color: #333; } .skills ul { column-count: 2;
-      column-gap: 5px; padding-left: 0; } .skills ul li { margin-bottom: 5px;
-      padding: 2px 5px; } .skills-grid { display: grid; grid-template-columns:
-      repeat(auto-fill, minmax(120px, 1fr)); grid-gap: 5px; } .skill-item {
-      padding: 5px; background: #f9f9f9; border: 1px solid #ddd; border-radius:
-      5px; } @media (max-width: 768px) { body { margin: 10px; } .container {
-      padding: 10px; } .header { padding-bottom: 10px; } .header h1 { font-size:
-      20px; } .header h2 { font-size: 16px; } .avatar { width: 50px; height:
-      50px; top: 10px; left: 10px; } .section h2 { font-size: 18px; } .section
-      ul li { padding: 5px; font-size: 14px; } .contact-info ul li {
-      margin-right: 10px; } .skills ul { column-count: 1; } .skills-grid {
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); } } @media
-      (max-width: 480px) { .header h1 { font-size: 18px; } .header h2 {
+      '•'; margin-right: 5px; color: #555555; } .skills-grid { display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); grid-gap:
+      10px; } .skill-item { padding: 10px; background: #f0f0f0; border: 1px
+      solid #cccccc; border-radius: 5px; } @media (max-width: 768px) { body {
+      margin: 10px; } .container { padding: 10px; } .header { padding-bottom:
+      10px; } .header h1 { font-size: 24px; } .header h2 { font-size: 16px; }
+      .avatar { width: 50px; height: 50px; top: 10px; left: 10px; } .section h2
+      { font-size: 18px; } .section ul li { padding: 8px; font-size: 14px; }
+      .contact-info ul li { margin-right: 10px; } .skills-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } } @media
+      (max-width: 480px) { .header h1 { font-size: 22px; } .header h2 {
       font-size: 14px; } .avatar { width: 40px; height: 40px; } .section h2 {
-      font-size: 16px; } .section ul li { font-size: 12px; } }
+      font-size: 16px; } .section ul li { font-size: 12px; } .skills-grid {
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); } }
     </style>
   </head>
   <body>
@@ -57,11 +56,11 @@
       </div>
       <div class='technical-skills section'>
         <h2>Habilidades Técnicas</h2>
-        <ul>
+        <div class='skills-grid'>
           {{#each technicalSkills}}
-            <li>{{this.name}} ({{this.category}})</li>
+            <div class='skill-item'>{{this.name}} ({{this.category}})</div>
           {{/each}}
-        </ul>
+        </div>
       </div>
       <div class='experience section'>
         <h2>Experiencia Profesional</h2>
