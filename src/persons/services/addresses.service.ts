@@ -83,29 +83,59 @@ export class AddressesService {
   }
 
   async update(id: string, updateAddressDto: UpdateAddressDto) {
-    const address = await this.findOne(id);
+    await this.findOne(id);
+    let department;
+    let municipality;
 
-    const { countryId, departmentId, municipalityId, ...updateData } =
-      updateAddressDto;
+    const {
+      countryId,
+      countryName,
+      departmentId,
+      municipalityId,
+      ...updateData
+    } = updateAddressDto;
 
-    const [country, department, municipality] = await Promise.all([
+    const [country] = await Promise.all([
       this.prismaService.country.findUnique({
         where: {
           id: countryId,
         },
       }),
-      this.prismaService.department.findUnique({
-        where: {
-          id: departmentId,
-        },
-      }),
-      this.prismaService.municipality.findFirst({
-        where: {
-          id: municipalityId,
-          departmentId: departmentId ? departmentId : address?.department?.id,
-        },
-      }),
     ]);
+
+    if (countryName === EL_SALVADOR && !departmentId) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.DEPARTMENT'),
+          },
+        }),
+      );
+    }
+
+    if (countryName === EL_SALVADOR && !municipalityId) {
+      throw new NotFoundException(
+        this.i18n.t('exception.NOT_FOUND.DEFAULT', {
+          args: {
+            entity: this.i18n.t('entities.MUNICIPALITY'),
+          },
+        }),
+      );
+    }
+    if (countryName === EL_SALVADOR) {
+      [department, municipality] = await Promise.all([
+        this.prismaService.department.findUnique({
+          where: {
+            id: departmentId,
+          },
+        }),
+        this.prismaService.municipality.findUnique({
+          where: {
+            id: municipalityId,
+          },
+        }),
+      ]);
+    }
 
     if (!country) {
       throw new NotFoundException(
@@ -117,7 +147,7 @@ export class AddressesService {
       );
     }
 
-    if (!department) {
+    if (countryName === EL_SALVADOR && !department) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.DEFAULT', {
           args: {
@@ -127,7 +157,7 @@ export class AddressesService {
       );
     }
 
-    if (!municipality) {
+    if (countryName === EL_SALVADOR && !municipality) {
       throw new NotFoundException(
         this.i18n.t('exception.NOT_FOUND.MUNICIPALITY'),
       );
