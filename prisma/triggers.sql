@@ -57,7 +57,7 @@ END;
 
 
 -- validate date in update information meeting
-CREATE TRIGGER trg_update_fecha
+CREATE OR ALTER TRIGGER trg_update_fecha
 ON mnt_reunion
 AFTER UPDATE
 AS
@@ -65,9 +65,9 @@ BEGIN
     SET NOCOUNT ON;
 
     DECLARE @nuevaFecha DATE;
-	DECLARE @idReunion NVARCHAR(36);
+    DECLARE @idReunion NVARCHAR(36);
 
-    SELECT @nuevaFecha = i.fecha_de_ejecucion,
+    SELECT @nuevaFecha = DATEADD(DAY, -1, i.fecha_de_ejecucion),
            @idReunion = i.id
     FROM inserted i;
 

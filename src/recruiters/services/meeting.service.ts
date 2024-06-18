@@ -21,11 +21,12 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SEND_EMAIL_EVENT } from 'src/common/events/mail.event';
 import { FormattedDate } from '../utils/formatted-date.utils';
 
-import { format } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { CronJobDto } from '../dtos/response/cron-job.dto';
+import { format, subDays } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 
 @Injectable()
 export class MeetingService {
@@ -44,28 +45,29 @@ export class MeetingService {
     createMeetingAplicationDto: CreateMeetingAplicationDto,
   ): Promise<MeetingDto> {
     this.logger.log('Creating Meeting for recruiter');
-    const dateNow = new Date();
-    const date = new Date(createMeetingAplicationDto.executionDate);
+    const timeZone = 'America/El_Salvador';
 
-    const formattedDateNow = format(dateNow, 'yyyy-MM-dd');
-    const formattedDate = format(date, 'yyyy-MM-dd');
+    const dateMachine = new Date();
 
-    if (formattedDateNow === formattedDate) {
+    const dateMachineInSalvadorTime = toZonedTime(dateMachine, timeZone);
+
+    const formattedDateMachine = format(
+      dateMachineInSalvadorTime,
+      'yyyy-MM-dd',
+    );
+
+    const executionDate = new Date(createMeetingAplicationDto.executionDate);
+    const executionDateInUTC = toZonedTime(executionDate, 'UTC');
+    const executionDateInSalvadorTime = toZonedTime(
+      executionDateInUTC,
+      timeZone,
+    );
+
+    const formattedDate = format(executionDateInSalvadorTime, 'yyyy-MM-dd');
+
+    if (formattedDateMachine >= formattedDate) {
       throw new BadRequestException(
         this.i18n.t('exception.CONFLICT.MEETING_VALIDATE', {
-          args: {
-            entity: this.i18n.t('entities.MEETING'),
-          },
-        }),
-      );
-    }
-    const meetingHour = date.getHours();
-    const minAllowedHour = 6;
-    const maxAllowedHour = 24;
-
-    if (meetingHour < minAllowedHour || meetingHour > maxAllowedHour) {
-      throw new BadRequestException(
-        this.i18n.t('exception.CONFLICT.MEETING_VALIDATE_HOURS', {
           args: {
             entity: this.i18n.t('entities.MEETING'),
           },
@@ -87,6 +89,7 @@ export class MeetingService {
       await this.SendScheduledEmail(id, createMeetingAplicationDto);
       return createdMeeting;
     });
+
     const idMeeting = await this.prismaService.jobApplication.findUnique({
       where: {
         id: id,
@@ -108,10 +111,12 @@ export class MeetingService {
       },
     });
 
+    const newDay = subDays(createMeetingAplicationDto.executionDate, 1);
+
     await this.prismaService.alerts.create({
       data: {
         name: `cronjob${idMeeting.meeting[0].id}`,
-        dateCronJob: createMeetingAplicationDto.executionDate,
+        dateCronJob: newDay,
         meeting: {
           connect: {
             id: idMeeting.meeting[0].id,
@@ -229,6 +234,26 @@ export class MeetingService {
       );
     }
 
+    if (meeting.executionDate !== createJobAplicationDto.executionDate) {
+      const idAlerts = await this.prismaService.alerts.findFirst({
+        where: {
+          meetingId: meetId,
+        },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+
+      this.logger.log(`Adding new Cron job: ${idAlerts.name}`);
+      this.addCronJob(`cronjob${meetId}`, id, meeting);
+
+      if (idAlerts.name) {
+        this.logger.log(`Attempting to delete Cron job: ${idAlerts.name}`);
+        this.deleteCron(idAlerts.name);
+      }
+    }
+
     const updateMeeting = await this.prismaService.meeting.update({
       where: {
         id: meetId,
@@ -269,12 +294,16 @@ export class MeetingService {
       this.logger.warn(
         `time ${createMeetingAplicationDto.executionDate} for job ${name} to run!`,
       );
-
       await this.SendScheduledEmail(id, createMeetingAplicationDto);
     });
 
     this.schedulerRegistry.addCronJob(name, job);
     job.start();
+  }
+
+  async deleteCron(name: string) {
+    this.schedulerRegistry.deleteCronJob(name);
+    this.logger.warn(`job ${name} deleted!`);
   }
 
   async SendScheduledEmail(
