@@ -3,6 +3,7 @@ import { ApiHideProperty } from '@nestjs/swagger';
 import { JobAplicationEnum } from 'src/job-application/enums/job-aplication.enum';
 import { CandidateDto } from '../../../candidates/dto/response/candidate.dto';
 import { JobPositionDto } from '../../../job-position/dtos/response/job-position.dto';
+import { PersonDto } from '../../../persons/dtos/response/person.dto';
 
 @Exclude()
 export class MeetingsDto {
@@ -66,4 +67,15 @@ export class JobAplicationDto {
 
   @ApiHideProperty()
   readonly deletedAt: Date;
+}
+
+@Exclude()
+export class CandidateWithJobApplicationsDto {
+  @Expose()
+  @Type(() => PersonDto)
+  readonly person: PersonDto;
+
+  @Expose()
+  @Type(() => JobAplicationDto)
+  readonly jobApplications: JobAplicationDto[];
 }

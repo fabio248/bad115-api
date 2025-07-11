@@ -22,6 +22,7 @@ import { FilesModule } from './files/files.module';
 import { JobPositionModule } from './job-position/job-position.module';
 import { JobApplicationModule } from './job-application/job-application.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CalidadExerciseModule } from './calidad-exercise/calidad-exercise.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     FilesModule,
     JobPositionModule,
     JobApplicationModule,
+    CalidadExerciseModule,
   ],
   controllers: [AppController],
   providers: [AuthModule, UsersModule],

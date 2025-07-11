@@ -10,6 +10,7 @@ import { PrismaClient } from '@prisma/client';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { FormattedDate } from './recruiters/utils/formatted-date.utils';
+import { CalidadExerciseModule } from './calidad-exercise/calidad-exercise.module';
 
 async function restoreCronJobs(
   prisma: PrismaClient,
@@ -67,14 +68,33 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
-  const config = new DocumentBuilder()
+  const generalConfig = new DocumentBuilder()
     .setTitle('BAD115 API')
     .setDescription('The cats API description')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('v1/docs', app, document);
+  const generalDocument = SwaggerModule.createDocument(app, generalConfig);
+  SwaggerModule.setup('v1/docs', app, generalDocument);
+
+  const calidadExerciseConfig = new DocumentBuilder()
+    .setTitle('Documentación ejercicio especialidad de calidad - Grupo 01 ')
+    .setDescription(
+      'En esta documentación se encuentra todos los endpoints necesarios para poder la informarción de un usuario filtrada por email',
+    )
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const calidadExerciseDocument = SwaggerModule.createDocument(
+    app,
+    calidadExerciseConfig,
+    {
+      include: [CalidadExerciseModule],
+    },
+  );
+
+  SwaggerModule.setup('v1/calidad', app, calidadExerciseDocument);
 
   const prisma = new PrismaClient();
   const schedulerRegistry = new SchedulerRegistry();
