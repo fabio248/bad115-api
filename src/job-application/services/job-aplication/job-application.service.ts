@@ -6,22 +6,22 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { JobAplicationDto } from 'src/job-application/dto/response/job-aplication.dto';
+import { JobAplicationDto } from '../../dto/response/job-aplication.dto';
 import { plainToInstance } from 'class-transformer';
-import { CreateJobAplicationDto } from 'src/job-application/dto/request/create-job-aplication.dto';
+import { CreateJobAplicationDto } from '../../dto/request/create-job-aplication.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { I18nService } from 'nestjs-i18n';
 import { v4 as uuidv4 } from 'uuid';
-import { FilesService } from 'src/files/services/files.service';
+import { FilesService } from '../../../files/services/files.service';
 import {
   MailAlertJobPositionCandidateTemplateData,
   MailAlertJobPositionRecruiterTemplateData,
-} from 'src/common/types/mail.types';
+} from '../../../common/types/mail.types';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { SEND_EMAIL_EVENT } from 'src/common/events/mail.event';
+import { SEND_EMAIL_EVENT } from '../../../common/events/mail.event';
 import { Prisma } from '@prisma/client';
-import { UpdateJobApplicationDto } from 'src/job-application/dto/request/update-job-application.dto';
+import { UpdateJobApplicationDto } from '../../dto/request/update-job-application.dto';
 import { PageDto } from '../../../common/dtos/request/page.dto';
 import {
   getPaginationInfo,

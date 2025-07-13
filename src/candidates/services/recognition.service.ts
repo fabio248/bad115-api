@@ -5,12 +5,12 @@ import { I18nService } from 'nestjs-i18n';
 import {
   getPaginationParams,
   getPaginationInfo,
-} from 'src/common/utils/pagination.utils';
+} from '../../common/utils/pagination.utils';
 //dto's
 import { RecognitionDto } from '../dto/response/recognition.dto';
 import { CreateRecognitionDto } from '../dto/request/create-recognition.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { UpdateRecognitionDto } from '../dto/request/update-recognition.dto';
 
 @Injectable()

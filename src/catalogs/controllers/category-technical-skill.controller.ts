@@ -11,17 +11,17 @@ import {
 import { TechnicalSkillService } from '../services/category-technical-skill.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CategoryTechnicalSkillDto } from '../dtos/response/category-technical-skill.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
-import { CategoryIdDto } from 'src/candidates/dto/request/category-id.dto';
+import { CategoryIdDto } from '../../candidates/dto/request/category-id.dto';
 import { TechnicalSkillDto } from '../dtos/response/technical-skill.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 import { CreateTechnicalSkillDto } from '../dtos/request/create-technical-skill.dto';
-import { TechnicalSkillIdDto } from 'src/candidates/dto/request/technical-skill-id.dto';
+import { TechnicalSkillIdDto } from '../../candidates/dto/request/technical-skill-id.dto';
 import { UpdateTechnicalSkillTypeDto } from '../dtos/request/update-technical-skill.dto';
-import { CreateCategoryDto } from 'src/candidates/dto/request/create-category.dto';
+import { CreateCategoryDto } from '../../candidates/dto/request/create-category.dto';
 import { UpdateCategoryDto } from '../dtos/request/update-category.dto';
 import { FilterTechnicalSkillDto } from '../dtos/request/filter-technical-skill.dto';
 

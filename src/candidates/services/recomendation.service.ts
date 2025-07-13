@@ -10,9 +10,9 @@ import { Prisma } from '@prisma/client';
 import {
   getPaginationParams,
   getPaginationInfo,
-} from 'src/common/utils/pagination.utils';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+} from '../../common/utils/pagination.utils';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { UpdateRecomendationDto } from '../dto/request/update-recomendation.dto';
 
 @Injectable()

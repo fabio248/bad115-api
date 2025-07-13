@@ -1,6 +1,6 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
-import { JobAplicationEnum } from 'src/job-application/enums/job-aplication.enum';
+import { JobAplicationEnum } from '../../enums/job-aplication.enum';
 import { CandidateDto } from '../../../candidates/dto/response/candidate.dto';
 import { JobPositionDto } from '../../../job-position/dtos/response/job-position.dto';
 import { PersonDto } from '../../../persons/dtos/response/person.dto';

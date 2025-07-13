@@ -1,4 +1,4 @@
-import { StatusEnum } from 'src/job-position/enums';
+import { StatusEnum } from '../../enums';
 import { CreateJobPositionDto } from './create-job-position.dto';
 import { OmitType, PartialType } from '@nestjs/swagger';
 import { i18nValidationMessage } from 'nestjs-i18n';

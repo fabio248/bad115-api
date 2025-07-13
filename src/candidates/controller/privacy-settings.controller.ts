@@ -3,7 +3,7 @@ import { PrivacySettingsService } from '../services/privacy-settings.service';
 import { CandidateIdDto } from '../dto/request/candidate-id.dto';
 import { CreatePrivacySettingsDto } from '../dto/request/create-privacy-settings.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 import { PrivacySettingsDto } from '../dto/response/privacy-settings.dto';
 import { PrivacySettingIdDto } from '../dto/request/privacy-settings-id.dto';

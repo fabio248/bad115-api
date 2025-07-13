@@ -6,14 +6,14 @@ import { ParticipationService } from '../services/participation.service';
 import { CandidateIdDto } from '../dto/request/candidate-id.dto';
 import { CreateParticipationDto } from '../dto/request/create-participation.dto';
 import { ParticipationIdDto } from '../dto/request/participation-id.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateParticipationDto } from '../dto/request/update-participation.dto';
 import { ParticipationDto } from '../dto/response/participation.dto';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 
 @Controller('candidates/:candidateId/participation')

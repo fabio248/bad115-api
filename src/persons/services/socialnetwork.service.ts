@@ -6,12 +6,12 @@ import { CreateSocialNetworkDto } from '../dtos/request/create-social-network.dt
 import { plainToInstance } from 'class-transformer';
 import { PrismaService } from 'nestjs-prisma';
 import { I18nService } from 'nestjs-i18n';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import {
   getPaginationInfo,
   getPaginationParams,
-} from 'src/common/utils/pagination.utils';
+} from '../../common/utils/pagination.utils';
 import { UpdateSocialNetworkDto } from '../dtos/request/update-red-social.dto';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { i18nValidationMessage } from 'nestjs-i18n';
 import { IsNotEmpty, IsString, IsOptional, IsEnum } from 'class-validator';
-import { RecomendationEnum } from 'src/candidates/enums/recomendation-enum';
+import { RecomendationEnum } from '../../enums/recomendation-enum';
 
 export class CreateRecomendationDto {
   /*

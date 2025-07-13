@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { LaboralExperiencesService } from '../services/laboral-experiences.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { ApiErrorResponse } from 'src/common/decorators/api-error-response.decorator';
+import { ApiErrorResponse } from '../../common/decorators/api-error-response.decorator';
 
 //dto's
 // Laboral Experience
@@ -20,10 +20,10 @@ import { LaboralExperienceDto } from '../dto/response/laboral-experience.dto';
 import { LaboralExperienceIdDto } from '../dto/request/laboral-experience-id.dto';
 import { UpdateLaboralExperienceDto } from '../dto/request/update-laboral-expirence.dto';
 //pagination
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 
 @Controller('candidates/:candidateId/laboral-experiences')

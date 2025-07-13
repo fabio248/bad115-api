@@ -7,16 +7,16 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { JobApplicationService } from 'src/job-application/services/job-aplication/job-application.service';
-import { CandidateIdDto } from 'src/candidates/dto/request/candidate-id.dto';
-import { CreateJobAplicationDto } from 'src/job-application/dto/request/create-job-aplication.dto';
+import { JobApplicationService } from '../../services/job-aplication/job-application.service';
+import { CandidateIdDto } from '../../../candidates/dto/request/candidate-id.dto';
+import { CreateJobAplicationDto } from '../../dto/request/create-job-aplication.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { JobAplicationDto } from 'src/job-application/dto/response/job-aplication.dto';
-import { JobPositionId } from 'src/candidates/dto/request/create-job-position-id.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
-import { permissions } from 'prisma/seeds/permissions.seed';
-import { JobAplicationIdDto } from 'src/job-application/dto/request/create-job-aplication-id.dto';
-import { UpdateJobApplicationDto } from 'src/job-application/dto/request/update-job-application.dto';
+import { JobAplicationDto } from '../../dto/response/job-aplication.dto';
+import { JobPositionId } from '../../../candidates/dto/request/create-job-position-id.dto';
+import { Auth } from '../../../auth/decorators/auth.decorator';
+import { permissions } from '../../../../prisma/seeds/permissions.seed';
+import { JobAplicationIdDto } from '../../dto/request/create-job-aplication-id.dto';
+import { UpdateJobApplicationDto } from '../../dto/request/update-job-application.dto';
 
 @Controller('job-applications')
 @ApiTags('Job Application Endpoints')

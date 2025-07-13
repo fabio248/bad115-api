@@ -3,7 +3,7 @@ import { CandidateService } from '../services/candidate.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CandidateIdDto } from '../dto/request/candidate-id.dto';
 import { CandidateDto } from '../dto/response/candidate.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 import { PaginatedDto } from '../../common/dtos/response/paginated.dto';

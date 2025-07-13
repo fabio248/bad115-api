@@ -8,12 +8,12 @@ import { PublicationDto } from '../dto/response/publication.dto';
 import { PrismaService } from 'nestjs-prisma';
 import { I18nService } from 'nestjs-i18n';
 import { plainToInstance } from 'class-transformer';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
 import {
   getPaginationParams,
   getPaginationInfo,
-} from 'src/common/utils/pagination.utils';
+} from '../../common/utils/pagination.utils';
 import { UpdatePublicationDto } from '../dto/request/update-publication.dto';
 
 @Injectable()

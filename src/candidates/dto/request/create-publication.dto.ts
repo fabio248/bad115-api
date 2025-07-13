@@ -6,7 +6,7 @@ import {
   ValidateIf,
   IsOptional,
 } from 'class-validator';
-import { PublicationEnum } from 'src/candidates/enums/publication.enum';
+import { PublicationEnum } from '../../enums/publication.enum';
 
 export class CreatePublicationDto {
   @IsNotEmpty({ message: i18nValidationMessage('validation.IS_NOT_EMPTY') })

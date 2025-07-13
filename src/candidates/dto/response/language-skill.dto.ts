@@ -2,7 +2,7 @@ import { Exclude, Expose } from 'class-transformer';
 import {
   LanguageLevelEnum,
   LanguageSkillsEnum,
-} from 'src/candidates/enums/language-skills.enum';
+} from '../../enums/language-skills.enum';
 import { ApiHideProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { LanguageTypesDto } from '../../../catalogs/dtos/response/language-type.dto';

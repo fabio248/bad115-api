@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { SocialNetworkTypesService } from '../services/social-network-types.service';
 import { ApiTags } from '@nestjs/swagger';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { SocialNetworkTypesDto } from '../dtos/response/social-network-types.dto';
 import { CreateSocialNetworkTypesDto } from '../dtos/request/create-social-network-type.dto';
 import { SocialNetworkTypeIdDto } from '../dtos/request/create-social-network-types-id.dto';

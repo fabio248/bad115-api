@@ -5,10 +5,10 @@ import {
   Transform,
   Type,
 } from 'class-transformer';
-import { PersonDto } from 'src/persons/dtos/response/person.dto';
+import { PersonDto } from '../../../persons/dtos/response/person.dto';
 import { LaboralExperienceDto } from './laboral-experience.dto';
 import { AcademicKnowledgeDto } from './academic-knowledge.dto';
-import { TechnicalSkillDto } from 'src/catalogs/dtos/response/technical-skill.dto';
+import { TechnicalSkillDto } from '../../../catalogs/dtos/response/technical-skill.dto';
 import { LanguageSkillDto } from './language-skill.dto';
 import { RecognitionDto } from './recognition.dto';
 import { PublicationDto } from './publication.dto';
@@ -16,7 +16,7 @@ import { ParticipationDto } from './participation.dto';
 import { TestDto } from './test.dto';
 import { RecomendationDto } from './recomendation.dto';
 import { CertificationDto } from './certification.dto';
-import { SocialNetworkDto } from 'src/persons/dtos/response/social-network.dto';
+import { SocialNetworkDto } from '../../../persons/dtos/response/social-network.dto';
 
 @Exclude()
 export class CandidateDto {

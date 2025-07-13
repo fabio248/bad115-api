@@ -9,7 +9,7 @@ import { CreateAcademicKnowledgeDto } from '../dto/request/create-academic-knowl
 import { AcademicKnowledgeDto } from '../dto/response/academic-knowledge.dto';
 import { UpdateAcademicKnowledgeDto } from '../dto/request/update-academic-knowledge.dto';
 //pagination
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { PageDto } from '../../common/dtos/request/page.dto';
 import {
   getPaginationInfo,

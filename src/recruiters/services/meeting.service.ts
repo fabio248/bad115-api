@@ -12,13 +12,13 @@ import { plainToInstance } from 'class-transformer';
 import {
   getPaginationInfo,
   getPaginationParams,
-} from 'src/common/utils/pagination.utils';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { MailAlertMeetingTemplateData } from 'src/common/types/mail.types';
+} from '../../common/utils/pagination.utils';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { MailAlertMeetingTemplateData } from '../../common/types/mail.types';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { SEND_EMAIL_EVENT } from 'src/common/events/mail.event';
+import { SEND_EMAIL_EVENT } from '../../common/events/mail.event';
 import { FormattedDate } from '../utils/formatted-date.utils';
 
 import { enUS } from 'date-fns/locale';

@@ -5,8 +5,8 @@ import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from '../../../prisma/seeds/permissions.seed';
 import { UserIdDto } from '../dtos/request/user-id.dto';
 import { UserDto } from '../dtos/response/user.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { UserFilterDto } from '../dtos/request/user-filter.dto';
 import { UpdateUserDto } from '../dtos/request/update-user.dto';
 

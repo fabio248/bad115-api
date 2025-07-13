@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import { CompanyDto } from '../../../companies/dtos/response/company.dto';
-import { PersonDto } from 'src/persons/dtos/response/person.dto';
+import { PersonDto } from '../../../persons/dtos/response/person.dto';
 
 export class RecruiterDto {
   @Expose()

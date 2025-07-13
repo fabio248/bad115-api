@@ -5,11 +5,11 @@ import { CreateLanguageSkillDto } from '../dto/request/create-language-skill.dto
 import { LanguageSkillService } from '../services/language-skill.service';
 import { CandidateIdDto } from '../dto/request/candidate-id.dto';
 import { LanguageSkillIdDto } from '../dto/request/language-skill-id.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
 import { LanguageSkillDto } from '../dto/response/language-skill.dto';
 import { UpdateLanguageSkillDto } from '../dto/request/update-language-skill.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 

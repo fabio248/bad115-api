@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { Post, Param, Body, Get, Query, Put, Delete } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
-import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-response.decorator';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 
 //Dto's
 import { CandidateIdDto } from '../dto/request/candidate-id.dto';
@@ -10,11 +10,11 @@ import { CreateRecomendationDto } from '../dto/request/create-recomendation.dto'
 import { RecomendationDto } from '../dto/response/recomendation.dto';
 import { RecomendationIdDto } from '../dto/request/recomendation-id.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { UserIdDto } from 'src/users/dtos/request/user-id.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { UserIdDto } from '../../users/dtos/request/user-id.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { UpdateRecomendationDto } from '../dto/request/update-recomendation.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 
 @Controller('candidates/:candidateId')

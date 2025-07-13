@@ -10,13 +10,13 @@ import { CreateLanguageSkillDto } from '../dto/request/create-language-skill.dto
 import { UpdateLanguageSkillDto } from '../dto/request/update-language-skill.dto';
 
 //paginaciones
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
 
 import {
   getPaginationParams,
   getPaginationInfo,
-} from 'src/common/utils/pagination.utils';
+} from '../../common/utils/pagination.utils';
 
 @Injectable()
 export class LanguageSkillService {

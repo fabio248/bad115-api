@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { Post, Body, Param, Get, Delete, Query, Put } from '@nestjs/common';
 import { TestService } from '../services/test.service';
-import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-response.decorator';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 
 //Dto's
 import { CandidateIdDto } from '../dto/request/candidate-id.dto';
@@ -9,10 +9,10 @@ import { CreateTestDto } from '../dto/request/create-test.dto';
 import { TestDto } from '../dto/response/test.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TestIdDto } from '../dto/request/test-id.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { UpdateTestDto } from '../dto/request/update-test.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 
 @Controller('candidates/:candidateId/test')

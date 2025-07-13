@@ -1,7 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { ApiHideProperty } from '@nestjs/swagger';
-import { RecomendationEnum } from 'src/candidates/enums/recomendation-enum';
-import { UserDto } from 'src/users/dtos/response/user.dto';
+import { RecomendationEnum } from '../../enums/recomendation-enum';
+import { UserDto } from '../../../users/dtos/response/user.dto';
 import { Type } from 'class-transformer';
 
 @Exclude()

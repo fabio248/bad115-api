@@ -7,11 +7,11 @@ import { I18nService } from 'nestjs-i18n';
 import {
   getPaginationParams,
   getPaginationInfo,
-} from 'src/common/utils/pagination.utils';
+} from '../../common/utils/pagination.utils';
 
 //paginations
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { UpdateParticipationDto } from '../dto/request/update-participation.dto';
 
 @Injectable()

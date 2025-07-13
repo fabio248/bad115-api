@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { JobApplicationController } from './controllers/job-aplication/job-application.controller';
 import { JobApplicationService } from './services/job-aplication/job-application.service';
-import { FilesModule } from 'src/files/files.module';
+import { FilesModule } from '../files/files.module';
 import { JobPositionModule } from '../job-position/job-position.module';
 
 @Module({

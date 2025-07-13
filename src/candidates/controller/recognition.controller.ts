@@ -11,10 +11,10 @@ import { RecognitionIdDto } from '../dto/request/recognition-id.dto';
 import { UpdateRecognitionDto } from '../dto/request/update-recognition.dto';
 
 //paginations
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 
 @Controller('candidates/:candidateId/recognition')

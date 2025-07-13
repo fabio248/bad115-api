@@ -9,14 +9,14 @@ import {
   Query,
 } from '@nestjs/common';
 import { MeetingService } from '../services/meeting.service';
-import { JobAplicationIdDto } from 'src/job-application/dto/request/create-job-aplication-id.dto';
+import { JobAplicationIdDto } from '../../job-application/dto/request/create-job-aplication-id.dto';
 import { CreateMeetingAplicationDto } from '../dtos/request/create-meeting.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MeetingDto } from '../dtos/response/meeting.dto';
 import { MeetingIdDto } from '../dtos/request/create-meeting-id.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-response.decorator';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
 import { CronJobIdDto } from '../dtos/request/create-cron-job-id.dto';
 import { CronJobDto } from '../dtos/response/cron-job.dto';
 

@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { TestTypeService } from '../services/test-type.service';
 import { TestTypeDto } from '../dtos/response/test-type.dto';
 import { CreateTestTypeDto } from '../dtos/request/create-test-type.dto';

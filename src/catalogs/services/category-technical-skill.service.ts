@@ -7,16 +7,16 @@ import { plainToInstance } from 'class-transformer';
 import { PrismaService } from 'nestjs-prisma';
 import { CategoryTechnicalSkillDto } from '../dtos/response/category-technical-skill.dto';
 import { TechnicalSkillDto } from '../dtos/response/technical-skill.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import {
   getPaginationInfo,
   getPaginationParams,
-} from 'src/common/utils/pagination.utils';
-import { PageDto } from 'src/common/dtos/request/page.dto';
+} from '../../common/utils/pagination.utils';
+import { PageDto } from '../../common/dtos/request/page.dto';
 import { I18nService } from 'nestjs-i18n';
 import { CreateTechnicalSkillDto } from '../dtos/request/create-technical-skill.dto';
 import { UpdateTechnicalSkillTypeDto } from '../dtos/request/update-technical-skill.dto';
-import { CreateCategoryDto } from 'src/candidates/dto/request/create-category.dto';
+import { CreateCategoryDto } from '../../candidates/dto/request/create-category.dto';
 import { UpdateCategoryDto } from '../dtos/request/update-category.dto';
 import { Prisma } from '@prisma/client';
 import { FilterTechnicalSkillDto } from '../dtos/request/filter-technical-skill.dto';

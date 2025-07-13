@@ -16,9 +16,9 @@ import { CreateSocialNetworkDto } from '../dtos/request/create-social-network.dt
 import { PersonIdDto } from '../dtos/request/person-id.dto';
 import { SocialNetworkDto } from '../dtos/response/social-network.dto';
 import { SocialNetworkIdDto } from '../dtos/request/social-network-id.dto';
-import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-response.decorator';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { UpdateSocialNetworkDto } from '../dtos/request/update-red-social.dto';
 
 @Controller('person/:personId/social-network')

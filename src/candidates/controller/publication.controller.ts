@@ -16,12 +16,12 @@ import { CreatePublicationDto } from '../dto/request/create-publication.dto';
 import { CandidateIdDto } from '../dto/request/candidate-id.dto';
 import { PublicationDto } from '../dto/response/publication.dto';
 import { PublicationIdDto } from '../dto/request/publication-id.dto';
-import { ApiPaginatedResponse } from 'src/common/decorators/api-paginated-response.decorator';
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { UpdatePublicationDto } from '../dto/request/update-publication.dto';
 import { permissions } from 'prisma/seeds/permissions.seed';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 
 @Controller('candidates/')
 @ApiTags('Candidates Endpoints')

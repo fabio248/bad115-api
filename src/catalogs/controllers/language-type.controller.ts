@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { LanguageTypeService } from '../services/language-type.service';
 import { ApiTags } from '@nestjs/swagger';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { permissions } from 'prisma/seeds/permissions.seed';
 
 //Dto's

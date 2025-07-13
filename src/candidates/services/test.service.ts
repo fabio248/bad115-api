@@ -7,13 +7,13 @@ import { plainToInstance } from 'class-transformer';
 import { v4 as uuidv4 } from 'uuid';
 
 //Dto's
-import { PageDto } from 'src/common/dtos/request/page.dto';
-import { PaginatedDto } from 'src/common/dtos/response/paginated.dto';
+import { PageDto } from '../../common/dtos/request/page.dto';
+import { PaginatedDto } from '../../common/dtos/response/paginated.dto';
 import { UpdateTestDto } from '../dto/request/update-test.dto';
 import {
   getPaginationParams,
   getPaginationInfo,
-} from 'src/common/utils/pagination.utils';
+} from '../../common/utils/pagination.utils';
 import { FilesService } from '../../files/services/files.service';
 
 @Injectable()
